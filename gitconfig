@@ -1,0 +1,13 @@
+[user]
+	name = soctar
+	email = soctar@gmail.com
+[push]
+	default = simple
+[core]
+	editor = nvim
+    excludesfile = ~/.gitignore
+[fetch]
+    prune = true
+[rebase]
+    autosquash = true
+
