@@ -38,7 +38,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
-Plug 'vim-scripts/CSApprox'
+"Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
 "Plug 'Raimondi/delimitMate'
 Plug 'majutsushi/tagbar'
@@ -54,8 +54,8 @@ endif
 Plug 'Shougo/vimproc.vim', {'do': g:make}
 
 "" Vim-Session
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-session'
+"Plug 'xolox/vim-misc'
+"Plug 'xolox/vim-session'
 
 "if v:version >= 703
 "  Plug 'Shougo/vimshell.vim'
@@ -79,13 +79,13 @@ Plug 'KeitaNakamura/neodark.vim'
 "*****************************************************************************
 
 " c
-Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
-Plug 'ludwig/split-manpage.vim'
+"Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
+"Plug 'ludwig/split-manpage.vim'
 
 
 " python
 "" Python Bundle
-Plug 'davidhalter/jedi-vim'
+"Plug 'davidhalter/jedi-vim'
 
 
 "*****************************************************************************
@@ -208,10 +208,9 @@ endif
 
 " vim-airline
 let g:airline_theme = 'powerlineish'
-let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#syntastic#enabled = 0
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tagbar#enabled = 1
 let g:airline_skip_empty_sections = 1
 
 "*****************************************************************************
@@ -376,7 +375,7 @@ let g:UltiSnipsEditSplit="vertical"
 "let g:syntastic_aggregate_errors = 1
 
 " Neoake
-autocmd! BufWritePost,BufEnter * Neomake " Run on read/write
+"autocmd! BufWritePost,BufEnter * Neomake " Run on read/write
 let g:neomake_open_list = 2 " Auto-open error window
 let g:neomake_error_sign = {
             \ 'text': '✗',
@@ -538,3 +537,5 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
+
+autocmd BufRead,BufNewFile *.h,*.c set filetype=c
