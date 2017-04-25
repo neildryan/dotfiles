@@ -1,45 +1,36 @@
-"Python compatibility and speedups
-
-let g:python_host_prog = '/usr/bin/python2.7'
-let g:python3_host_prog = '/usr/bin/python3.5'
+" vim-bootstrap 224c6cc
 
 "*****************************************************************************
-"" Vim-Plug core
+"" Vim-PLug core
 "*****************************************************************************
 if has('vim_starting')
   set nocompatible               " Be iMproved
 endif
 
-let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
+let vimplug_exists=expand('~/.vim/autoload/plug.vim')
 
 let g:vim_bootstrap_langs = "c,python"
-let g:vim_bootstrap_editor = "nvim"				" nvim or vim
+let g:vim_bootstrap_editor = "vim"				" nvim or vim
 
 if !filereadable(vimplug_exists)
   echo "Installing Vim-Plug..."
   echo ""
-  silent !\curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-     \  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  silent !\curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   let g:not_finish_vimplug = "yes"
 
   autocmd VimEnter * PlugInstall
 endif
 
 " Required:
-call plug#begin(expand('~/.config/nvim/plugged'))
+call plug#begin(expand('~/.vim/plugged'))
 
 "*****************************************************************************
 "" Plug install packages
 "*****************************************************************************
-
-Plug 'neomake/neomake'
-Plug 'embear/vim-localvimrc'
-
 Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
@@ -47,10 +38,20 @@ Plug 'airblade/vim-gitgutter'
 Plug 'bronson/vim-trailing-whitespace'
 "Plug 'Raimondi/delimitMate'
 Plug 'majutsushi/tagbar'
-"Plug 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 "Plug 'Yggdroot/indentLine'
 "Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
+
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'embear/vim-localvimrc'
+
+if isdirectory('/usr/local/opt/fzf')
+  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+else
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf.vim'
+endif
 
 let g:make = 'gmake'
 if exists('make')
@@ -58,26 +59,9 @@ if exists('make')
 endif
 Plug 'Shougo/vimproc.vim', {'do': g:make}
 
-"" Vim-Session
-"Plug 'xolox/vim-misc'
-"Plug 'xolox/vim-session'
-
-"if v:version >= 703
-"  Plug 'Shougo/vimshell.vim'
-"endif
-
-"if v:version >= 704
-  "" Snippets
-"  Plug 'SirVer/ultisnips'
-"  Plug 'FelikZ/ctrlp-py-matcher'
-"endif
-
-"Plug 'honza/vim-snippets'
-
 "" Color
 Plug 'tomasr/molokai'
 Plug 'joshdick/onedark.vim'
-Plug 'KeitaNakamura/neodark.vim'
 
 "*****************************************************************************
 "" Custom bundles
@@ -97,8 +81,8 @@ Plug 'KeitaNakamura/neodark.vim'
 "*****************************************************************************
 
 "" Include user's extra bundle
-if filereadable(expand("~/.config/nvim/local_bundles.vim"))
-  source ~/.config/nvim/local_bundles.vim
+if filereadable(expand("~/.vimrc.local.bundles"))
+  source ~/.vimrc.local.bundles
 endif
 
 call plug#end()
@@ -116,19 +100,19 @@ set fileencoding=utf-8
 set fileencodings=utf-8
 set bomb
 set binary
-
+set ttyfast
 
 "" Fix backspace indent
 set backspace=indent,eol,start
 
 "" Tabs. May be overriten by autocmd rules
 set tabstop=4
-set softtabstop=4
+set softtabstop=0
 set shiftwidth=4
 set expandtab
 
 "" Map leader to ,
-let mapleader='\<Space>'
+let mapleader=','
 
 "" Enable hidden buffers
 set hidden
@@ -144,6 +128,7 @@ set nobackup
 set noswapfile
 
 set fileformats=unix,dos,mac
+set showcmd
 
 if exists('$SHELL')
     set shell=$SHELL
@@ -152,7 +137,7 @@ else
 endif
 
 " session management
-let g:session_directory = "~/.config/nvim/session"
+let g:session_directory = "~/.vim/session"
 let g:session_autoload = "no"
 let g:session_autosave = "no"
 let g:session_command_aliases = 1
@@ -166,22 +151,35 @@ set ruler
 let no_buffers_menu=1
 if !exists('g:not_finish_vimplug')
 "  colorscheme molokai
-   colorscheme onedark
-   let g:onedark_termcolors=16
-   set background=light
+  colorscheme onedark
+  let g:onedark_termcolors=16
+  set background=light
 endif
-
 
 set t_Co=256
 set gfn=Monospace\ 10
 
-let g:CSApprox_loaded = 1
+  let g:CSApprox_loaded = 1
 
-" IndentLine
-let g:indentLine_enabled = 1
-let g:indentLine_concealcursor = 0
-let g:indentLine_char = '┆'
-let g:indentLine_faster = 1
+  " IndentLine
+  let g:indentLine_enabled = 1
+  let g:indentLine_concealcursor = 0
+  let g:indentLine_char = '┆'
+  let g:indentLine_faster = 1
+
+
+if $COLORTERM == 'gnome-terminal'
+  set term=gnome-256color
+else
+  if $TERM == 'xterm'
+    set term=xterm-256color
+  endif
+endif
+
+if &term =~ '256color'
+  set t_ut=
+endif
+
 
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
@@ -211,10 +209,12 @@ endif
 
 " vim-airline
 let g:airline_theme = 'powerlineish'
-let g:airline#extensions#syntastic#enabled = 0
+let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tagbar#enabled = 1
 let g:airline_skip_empty_sections = 1
+set ttimeoutlen=50
 
 "*****************************************************************************
 "" Abbreviations
@@ -243,10 +243,6 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 nnoremap <silent> <F2> :NERDTreeFind<CR>
 noremap <F3> :NERDTreeToggle<CR>
 
-" vimshell.vim
-let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
-let g:vimshell_prompt =  '$ '
-
 " terminal emulation
 if g:vim_bootstrap_editor == 'nvim'
   nnoremap <silent> <leader>sh :terminal<CR>
@@ -254,9 +250,9 @@ else
   nnoremap <silent> <leader>sh :VimShellCreate<CR>
 endif
 
-"************************************************************************
+"*****************************************************************************
 "" Functions
-"************************************************************************
+"*****************************************************************************
 if !exists('*s:setupWrapping')
   function s:setupWrapping()
     set wrap
@@ -327,10 +323,10 @@ nnoremap <silent> <S-t> :tabnew<CR>
 "" Set working directory
 nnoremap <leader>. :lcd %:p:h<CR>
 
-"" Opens an edit command with path of the currently edited file filled in
+"" Opens an edit command with the path of the currently edited file filled in
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 
-"" Opens a tab edit command with path of the currently edited file filled
+"" Opens a tab edit command with the path of the currently edited file filled
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 "" ctrlp.vim
@@ -343,18 +339,27 @@ map <c-p> :CtrlP<CR>
 nnoremap <c-]> :bnext<CR>
 nnoremap <c-[> :bprevious<CR>
 
+"" fzf.vim
+set wildmode=list:longest,list:full
+set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
+let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o  -type f -print -o -type l -print 2> /dev/null"
+
 " The Silver Searcher
 if executable('ag')
+  let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
   set grepprg=ag\ --nogroup\ --nocolor
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-  let g:ctrlp_use_caching = 0
+endif
+
+" ripgrep
+if executable('rg')
+  let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+  set grepprg=rg\ --vimgrep
+  command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 endif
 
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
-noremap <leader>b :CtrlPBuffer<CR>
-let g:ctrlp_map = '<leader>e'
-let g:ctrlp_open_new_file = 'r'
-let g:ctrlp_cache_dir = $HOME . '/.cache/ctrlp'
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>e :FZF -m<CR>
 
 " snippets
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -363,34 +368,13 @@ let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:UltiSnipsEditSplit="vertical"
 
 " syntastic
-"let g:syntastic_always_populate_loc_list=1
-"let g:syntastic_error_symbol='✗'
-"let g:syntastic_warning_symbol='⚠'
-"let g:syntastic_style_error_symbol = '✗'
-"let g:syntastic_style_warning_symbol = '⚠'
-"let g:syntastic_auto_loc_list=1
-"let g:syntastic_aggregate_errors = 1
-
-" Neoake
-"autocmd! BufWritePost,BufEnter * Neomake " Run on read/write
-let g:neomake_open_list = 2 " Auto-open error window
-let g:neomake_error_sign = {
-            \ 'text': '✗',
-            \ 'texthl': 'WarningMsg',
-            \ }
-let g:neomake_warning_sign = {
-            \ 'text': '⚠',
-            \ 'texthl': 'ErrorMsg',
-            \ }
-
-" vim-localvimrc
-let g:localvimrc_name = [".lvimrc"]
-let g:localvimrc_event = ["BufWinEnter", "BufEnter"]
-let g:localvimrc_sandbox = 0
-let g:localvimrc_whitelist = ['/home/neil/Desktop/18349/',
-            \ '/home/neil/Desktop/Chain-MiBench',
-            \ '/home/neil/Desktop/app-blinker-chain']
-
+let g:syntastic_always_populate_loc_list=1
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+let g:syntastic_style_error_symbol = '✗'
+let g:syntastic_style_warning_symbol = '⚠'
+let g:syntastic_auto_loc_list=1
+let g:syntastic_aggregate_errors = 1
 
 " Tagbar
 nmap <silent> <F4> :TagbarToggle<CR>
@@ -410,6 +394,12 @@ endif
 noremap YY "+y<CR>
 noremap <leader>p "+gP<CR>
 noremap XX "+x<CR>
+
+if has('macunix')
+  " pbcopy for OSX copy/paste
+  vmap <C-x> :!pbcopy<CR>
+  vmap <C-c> :w !pbcopy<CR><CR>
+endif
 
 "" Buffer nav
 noremap <leader>z :bp<CR>
@@ -453,7 +443,7 @@ autocmd FileType cpp setlocal tabstop=4 shiftwidth=4 expandtab
 " vim-python
 augroup vimrc-python
   autocmd!
-  autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4 colorcolumn=79
+  autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8 colorcolumn=79
       \ formatoptions+=croq softtabstop=4
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
@@ -470,7 +460,7 @@ let g:jedi#completions_command = "<C-Space>"
 let g:jedi#smart_auto_mappings = 0
 
 " syntastic
-let g:syntastic_python_checkers=['python', 'flake8']
+let g:syntastic_python_checkers = ['python', 'pychecker']
 
 " vim-airline
 let g:airline#extensions#virtualenv#enabled = 1
@@ -480,13 +470,22 @@ let g:airline#extensions#virtualenv#enabled = 1
 let g:polyglot_disabled = ['python']
 let python_highlight_all = 1
 
+" vim-localvimrc
+let g:localvimrc_name = [".lvimrc"]
+let g:localvimrc_event = ["BufWinEnter", "BufEnter"]
+let g:localvimrc_sandbox = 0
+let g:localvimrc_persistent = 1 " Store if capital answer
+let g:localvimrc_whitelist = ['/home/neil/Desktop/18349/',
+            \ '/home/neil/Desktop/Chain-MiBench',
+            \ '/home/neil/Desktop/app-blinker-chain']
+
 
 "*****************************************************************************
 "*****************************************************************************
 
 "" Include user's local vim config
-if filereadable(expand("~/.config/nvim/local_init.vim"))
-  source ~/.config/nvim/local_init.vim
+if filereadable(expand("~/.vimrc.local"))
+  source ~/.vimrc.local
 endif
 
 "*****************************************************************************
@@ -529,12 +528,20 @@ else
   let g:airline_symbols.linenr = ''
 endif
 
-" Disable arrow keys for hardmode
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
-nnoremap <Esc> <NOP>
+nnoremap <Esc> <Nop>
 
-autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+if has("autocmd")
+  au VimEnter,InsertLeave * silent execute '!echo -ne "\e[1 q"' | redraw!
+  au InsertEnter,InsertChange *
+    \ if v:insertmode == 'i' |
+    \   silent execute '!echo -ne "\e[5 q"' | redraw! |
+    \ elseif v:insertmode == 'r' |
+    \   silent execute '!echo -ne "\e[3 q"' | redraw! |
+    \ endif
+  au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
+endif
