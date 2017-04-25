@@ -533,8 +533,9 @@ noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
-nnoremap <Esc> <Nop>
+nnoremap <Esc> <NOP>
 
+" Make the cursor a line in insert mode
 if has("autocmd")
   au VimEnter,InsertLeave * silent execute '!echo -ne "\e[1 q"' | redraw!
   au InsertEnter,InsertChange *

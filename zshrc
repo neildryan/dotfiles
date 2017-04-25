@@ -63,7 +63,7 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR='nvim'
+    export EDITOR='vim'
 else
     export EDITOR='mvim'
 fi
@@ -82,9 +82,11 @@ export ARCHFLAGS="-arch x86_64"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-# alias vim="nvim"
+
+# Fix for issue where c is pressed upon starting vim
+alias vim="vim --cmd 'set t_RV='"
 # Neovim garbage text fix
-export VTE_VERSION='100'
+# export VTE_VERSION='100'
 
 alias fix_res="xrandr --output eDP-1 --scale 1x1 --pos 0x0 ; xrandr --output DP-1 --scale 2x2 --mode 1920x1080 --fb 7680x2160 --auto --pos 3840x0"
 
