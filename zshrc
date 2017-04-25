@@ -88,6 +88,8 @@ export VTE_VERSION='100'
 
 alias fix_res="xrandr --output eDP-1 --scale 1x1 --pos 0x0 ; xrandr --output DP-1 --scale 2x2 --mode 1920x1080 --fb 7680x2160 --auto --pos 3840x0"
 
+alias upgrade="sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get upgrade && sudo apt-get autoremove"
+
 setopt correctall
 
 
