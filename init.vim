@@ -543,4 +543,6 @@ noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
+nnoremap <Esc> <NOP>
+
 autocmd BufRead,BufNewFile *.h,*.c set filetype=c
