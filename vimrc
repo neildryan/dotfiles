@@ -24,34 +24,21 @@ endif
 " Required:
 call plug#begin(expand('~/.vim/plugged'))
 
-"*****************************************************************************
+"************************************************************************
 "" Plug install packages
-"*****************************************************************************
+"************************************************************************
 Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
-"Plug 'vim-scripts/CSApprox'
 Plug 'bronson/vim-trailing-whitespace'
-"Plug 'Raimondi/delimitMate'
-Plug 'majutsushi/tagbar'
 Plug 'scrooloose/syntastic'
-"Plug 'Yggdroot/indentLine'
-"Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
 
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'embear/vim-localvimrc'
-
-if isdirectory('/usr/local/opt/fzf')
-  Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-else
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-  Plug 'junegunn/fzf.vim'
-endif
 
 let g:make = 'gmake'
 if exists('make')
@@ -63,9 +50,9 @@ Plug 'Shougo/vimproc.vim', {'do': g:make}
 Plug 'tomasr/molokai'
 Plug 'joshdick/onedark.vim'
 
-"*****************************************************************************
+"************************************************************************
 "" Custom bundles
-"*****************************************************************************
+"************************************************************************
 
 " c
 "Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
@@ -77,8 +64,8 @@ Plug 'joshdick/onedark.vim'
 "Plug 'davidhalter/jedi-vim'
 
 
-"*****************************************************************************
-"*****************************************************************************
+"************************************************************************
+"************************************************************************
 
 "" Include user's extra bundle
 if filereadable(expand("~/.vimrc.local.bundles"))
@@ -91,9 +78,9 @@ call plug#end()
 filetype plugin indent on
 
 
-"*****************************************************************************
+"***********************************************************************
 "" Basic Setup
-"*****************************************************************************"
+"***********************************************************************
 "" Encoding
 set encoding=utf-8
 set fileencoding=utf-8
@@ -112,7 +99,7 @@ set shiftwidth=4
 set expandtab
 
 "" Map leader to ,
-let mapleader=','
+let mapleader="\<Space>"
 
 "" Enable hidden buffers
 set hidden
@@ -142,15 +129,14 @@ let g:session_autoload = "no"
 let g:session_autosave = "no"
 let g:session_command_aliases = 1
 
-"*****************************************************************************
+"************************************************************************
 "" Visual Settings
-"*****************************************************************************
+"************************************************************************
 syntax on
 set ruler
 
 let no_buffers_menu=1
 if !exists('g:not_finish_vimplug')
-"  colorscheme molokai
   colorscheme onedark
   let g:onedark_termcolors=16
   set background=light
@@ -158,15 +144,6 @@ endif
 
 set t_Co=256
 set gfn=Monospace\ 10
-
-  let g:CSApprox_loaded = 1
-
-  " IndentLine
-  let g:indentLine_enabled = 1
-  let g:indentLine_concealcursor = 0
-  let g:indentLine_char = '┆'
-  let g:indentLine_faster = 1
-
 
 if $COLORTERM == 'gnome-terminal'
   set term=gnome-256color
@@ -203,10 +180,6 @@ set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-if exists("*fugitive#statusline")
-  set statusline+=%{fugitive#statusline()}
-endif
-
 " vim-airline
 let g:airline_theme = 'powerlineish'
 let g:airline#extensions#syntastic#enabled = 1
@@ -216,9 +189,9 @@ let g:airline#extensions#tagbar#enabled = 1
 let g:airline_skip_empty_sections = 1
 set ttimeoutlen=50
 
-"*****************************************************************************
+"***********************************************************************
 "" Abbreviations
-"*****************************************************************************
+"***********************************************************************
 "" no one is really happy until you have this shortcuts
 cnoreabbrev W! w!
 cnoreabbrev Q! q!
@@ -243,16 +216,9 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 nnoremap <silent> <F2> :NERDTreeFind<CR>
 noremap <F3> :NERDTreeToggle<CR>
 
-" terminal emulation
-if g:vim_bootstrap_editor == 'nvim'
-  nnoremap <silent> <leader>sh :terminal<CR>
-else
-  nnoremap <silent> <leader>sh :VimShellCreate<CR>
-endif
-
-"*****************************************************************************
+"***********************************************************************
 "" Functions
-"*****************************************************************************
+"***********************************************************************
 if !exists('*s:setupWrapping')
   function s:setupWrapping()
     set wrap
@@ -261,9 +227,9 @@ if !exists('*s:setupWrapping')
   endfunction
 endif
 
-"*****************************************************************************
+"***********************************************************************
 "" Autocmd Rules
-"*****************************************************************************
+"***********************************************************************
 "" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
 augroup vimrc-sync-fromstart
   autocmd!
@@ -304,7 +270,7 @@ noremap <Leader>ga :Gwrite<CR>
 noremap <Leader>gc :Gcommit<CR>
 noremap <Leader>gsh :Gpush<CR>
 noremap <Leader>gll :Gpull<CR>
-noremap <Leader>gs :Gstatus<CR>
+noremap <Leader>gst :Gstatus<CR>
 noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
 noremap <Leader>gr :Gremove<CR>
@@ -315,10 +281,10 @@ nnoremap <leader>ss :SaveSession<Space>
 nnoremap <leader>sd :DeleteSession<CR>
 nnoremap <leader>sc :CloseSession<CR>
 
-"" Tabs
-nnoremap <Tab> gt
-nnoremap <S-Tab> gT
-nnoremap <silent> <S-t> :tabnew<CR>
+"" Tabs - really buffers
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
+nnoremap <c-w> :bdelete<CR>
 
 "" Set working directory
 nnoremap <leader>. :lcd %:p:h<CR>
@@ -335,27 +301,11 @@ set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
 let g:ctrlp_user_command = "find %s -type f | grep -Ev '"+ g:ctrlp_custom_ignore +"'"
 let g:ctrlp_use_caching = 1
-map <c-p> :CtrlP<CR>
-nnoremap <c-]> :bnext<CR>
-nnoremap <c-[> :bprevious<CR>
-
-"" fzf.vim
-set wildmode=list:longest,list:full
-set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
-let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o  -type f -print -o -type l -print 2> /dev/null"
-
-" The Silver Searcher
-if executable('ag')
-  let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
-  set grepprg=ag\ --nogroup\ --nocolor
-endif
-
-" ripgrep
-if executable('rg')
-  let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
-  set grepprg=rg\ --vimgrep
-  command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
-endif
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_open_new_file = 't' " Open in new tab
+let g:ctrlp_follow_symlinks = 1 " Follow but avoid recursive
+let g:ctrlp_brief_prompt = 1 "<bs> on empty prompt exits
 
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <silent> <leader>b :Buffers<CR>
@@ -376,10 +326,6 @@ let g:syntastic_style_warning_symbol = '⚠'
 let g:syntastic_auto_loc_list=1
 let g:syntastic_aggregate_errors = 1
 
-" Tagbar
-nmap <silent> <F4> :TagbarToggle<CR>
-let g:tagbar_autofocus = 1
-
 " Disable visualbell
 set noerrorbells visualbell t_vb=
 if has('autocmd')
@@ -394,12 +340,6 @@ endif
 noremap YY "+y<CR>
 noremap <leader>p "+gP<CR>
 noremap XX "+x<CR>
-
-if has('macunix')
-  " pbcopy for OSX copy/paste
-  vmap <C-x> :!pbcopy<CR>
-  vmap <C-c> :w !pbcopy<CR><CR>
-endif
 
 "" Buffer nav
 noremap <leader>z :bp<CR>
@@ -437,7 +377,6 @@ nnoremap <Leader>o :.Gbrowse<CR>
 " c
 autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd FileType cpp setlocal tabstop=4 shiftwidth=4 expandtab
-
 
 " python
 " vim-python
@@ -480,17 +419,17 @@ let g:localvimrc_whitelist = ['/home/neil/Desktop/18349/',
             \ '/home/neil/Desktop/app-blinker-chain']
 
 
-"*****************************************************************************
-"*****************************************************************************
+"***********************************************************************
+"***********************************************************************
 
 "" Include user's local vim config
 if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
 
-"*****************************************************************************
+"***********************************************************************
 "" Convenience variables
-"*****************************************************************************
+"***********************************************************************
 
 " vim-airline
 if !exists('g:airline_symbols')
@@ -532,8 +471,6 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
-
-nnoremap <Esc> <NOP>
 
 " Make the cursor a line in insert mode
 if has("autocmd")

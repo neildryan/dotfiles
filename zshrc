@@ -83,8 +83,6 @@ export ARCHFLAGS="-arch x86_64"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# Fix for issue where c is pressed upon starting vim
-alias vim="vim --cmd 'set t_RV='"
 # Neovim garbage text fix
 # export VTE_VERSION='100'
 
