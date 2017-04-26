@@ -1,16 +1,11 @@
-" vim-bootstrap 224c6cc
-
-"*****************************************************************************
-"" Vim-PLug core
-"*****************************************************************************
+"************************************************************************
+"" Vim-Plug - Install if not there
+"************************************************************************
 if has('vim_starting')
   set nocompatible               " Be iMproved
 endif
 
 let vimplug_exists=expand('~/.vim/autoload/plug.vim')
-
-let g:vim_bootstrap_langs = "c,python"
-let g:vim_bootstrap_editor = "vim"				" nvim or vim
 
 if !filereadable(vimplug_exists)
   echo "Installing Vim-Plug..."
@@ -50,37 +45,21 @@ Plug 'Shougo/vimproc.vim', {'do': g:make}
 Plug 'tomasr/molokai'
 Plug 'joshdick/onedark.vim'
 
-"************************************************************************
-"" Custom bundles
-"************************************************************************
-
 " c
 "Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
 "Plug 'ludwig/split-manpage.vim'
 
-
 " python
-"" Python Bundle
 "Plug 'davidhalter/jedi-vim'
 
-
-"************************************************************************
-"************************************************************************
-
-"" Include user's extra bundle
-if filereadable(expand("~/.vimrc.local.bundles"))
-  source ~/.vimrc.local.bundles
-endif
-
 call plug#end()
-
-" Required:
-filetype plugin indent on
 
 
 "***********************************************************************
 "" Basic Setup
 "***********************************************************************
+" Required:
+filetype plugin indent on
 "" Encoding
 set encoding=utf-8
 set fileencoding=utf-8
@@ -204,18 +183,6 @@ cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
 
-"" NERDTree configuration
-let g:NERDTreeChDirMode=2
-let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
-let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
-let g:NERDTreeShowBookmarks=1
-let g:nerdtree_tabs_focus_on_files=1
-let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
-let g:NERDTreeWinSize = 50
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
-nnoremap <silent> <F2> :NERDTreeFind<CR>
-noremap <F3> :NERDTreeToggle<CR>
-
 "***********************************************************************
 "" Functions
 "***********************************************************************
@@ -257,13 +224,19 @@ augroup END
 
 set autoread
 
-"*****************************************************************************
+"*************************************************************************
 "" Mappings
-"*****************************************************************************
+"*************************************************************************
 
 "" Split
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
+
+"" Switching windows
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+noremap <C-h> <C-w>h
 
 "" Git
 noremap <Leader>ga :Gwrite<CR>
@@ -295,69 +268,23 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 "" Opens a tab edit command with the path of the currently edited file filled
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
-"" ctrlp.vim
-set wildmode=list:longest,list:full
-set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
-let g:ctrlp_user_command = "find %s -type f | grep -Ev '"+ g:ctrlp_custom_ignore +"'"
-let g:ctrlp_use_caching = 1
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_open_new_file = 't' " Open in new tab
-let g:ctrlp_follow_symlinks = 1 " Follow but avoid recursive
-let g:ctrlp_brief_prompt = 1 "<bs> on empty prompt exits
-
 cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>e :FZF -m<CR>
 
-" snippets
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
-let g:UltiSnipsEditSplit="vertical"
-
-" syntastic
-let g:syntastic_always_populate_loc_list=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_style_error_symbol = '✗'
-let g:syntastic_style_warning_symbol = '⚠'
-let g:syntastic_auto_loc_list=1
-let g:syntastic_aggregate_errors = 1
-
 " Disable visualbell
 set noerrorbells visualbell t_vb=
-if has('autocmd')
-  autocmd GUIEnter * set visualbell t_vb=
-endif
 
 "" Copy/Paste/Cut
 if has('unnamedplus')
   set clipboard=unnamed,unnamedplus
 endif
 
-noremap YY "+y<CR>
-noremap <leader>p "+gP<CR>
-noremap XX "+x<CR>
-
-"" Buffer nav
-noremap <leader>z :bp<CR>
-noremap <leader>q :bp<CR>
-noremap <leader>x :bn<CR>
-noremap <leader>w :bn<CR>
-
 "" Close buffer
 noremap <leader>c :bd<CR>
 
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
-
-"" Switching windows
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-l> <C-w>l
-noremap <C-h> <C-w>h
 
 "" Vmap for maintain Visual Mode after shifting > and <
 vmap < <gv
@@ -370,9 +297,9 @@ vnoremap K :m '<-2<CR>gv=gv
 "" Open current line on GitHub
 nnoremap <Leader>o :.Gbrowse<CR>
 
-"*****************************************************************************
+"************************************************************************
 "" Custom configs
-"*****************************************************************************
+"************************************************************************
 
 " c
 autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
@@ -399,6 +326,14 @@ let g:jedi#completions_command = "<C-Space>"
 let g:jedi#smart_auto_mappings = 0
 
 " syntastic
+let g:syntastic_always_populate_loc_list=1
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+let g:syntastic_style_error_symbol = '✗'
+let g:syntastic_style_warning_symbol = '⚠'
+let g:syntastic_auto_loc_list=1
+let g:syntastic_aggregate_errors = 1
+
 let g:syntastic_python_checkers = ['python', 'pychecker']
 
 " vim-airline
@@ -418,14 +353,29 @@ let g:localvimrc_whitelist = ['/home/neil/Desktop/18349/',
             \ '/home/neil/Desktop/Chain-MiBench',
             \ '/home/neil/Desktop/app-blinker-chain']
 
+"" ctrlp.vim
+set wildmode=list:longest,list:full
+set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
+let g:ctrlp_user_command = "find %s -type f | grep -Ev '"+ g:ctrlp_custom_ignore +"'"
+let g:ctrlp_use_caching = 1
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_open_new_file = 't' " Open in new tab
+let g:ctrlp_follow_symlinks = 1 " Follow but avoid recursive
+let g:ctrlp_brief_prompt = 1 "<bs> on empty prompt exits
 
-"***********************************************************************
-"***********************************************************************
-
-"" Include user's local vim config
-if filereadable(expand("~/.vimrc.local"))
-  source ~/.vimrc.local
-endif
+"" NERDTree configuration
+let g:NERDTreeChDirMode=2
+let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
+let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
+let g:NERDTreeShowBookmarks=1
+let g:nerdtree_tabs_focus_on_files=1
+let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
+let g:NERDTreeWinSize = 50
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
+nnoremap <silent> <F2> :NERDTreeFind<CR>
+noremap <F3> :NERDTreeToggle<CR>
 
 "***********************************************************************
 "" Convenience variables
