@@ -34,6 +34,7 @@ Plug 'sheerun/vim-polyglot'
 
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'embear/vim-localvimrc'
+Plug 'junegunn/goyo.vim'
 
 let g:make = 'gmake'
 if exists('make')
@@ -44,13 +45,6 @@ Plug 'Shougo/vimproc.vim', {'do': g:make}
 "" Color
 Plug 'tomasr/molokai'
 Plug 'joshdick/onedark.vim'
-
-" c
-"Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
-"Plug 'ludwig/split-manpage.vim'
-
-" python
-"Plug 'davidhalter/jedi-vim'
 
 call plug#end()
 
@@ -77,7 +71,7 @@ set softtabstop=0
 set shiftwidth=4
 set expandtab
 
-"" Map leader to ,
+"" Map leader
 let mapleader="\<Space>"
 
 "" Enable hidden buffers
@@ -101,6 +95,13 @@ if exists('$SHELL')
 else
     set shell=/bin/sh
 endif
+
+set shortmess=atI
+
+" % matches if/else and others
+runtime macros/matchit.vim
+
+set history=100
 
 " session management
 let g:session_directory = "~/.vim/session"
@@ -149,7 +150,6 @@ set modeline
 set modelines=10
 
 set title
-set titleold="Terminal"
 set titlestring=%F
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
@@ -164,8 +164,9 @@ let g:airline_theme = 'powerlineish'
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tagbar#enabled = 1
 let g:airline_skip_empty_sections = 1
+
+let g:airline#extensions#virtualenv#enabled = 1
 set ttimeoutlen=50
 
 "***********************************************************************
@@ -212,7 +213,7 @@ augroup END
 "" txt
 augroup vimrc-wrapping
   autocmd!
-  autocmd BufRead,BufNewFile *.txt call s:setupWrapping()
+  autocmd BufRead,BufNewFile *.txt,*.tex call s:setupWrapping()
 augroup END
 
 "" make/cmake
@@ -233,20 +234,28 @@ noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
 
 "" Switching windows
+noremap <Leader>j <C-w>j
+noremap <Leader>k <C-w>k
+noremap <Leader>l <C-w>l
+noremap <Leader>h <C-w>h
+
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 noremap <C-h> <C-w>h
 
 "" Git
-noremap <Leader>ga :Gwrite<CR>
 noremap <Leader>gc :Gcommit<CR>
 noremap <Leader>gsh :Gpush<CR>
 noremap <Leader>gll :Gpull<CR>
 noremap <Leader>gst :Gstatus<CR>
 noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
-noremap <Leader>gr :Gremove<CR>
+
+"" Syntastic
+noremap <Leader>c :SyntasticCheck<CR>
+noremap <Leader>r :SyntasticReset<CR>
+noremap <Leader>i :SyntasticInfo<CR>
 
 " session management
 nnoremap <leader>so :OpenSession<Space>
@@ -258,9 +267,6 @@ nnoremap <leader>sc :CloseSession<CR>
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
 nnoremap <c-w> :bdelete<CR>
-
-"" Set working directory
-nnoremap <leader>. :lcd %:p:h<CR>
 
 "" Opens an edit command with the path of the currently edited file filled in
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
@@ -279,9 +285,6 @@ set noerrorbells visualbell t_vb=
 if has('unnamedplus')
   set clipboard=unnamed,unnamedplus
 endif
-
-"" Close buffer
-noremap <leader>c :bd<CR>
 
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
@@ -314,30 +317,23 @@ augroup vimrc-python
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
 
-" jedi-vim
-let g:jedi#popup_on_dot = 0
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#show_call_signatures = "0"
-let g:jedi#completions_command = "<C-Space>"
-let g:jedi#smart_auto_mappings = 0
-
 " syntastic
 let g:syntastic_always_populate_loc_list=1
+let g:syntastic_auto_loc_list=1
+let g:syntastic_check_on_wq = 0
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_style_error_symbol = '✗'
 let g:syntastic_style_warning_symbol = '⚠'
-let g:syntastic_auto_loc_list=1
 let g:syntastic_aggregate_errors = 1
+
+let g:syntastic_mode_map = {
+            \ "mode": "passive",
+            \ "active_filetypes": [],
+            \ "passive_filetypes": []} "Default to passive, see leader command
 
 let g:syntastic_python_checkers = ['python', 'pychecker']
 
-" vim-airline
-let g:airline#extensions#virtualenv#enabled = 1
 
 " Syntax highlight
 " Default highlight is better than polyglot
