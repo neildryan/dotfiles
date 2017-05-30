@@ -4,10 +4,9 @@
 [push]
 	default = simple
 [core]
-	editor = nvim
+	editor = vim
     excludesfile = ~/.gitignore
 [fetch]
     prune = true
 [rebase]
     autosquash = true
-
