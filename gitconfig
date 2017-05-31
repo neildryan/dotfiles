@@ -1,13 +1,16 @@
 [user]
-	name = soctar
-	email = soctar@gmail.com
+    name = Neil Ryan
+    email = soctar@gmail.com
 [push]
-	default = simple
+    default = simple
 [core]
-	editor = nvim
+    editor = vim
     excludesfile = ~/.gitignore
 [fetch]
     prune = true
 [rebase]
     autosquash = true
-
+[diff]
+    tool = vimdiff
+[github]
+    name = soctar
