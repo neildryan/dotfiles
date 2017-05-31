@@ -27,6 +27,7 @@ rm -f $HOME/.vimrc
 ln -s $DOTFILES/zshrc $HOME/.zshrc
 ln -s $DOTFILES/gitignore $HOME/.gitignore
 ln -s $DOTFILES/gdbinit $HOME/.gdbinit
+mkdir -p $HOME/.config/nvim/init.vim
 ln -s $DOTFILES/init.vim $HOME/.config/nvim/init.vim
 ln -s $DOTFILES/gitconfig $HOME/.gitconfig
 ln -s $DOTFILES/vimrc $HOME/.vimrc
