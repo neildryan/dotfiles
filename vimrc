@@ -239,11 +239,6 @@ noremap <Leader>k <C-w>k
 noremap <Leader>l <C-w>l
 noremap <Leader>h <C-w>h
 
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-l> <C-w>l
-noremap <C-h> <C-w>h
-
 "" Git
 noremap <Leader>gc :Gcommit<CR>
 noremap <Leader>gsh :Gpush<CR>
@@ -266,7 +261,7 @@ nnoremap <leader>sc :CloseSession<CR>
 "" Tabs - really buffers
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
-nnoremap <c-w> :bdelete<CR>
+nnoremap <Leader>w :bdelete<CR>
 
 "" Opens an edit command with the path of the currently edited file filled in
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
