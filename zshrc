@@ -92,6 +92,7 @@ alias upgrade="sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get 
 
 setopt correctall
 
+export DEFAULT_USER="neil"
 
 # RISCV
 export RISCV=~/riscv
@@ -106,3 +107,4 @@ export PATH=$PATH:/opt/gcc-arm-none-eabi/bin
 export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
 export PATH=$PATH:$TOOLCHAIN_ROOT/bin
 
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
