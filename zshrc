@@ -49,7 +49,7 @@ HIST_STAMPS="mm/dd/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colorize colored-man-pages cp)
+plugins=(git colorize colored-man-pages cp python debian common-aliases)
 
 # User configuration
 
@@ -88,16 +88,11 @@ export ARCHFLAGS="-arch x86_64"
 
 alias fix_res="xrandr --output eDP-1 --scale 1x1 --pos 0x0 ; xrandr --output DP-1 --scale 2x2 --mode 1920x1080 --fb 7680x2160 --auto --pos 3840x0"
 
-alias upgrade="sudo apt-get update && sudo apt-get dist-upgrade && sudo apt-get upgrade && sudo apt-get autoremove"
+alias upgrade="sudo apt-get update && sudo apt-get upgrade && sudo apt-get autoremove"
 
 setopt correctall
 
 export DEFAULT_USER="neil"
-
-# RISCV
-export RISCV=~/riscv
-export PATH=$PATH:$RISCV/bin
-export PATH=$PATH:/opt/riscv32i/bin
 
 # 18349
 export PATH=$PATH:~/Desktop/18349/repos/ftditerm

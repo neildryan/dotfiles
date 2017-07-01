@@ -6,6 +6,8 @@ DOTFILES=$HOME/.files/
 sudo apt-get update
 sudo apt-get -y install make wget curl git
 sudo apt-get -y install zsh zsh-common vim vim-common vim-runtime
+sudo apt-get -y install terminator
+sudo apt-get -y autoremove
 
 
 # Get oh-my-zsh
@@ -22,6 +24,7 @@ rm -f $HOME/.gdbinit
 rm -f $HOME/.config/nvim/init.vim
 rm -f $HOME/.gitconfig
 rm -f $HOME/.vimrc
+rm -f $HOME/.config/terminator/config
 
 # Setup symlinks so programs work
 ln -s $DOTFILES/zshrc $HOME/.zshrc
@@ -31,6 +34,8 @@ mkdir -p $HOME/.config/nvim/init.vim
 ln -s $DOTFILES/init.vim $HOME/.config/nvim/init.vim
 ln -s $DOTFILES/gitconfig $HOME/.gitconfig
 ln -s $DOTFILES/vimrc $HOME/.vimrc
+mkdir -p $HOME/.config/terminator/config
+ln -s $DOTFILES/.config/terminator/config $HOME/.config/terminator/config
 
 # Get fonts to play nice with agnoster
 wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
