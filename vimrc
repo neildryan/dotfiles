@@ -229,6 +229,9 @@ set autoread
 "" Mappings
 "*************************************************************************
 
+"" Line numbers - default off
+noremap <Leader>n : set invrelativenumber<CR> :set invnumber<CR>
+
 "" Split
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
@@ -347,7 +350,7 @@ let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|gi
 let g:ctrlp_user_command = "find %s -type f | grep -Ev '"+ g:ctrlp_custom_ignore +"'"
 let g:ctrlp_use_caching = 1
 let g:ctrlp_map = '<Leader>p'
-let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_cmd = 'CtrlPCurWD'
 let g:ctrlp_open_new_file = 't' " Open in new tab
 let g:ctrlp_follow_symlinks = 1 " Follow but avoid recursive
 let g:ctrlp_brief_prompt = 1 "<bs> on empty prompt exits
