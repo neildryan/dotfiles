@@ -84,7 +84,7 @@ set fileencodings=utf-8
 set bomb
 set binary
 if !has('nvim')
-    set ttyfasat
+    set ttyfast
 endif
 
 "" Fix backspace indent
@@ -97,7 +97,7 @@ set shiftwidth=4
 set expandtab
 
 "" Map leader
-let mapleader='\<Space>'
+let mapleader=' '
 
 "" Enable hidden buffers
 set hidden
@@ -225,10 +225,10 @@ let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_prompt =  '$ '
 
 " terminal emulation
-if g:vim_bootstrap_editor == 'nvim'
+if has('nvim')
   nnoremap <silent> <leader>sh :terminal<CR>
 else
-  nnoremap <silent> <leader>sh :VimShellCreate<CR>
+    nnoremap <silent> <leader>sh :VimShellCreate<CR>
 endif
 
 "*********************************************************************
@@ -272,9 +272,9 @@ augroup END
 
 set autoread
 
-"*****************************************************************************
+"************************************************************************
 "" Mappings
-"*****************************************************************************
+"************************************************************************
 
 "" Line numbers - default off
 noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
