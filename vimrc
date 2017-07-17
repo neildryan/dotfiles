@@ -1,6 +1,6 @@
-"*****************************************************************************
+"************************************************************************
 "" Vim-Plug core
-"*****************************************************************************
+"************************************************************************
 if has('vim_starting')
   set nocompatible               " Be iMproved
 endif
@@ -33,9 +33,9 @@ else
     call plug#begin(expand('~/.vim/plugged'))
 endif
 
-"*****************************************************************************
+"************************************************************************
 "" Plug install packages
-"*****************************************************************************
+"************************************************************************
 
 if has('nvim')
     Plug 'neomake/neomake'
@@ -71,9 +71,9 @@ Plug 'KeitaNakamura/neodark.vim'
 call plug#end()
 
 
-"*****************************************************************************
+"*************************************************************************
 "" Basic Setup
-"*****************************************************************************"
+"*************************************************************************
 " Required:
 filetype plugin indent on
 
@@ -120,25 +120,20 @@ set shortmess=atI
 " % matches if/else and others
 runtime macros/matchit.vim
 
-if exists('$SHELL')
-    set shell=$SHELL
-else
-    set shell=/bin/sh
-endif
-
 " session management
 if has('nvim')
     let g:session_directory = "~/.config/nvim/session"
 else
     let g:session_directory = "~/.vim/session"
 endif
+
 let g:session_autoload = "no"
 let g:session_autosave = "no"
 let g:session_command_aliases = 1
 
-"*****************************************************************************
+"************************************************************************
 "" Visual Settings
-"*****************************************************************************
+"************************************************************************
 syntax on
 set ruler
 
@@ -180,7 +175,6 @@ set modeline
 set modelines=10
 
 set title
-set titleold="Terminal"
 set titlestring=%F
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)\
@@ -202,8 +196,11 @@ let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_skip_empty_sections = 1
 
-let g:airline#extensions#virtualenv#enabled  = 1
+let g:airline#extensions#virtualenv#enabled = 1
 set ttimeoutlen=50
+
+"" Disable visualbell
+set noerrorbells visualbell t_vb=
 
 "*********************************************************************
 "" Abbreviations
@@ -220,12 +217,11 @@ cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
 
-" vimshell.vim
-let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
-let g:vimshell_prompt =  '$ '
-
 " terminal emulation
 if has('nvim')
+  " vimshell.vim
+  let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
+  let g:vimshell_prompt =  '$ '
   nnoremap <silent> <leader>sh :terminal<CR>
 else
     nnoremap <silent> <leader>sh :VimShellCreate<CR>
@@ -242,10 +238,10 @@ if !exists('*s:setupWrapping')
   endfunction
 endif
 
-"**************************************************************************
+"*********************************************************************
 "" Autocmd Rules
-"**************************************************************************
-"" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
+"*********************************************************************
+"" PC fast enough, do syntax hi syncing from start unless 200 lines
 augroup vimrc-sync-fromstart
   autocmd!
   autocmd BufEnter * :syntax sync maxlines=200
@@ -321,9 +317,6 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 "" Opens a tab edit command with path of the currently edited file filled
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
-"" Disable visualbell
-set noerrorbells visualbell t_vb=
-
 "" ctrlp.vim
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
@@ -391,12 +384,6 @@ endif
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
 
-"" Switching windows
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-l> <C-w>l
-noremap <C-h> <C-w>h
-
 "" Vmap for maintain Visual Mode after shifting > and <
 vmap < <gv
 vmap > >gv
@@ -405,14 +392,13 @@ vmap > >gv
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-"*****************************************************************************
+"***********************************************************************
 "" Custom configs
-"*****************************************************************************
+"***********************************************************************
 
 " c
 autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd FileType cpp setlocal tabstop=4 shiftwidth=4 expandtab
-
 
 " python
 " vim-python
@@ -431,9 +417,9 @@ let g:localvimrc_whitelist = ['/home/neil/Desktop/18349/',
             \ '/home/neil/Desktop/Chain-MiBench',
             \ '/home/neil/Desktop/app-blinker-chain']
 
-"*****************************************************************************
+"*********************************************************************
 "" Convenience variables
-"*****************************************************************************
+"*********************************************************************
 
 " vim-airline
 if !exists('g:airline_symbols')
@@ -476,7 +462,5 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
-
-nnoremap <Esc> <NOP>
 
 autocmd BufRead,BufNewFile *.h,*.c set filetype=c
