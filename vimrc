@@ -90,6 +90,9 @@ endif
 "" Fix backspace indent
 set backspace=indent,eol,start
 
+"" Fix mouse scroll
+set mouse=a
+
 "" Tabs. May be overriten by autocmd rules
 set tabstop=4
 set softtabstop=4
@@ -278,6 +281,8 @@ noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
 "" Split
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
+set splitbelow
+set splitright
 
 "" Switching windows
 noremap <Leader>j <C-w>j
@@ -321,13 +326,22 @@ noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
-let g:ctrlp_user_command = "find %s -type f | grep -Ev '"+ g:ctrlp_custom_ignore +"'"
-let g:ctrlp_use_caching = 1
 let g:ctrlp_map = '<Leader>p'
 let g:ctrlp_cmd = 'CtrlPCurWD'
 let g:ctrlp_open_new_file = 't' "TODO, maybe buffer?
 let g:ctrlp_follow_symlinks = 1 " Follow but avoid recursive
 let g:cctrlp_brief_prompt = 1 "<bs> on empty prompt exits
+if executable('ag')
+    " Use ag in CtrlP for listing files; fast and respects .gitignore
+    let g:ctrlp_user_command = 'ag -Q -l --nocolor --hidden -g "" %s'
+
+    " ag is fast enough that CtrlP doesn't need to cache
+    let g:ctrlp_use_caching = 0
+else
+    let g:ctrlp_user_command = "find %s -type f | grep -Ev '"+ g:ctrlp_custom_ignore +"'"
+    let g:ctrlp_use_caching = 1
+endif
+
 
 "" NERDTree configuration
 let g:NERDTreeChDirMode=2
@@ -341,8 +355,6 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 nnoremap <silent> <F2> :NERDTreeFind<CR>
 noremap <F3> :NERDTreeToggle<CR>
 
-cnoremap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
-
 " syntastic
 if !has('nvim')
     let g:syntastic_always_populate_loc_list=1
@@ -352,6 +364,9 @@ if !has('nvim')
     let g:syntastic_style_warning_symbol = '⚠'
     let g:syntastic_auto_loc_list=1
     let g:syntastic_aggregate_errors = 1
+    let g:syntastic_mode_map = { 'mode': 'passive',
+                \'active_filetypes': ["python"],
+                \'passive_filetypes': [] }
 endif
 
 " Neomake
@@ -368,6 +383,16 @@ if has('nvim')
             \ }
 endif
 
+" The Silver Searcher
+if executable('ag')
+    " Use Ag instead of grep
+    set grepprg=ag\ --nogroup\ --nocolor
+
+    if !exists(":Ag")
+        command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+        nnoremap \ :Ag<SPACE>
+  endif
+endif
 " vim-localvimrc
 let g:localvimrc_name = [".lvimrc"]
 let g:localvimrc_event = ["BufWinEnter", "BufEnter"]

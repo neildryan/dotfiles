@@ -6,6 +6,7 @@ DOTFILES=$HOME/.files/
 sudo apt-get update
 sudo apt-get -y install make wget curl git
 sudo apt-get -y install zsh zsh-common vim vim-common vim-runtime
+sudo apt-get -y install silversearcher-ag
 sudo apt-get -y install terminator
 sudo apt-get -y autoremove
 
