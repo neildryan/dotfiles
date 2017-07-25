@@ -1,5 +1,9 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/home/neil/.oh-my-zsh
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export ZSH=/Users/neil/.oh-my-zsh
+else
+    export ZSH=/home/neil/.oh-my-zsh
+fi
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -49,7 +53,11 @@ HIST_STAMPS="mm/dd/yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git colorize colored-man-pages cp python debian common-aliases)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    plugins=(git ssh-agent colorize colored-man-pages cp)
+else
+    plugins=(git colorize colored-man-pages cp python debian common-aliases)
+fi
 
 # User configuration
 
@@ -82,24 +90,25 @@ export ARCHFLAGS="-arch x86_64"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias lc="colorls -sd"
 
-# Neovim garbage text fix
-# export VTE_VERSION='100'
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    alias fix_res="xrandr --output eDP-1 --scale 1x1 --pos 0x0 ; xrandr --output DP-1 --scale 2x2 --mode 1920x1080 --fb 7680x2160 --auto --pos 3840x0"
+    alias upgrade="sudo apt-get update && sudo apt-get upgrade && sudo apt-get autoremove"
+    # 18349
+    export PATH=$PATH:~/Desktop/18349/repos/ftditerm
+    export PATH=$PATH:/opt/gcc-arm-none-eabi/bin
 
-alias fix_res="xrandr --output eDP-1 --scale 1x1 --pos 0x0 ; xrandr --output DP-1 --scale 2x2 --mode 1920x1080 --fb 7680x2160 --auto --pos 3840x0"
-
-alias upgrade="sudo apt-get update && sudo apt-get upgrade && sudo apt-get autoremove"
+    # 18742
+    export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
+    export PATH=$PATH:$TOOLCHAIN_ROOT/bin
+fi
 
 setopt correctall
-
 export DEFAULT_USER="neil"
 
-# 18349
-export PATH=$PATH:~/Desktop/18349/repos/ftditerm
-export PATH=$PATH:/opt/gcc-arm-none-eabi/bin
-
-# 18742
-export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
-export PATH=$PATH:$TOOLCHAIN_ROOT/bin
-
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+else
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
