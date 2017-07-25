@@ -1,14 +1,24 @@
 #! /bin/bash
 
 DOTFILES=$HOME/.files/
+ITERM=com.googlecode.iterm2.plist
 
 # Get some essentials
-sudo apt-get update
-sudo apt-get -y install make wget curl git
-sudo apt-get -y install zsh zsh-common vim vim-common vim-runtime
-sudo apt-get -y install silversearcher-ag
-sudo apt-get -y install terminator
-sudo apt-get -y autoremove
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    brew install zsh-syntax-highlighting
+    brew cask install iterm2
+    brew install the_silver_searcher
+    cp $DOTFILES/$ITERM ~/Documents/$ITERM
+else
+    sudo add-apt-repository ppa:webupd8team/terminix
+    sudo apt-get update
+    sudo apt-get -y install make wget curl git python python3
+    sudo apt-get -y install zsh zsh-common vim vim-common vim-runtime vim-tiny
+    sudo apt-get -y install silversearcher-ag
+    sudo apt-get -y install tilix
+    sudo apt-get -y autoremove
+fi
 
 
 # Get oh-my-zsh
@@ -25,7 +35,6 @@ rm -f $HOME/.gdbinit
 rm -f $HOME/.config/nvim/init.vim
 rm -f $HOME/.gitconfig
 rm -f $HOME/.vimrc
-rm -f $HOME/.config/terminator/config
 
 # Setup symlinks so programs work
 ln -s $DOTFILES/zshrc $HOME/.zshrc
@@ -35,8 +44,6 @@ mkdir -p $HOME/.config/nvim/init.vim
 ln -s $DOTFILES/vimrc $HOME/.config/nvim/init.vim
 ln -s $DOTFILES/gitconfig $HOME/.gitconfig
 ln -s $DOTFILES/vimrc $HOME/.vimrc
-mkdir -p $HOME/.config/terminator/config
-ln -s $DOTFILES/.config/terminator/config $HOME/.config/terminator/config
 
 # Get fonts to play nice with agnoster
 wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
@@ -48,7 +55,7 @@ fc-cache -vf ~/.fonts
 mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d
 
 # Complete vim setup
-vim -S setup_vim_cmd
+vim -c "PlugInstall" -c "qall"
 
 
 source ~/.zshrc
