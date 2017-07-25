@@ -317,9 +317,9 @@ set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
 let g:ctrlp_map = '<Leader>p'
 let g:ctrlp_cmd = 'CtrlPCurWD'
-let g:ctrlp_open_new_file = 't' "TODO, maybe buffer?
+let g:ctrlp_arg_map = 1
 let g:ctrlp_follow_symlinks = 1 " Follow but avoid recursive
-let g:cctrlp_brief_prompt = 1 "<bs> on empty prompt exits
+let g:ctrlp_brief_prompt = 1 "<bs> on empty prompt exits
 if executable('ag')
     " Use ag in CtrlP for listing files; fast and respects .gitignore
     let g:ctrlp_user_command = 'ag -Q -l --nocolor --hidden -g "" %s'
