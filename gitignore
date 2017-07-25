@@ -1,4 +1,5 @@
 .DS_Store
+Desktop.ini
 *.sw[nop]
 .bundle
 .byebug_history
@@ -11,3 +12,8 @@ tags
 tmp/**/*
 !tmp/cache/.keep
 *.pyc
+
+.Trashes
+.Spotlight-V100
+Thumbs.db
+._*
