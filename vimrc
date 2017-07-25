@@ -1,7 +1,5 @@
 " Vim-plug core installation {{{
-if has('vim_starting')
-  set nocompatible               " Be iMproved
-endif
+set nocompatible               " Be iMproved
 
 if has('nvim')
     let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -14,7 +12,6 @@ if has('nvim')
 
       autocmd VimEnter * PlugInstall
     endif
-    " Required:
     call plug#begin(expand('~/.config/nvim/plugged'))
 else
     let vimplug_exists=expand('~/.vim/autoload/plug.vim')
@@ -27,7 +24,6 @@ else
 
       autocmd VimEnter * PlugInstall
     endif
-    " Required:
     call plug#begin(expand('~/.vim/plugged'))
 endif
 "}}}
@@ -236,6 +232,7 @@ set tabstop=4      "number of visual spaces per TAB
 set softtabstop=4  "number of spaces in tab when editing
 set shiftwidth=4   "
 set expandtab      "tabs are spaces
+set shiftround "Round indentation to nearest multiple of shiftwidth
 "}}}
 " Searching {{{
 set hlsearch   "highlight search matches
@@ -294,6 +291,14 @@ set ttimeoutlen=50  " Time to wait for keycode/sequence to complete
 set scrolloff=3 " Minimum number of lines to keep above & below cursor
 set mouse=a " Fix mouse scroll
 set autoread "Autoread if modified outside of vim
+set lazyredraw
+" iTerm Cursor Fix {{{
+if has("osx")
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+"}}}
 " }}}
 " Colors {{{
 " Colorscheme {{{
