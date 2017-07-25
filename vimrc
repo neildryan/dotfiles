@@ -53,13 +53,14 @@ Plug 'airblade/vim-gitgutter'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'sheerun/vim-polyglot'
 
+Plug 'tpope/vim-capslock'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'embear/vim-localvimrc'
 Plug 'junegunn/goyo.vim'
 
 let g:make = 'gmake'
 if exists('make')
-        let g:make = 'make'
+    let g:make = 'make'
 endif
 Plug 'Shougo/vimproc.vim', {'do': g:make}
 
@@ -112,16 +113,13 @@ set ignorecase
 set smartcase
 
 "" Directories for swp files
-set nobackup
-set noswapfile
+set nobackup      " No backup file create when overwriting
+set noswapfile    " No swap files
 
 set fileformats=unix,dos,mac
-set showcmd
+set showcmd       " Show partial command in last line of screen
 
-set shortmess=atI
-
-" % matches if/else and others
-runtime macros/matchit.vim
+set shortmess=atI "All abbreviations, truncate file message, no intro
 
 " session management
 if has('nvim')
@@ -142,15 +140,12 @@ set ruler
 
 let no_buffers_menu=1
 if !exists('g:not_finish_vimplug')
-"  colorscheme molokai
    colorscheme onedark
    let g:onedark_termcolors=16
    set background=light
 endif
 
-
-set t_Co=256
-set gfn=Monospace\ 10
+set t_Co=256   " 256 color
 
 if !has('nvim')
     if $COLORTERM == 'gnome-terminal'
@@ -167,8 +162,8 @@ if !has('nvim')
 endif
 
 "" Disable the blinking cursor.
-set gcr=a:blinkon0
-set scrolloff=3
+set guicursor=n-v-ve-c-o:block-blinkon0,i-ci-sm:ver100-blinkon0,r-cr:hor100-blinkon0
+set scrolloff=3 " Minimum number of lines to keep above & below cursor
 
 "" Status bar
 set laststatus=2
@@ -190,17 +185,18 @@ nnoremap N Nzzzv
 " vim-airline
 let g:airline_theme = 'powerlineish'
 if has('nvim')
-    let g:airline#extensions#syntastic#enabled = 0
+    let g:airline#extensions#neomake#enabled = 1
 else
     let g:airline#extensions#syntastic#enabled = 1
 endif
 
 let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#capslock#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_skip_empty_sections = 1
 
-let g:airline#extensions#virtualenv#enabled = 1
-set ttimeoutlen=50
+let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
+set ttimeoutlen=50  " Time to wait for keycode/sequence to complete
 
 "" Disable visualbell
 set noerrorbells visualbell t_vb=
@@ -225,9 +221,6 @@ if has('nvim')
   " vimshell.vim
   let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
   let g:vimshell_prompt =  '$ '
-  nnoremap <silent> <leader>sh :terminal<CR>
-else
-    nnoremap <silent> <leader>sh :VimShellCreate<CR>
 endif
 
 "*********************************************************************
@@ -256,7 +249,7 @@ augroup vimrc-remember-cursor-position
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 
-"" txt
+"" Auto-wrap text
 augroup vimrc-wrapping
   autocmd!
   autocmd BufRead,BufNewFile *.txt,*.tex call s:setupWrapping()
@@ -279,7 +272,7 @@ set autoread
 noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
 
 "" Split
-noremap <Leader>h :<C-u>split<CR>
+noremap <Leader>s :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
 set splitbelow
 set splitright
@@ -305,15 +298,11 @@ if !has('nvim')
     noremap <Leader>i :SyntasticInfo<CR>
 endif
 
-" session management
-nnoremap <leader>so :OpenSession<Space>
-nnoremap <leader>ss :SaveSession<Space>
-nnoremap <leader>sd :DeleteSession<CR>
-nnoremap <leader>sc :CloseSession<CR>
-
-"" Tabs
-nnoremap <Tab> :bnext<CR>
-nnoremap <S-Tab> :bprevious<CR>
+"" Buffers and Tabs
+nnoremap <C-N> :bnext<CR>
+nnoremap <C-P> :bprevious<CR>
+nnoremap <Tab>  :tabnext<CR>
+nnoremap <S-Tab> :tabprevious<CR>
 nnoremap <Leader>w :bdelete<CR>
 
 "" Opens an edit command with path of the currently edited file filled in
@@ -367,10 +356,8 @@ if !has('nvim')
     let g:syntastic_mode_map = { 'mode': 'passive',
                 \'active_filetypes': ["python"],
                 \'passive_filetypes': [] }
-endif
-
+else
 " Neomake
-if has('nvim')
     "autocmd! BufWritePost,BufEnter * Neomake " Run on read/write
     let g:neomake_open_list = 2 " Auto-open error window
     let g:neomake_error_sign = {
@@ -393,13 +380,11 @@ if executable('ag')
         nnoremap \ :Ag<SPACE>
   endif
 endif
+
 " vim-localvimrc
 let g:localvimrc_name = [".lvimrc"]
 let g:localvimrc_event = ["BufWinEnter", "BufEnter"]
 let g:localvimrc_sandbox = 0
-
-" Disable visualbell
-set noerrorbells visualbell t_vb=
 
 "" Copy/Paste/Cut
 if has('unnamedplus')
@@ -424,18 +409,15 @@ vnoremap K :m '<-2<CR>gv=gv
 " c
 autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd FileType cpp setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd BufRead,BufNewFile *.h,*.c set filetype=c
 
 " python
-" vim-python
 augroup vimrc-python
   autocmd!
   autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4 colorcolumn=79
       \ formatoptions+=croq softtabstop=4
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
-
-" vim-airline
-let g:airline#extensions#virtualenv#enabled = 1
 
 " Local vimrc
 let g:localvimrc_whitelist = ['/home/neil/Desktop/18349/',
@@ -487,5 +469,3 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
-
-autocmd BufRead,BufNewFile *.h,*.c set filetype=c
