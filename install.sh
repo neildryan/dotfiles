@@ -9,7 +9,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install zsh-syntax-highlighting
     brew cask install iterm2
     brew install the_silver_searcher
-    cp $DOTFILES/$ITERM ~/Documents/$ITERM
+    cp "$DOTFILES"/"$ITERM" "$HOME/Documents/$ITERM"
 else
     sudo add-apt-repository ppa:webupd8team/terminix
     sudo apt-get update
@@ -29,21 +29,21 @@ chsh -s /bin/zsh
 
 
 # Remove symlinks if they exist
-rm -f $HOME/.zshrc
-rm -f $HOME/.gitignore
-rm -f $HOME/.gdbinit
-rm -f $HOME/.config/nvim/init.vim
-rm -f $HOME/.gitconfig
-rm -f $HOME/.vimrc
+rm -f "$HOME/.zshrc"
+rm -f "$HOME/.gitignore"
+rm -f "$HOME/.gdbinit"
+rm -f "$HOME/.config/nvim/init.vim"
+rm -f "$HOME/.gitconfig"
+rm -f "$HOME/.vimrc"
 
 # Setup symlinks so programs work
-ln -s $DOTFILES/zshrc $HOME/.zshrc
-ln -s $DOTFILES/gitignore $HOME/.gitignore
-ln -s $DOTFILES/gdbinit $HOME/.gdbinit
-mkdir -p $HOME/.config/nvim/init.vim
-ln -s $DOTFILES/vimrc $HOME/.config/nvim/init.vim
-ln -s $DOTFILES/gitconfig $HOME/.gitconfig
-ln -s $DOTFILES/vimrc $HOME/.vimrc
+ln -s "$DOTFILES/zshrc" "$HOME/.zshrc"
+ln -s "$DOTFILES/gitignore" "$HOME/.gitignore"
+ln -s "$DOTFILES/gdbinit" "$HOME/.gdbinit"
+mkdir -p "$HOME/.config/nvim/init.vim"
+ln -s "$DOTFILES/vimrc" "$HOME/.config/nvim/init.vim"
+ln -s "$DOTFILES/gitconfig" "$HOME/.gitconfig"
+ln -s "$DOTFILES/vimrc" "$HOME/.vimrc"
 
 # Get fonts to play nice with agnoster
 wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
@@ -58,4 +58,4 @@ mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d
 vim -c "PlugInstall" -c "qall"
 
 
-source ~/.zshrc
+source "$HOME/.zshrc"
