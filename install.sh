@@ -22,11 +22,17 @@ else
     sudo apt-get -y autoremove
     mkdir -p "$HOME/.fonts"
     cp "$DOTFILES/fonts/*" "$HOME/.fonts"
-    sudo fc-cache -f -v
+    sudo fc-cache -vf ~/.fonts
+    # Stuff for agnoster
+    wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
+    wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
+    mv PowerlineSymbols.otf ~/.fonts
+    mkdir -p .config/fontconfig/conf.d
+    mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d
 fi
 
 
-# Get oh-my-zsh
+# Get oh-my-zsh, set shell to zsh
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 cp ~/.zshrc ~/.zshrc.orig
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
@@ -41,23 +47,14 @@ rm -f "$HOME/.config/nvim/init.vim"
 rm -f "$HOME/.gitconfig"
 rm -f "$HOME/.vimrc"
 
-# Setup symlinks so programs work
+# Setup symlinks
 ln -s "$DOTFILES/zshrc" "$HOME/.zshrc"
 ln -s "$DOTFILES/gitignore" "$HOME/.gitignore"
 ln -s "$DOTFILES/gdbinit" "$HOME/.gdbinit"
-mkdir -p "$HOME/.config/nvim/init.vim"
+mkdir -p "$HOME/.config/nvim"
 ln -s "$DOTFILES/vimrc" "$HOME/.config/nvim/init.vim"
 ln -s "$DOTFILES/gitconfig" "$HOME/.gitconfig"
 ln -s "$DOTFILES/vimrc" "$HOME/.vimrc"
-
-# Get fonts to play nice with agnoster
-wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
-mkdir -p ~/.fonts
-mv PowerlineSymbols.otf ~/.fonts
-mkdir -p .config/fontconfig/conf.d
-fc-cache -vf ~/.fonts
-mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d
 
 # Complete vim setup
 vim -c "PlugInstall" -c "qall"
