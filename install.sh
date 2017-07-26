@@ -9,7 +9,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install zsh-syntax-highlighting
     brew cask install iterm2
     brew install the_silver_searcher
-    cp "$DOTFILES"/"$ITERM" "$HOME/Documents/$ITERM"
+    cp "$DOTFILES/$ITERM" "$HOME/Documents/$ITERM"
+    cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts"
+    open "$DOTFILES/one_dark.itermcolors"
 else
     sudo add-apt-repository ppa:webupd8team/terminix
     sudo apt-get update

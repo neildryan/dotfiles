@@ -9,8 +9,6 @@ Configuration files for git, zsh, vim
 `./install.sh` - installs prerequisites, sets up symlinks
 
 ### OSX
-Double click `meslo_lg_m.ttf` in Finder to install the font
-
-Double click `one_dark.itermcolors` in Finder to install the iterm colorscheme
+Accept the dialog box that opens to add the one_dark colorscheme to iTerm
 
 Set iTerm to load preferences from `~/.files/com.googlecode.iterm2.plist`
