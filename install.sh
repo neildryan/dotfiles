@@ -20,6 +20,9 @@ else
     sudo apt-get -y install silversearcher-ag
     sudo apt-get -y install tilix
     sudo apt-get -y autoremove
+    mkdir -p "$HOME/.fonts"
+    cp "$DOTFILES/fonts/*" "$HOME/.fonts"
+    sudo fc-cache -f -v
 fi
 
 
