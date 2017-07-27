@@ -50,16 +50,9 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'embear/vim-localvimrc'
 Plug 'junegunn/goyo.vim'
 
-let g:make = 'gmake'
-if exists('make')
-    let g:make = 'make'
-endif
-Plug 'Shougo/vimproc.vim', {'do': g:make}
-
 "" Color
 Plug 'tomasr/molokai'
 Plug 'joshdick/onedark.vim'
-Plug 'KeitaNakamura/neodark.vim'
 
 call plug#end()
 "}}}
@@ -108,13 +101,13 @@ if !has('nvim')
                 \'active_filetypes': ["python"],
                 \'passive_filetypes': [] }
 
-    noremap <LeadC-Per>c :SyntasticCheck<CR>
+    noremap <Leader>c :SyntasticCheck<CR>
     noremap <Leader>r :SyntasticReset<CR>
     noremap <Leader>i :SyntasticInfo<CR>
 endif
 
 "}}}
-" Neomake {{{
+" Neomake - Auto-run on read/write disabled {{{
 if has('nvim')
     "autocmd! BufWritePost,BufEnter * Neomake " Run on read/write
     let g:neomake_open_list = 2 " Auto-open error window
@@ -129,7 +122,7 @@ if has('nvim')
 endif
 "}}}
 " vim-airline {{{
-let g:airline_theme = 'powerlineish'
+let g:airline_theme = 'wombat'
 if has('nvim')
     let g:airline#extensions#neomake#enabled = 1
 else
@@ -378,8 +371,8 @@ let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
 noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
 
 " Split
-noremap <Leader>s :<C-u>split<CR>
-noremap <Leader>v :<C-u>vsplit<CR>
+noremap <Leader>sp :<C-u>split<CR>
+noremap <Leader>vs :<C-u>vsplit<CR>
 set splitbelow
 set splitright
 
@@ -397,6 +390,11 @@ noremap <Leader>gs :Gstatus<CR>
 noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
 
+" Shell
+if has('nvim')
+    nnoremap <Leader>sh :terminal<CR>
+endif
+
 " Buffers and Tabs
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
@@ -404,9 +402,6 @@ nnoremap <Leader>w :bdelete<CR>
 
 " Opens an edit command with path of the currently edited file filled in
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-
-" Opens a tab edit command with path of the currently edited file filled
-noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
 " Move visual block
 vnoremap J :m '>+1<CR>gv=gv
