@@ -108,7 +108,7 @@ if !has('nvim')
                 \'active_filetypes': ["python"],
                 \'passive_filetypes': [] }
 
-    noremap <Leader>c :SyntasticCheck<CR>
+    noremap <LeadC-Per>c :SyntasticCheck<CR>
     noremap <Leader>r :SyntasticReset<CR>
     noremap <Leader>i :SyntasticInfo<CR>
 endif
@@ -398,10 +398,8 @@ noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
 
 " Buffers and Tabs
-nnoremap <C-N> :bnext<CR>
-nnoremap <C-P> :bprevious<CR>
-nnoremap <Tab>  :tabnext<CR>
-nnoremap <S-Tab> :tabprevious<CR>
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
 nnoremap <Leader>w :bdelete<CR>
 
 " Opens an edit command with path of the currently edited file filled in
