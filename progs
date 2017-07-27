@@ -2,7 +2,6 @@ audacity
 binutils
 build-essential
 cmake
-curl
 doxygen
 etckeeper
 gdb
@@ -12,4 +11,3 @@ neovim
 nscd
 spotify-client
 vivaldi
-wget
