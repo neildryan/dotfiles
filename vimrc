@@ -1,4 +1,6 @@
 " TODO Replace vim-trailing-whitespace with ntpeters/vim-better-whitespace
+" TODO Integrate xolox/vim-session, ss->save-session, sd->deleteSession,
+" so-open session, sc-close session
 " Vim-plug core installation {{{
 set nocompatible               " Be iMproved
 
