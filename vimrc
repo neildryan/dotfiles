@@ -1,3 +1,4 @@
+" TODO Replace vim-trailing-whitespace with ntpeters/vim-better-whitespace
 " Vim-plug core installation {{{
 set nocompatible               " Be iMproved
 
