@@ -90,6 +90,10 @@ export ARCHFLAGS="-arch x86_64"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+bindkey -r "^o"
+bindkey -r "^l"
+bindkey "^o" clear-screen
+
 alias lc="colorls -sd"
 
 if [[ "$OSTYPE" != "darwin"* ]]; then

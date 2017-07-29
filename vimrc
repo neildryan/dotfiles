@@ -1,4 +1,3 @@
-" TODO Replace vim-trailing-whitespace with ntpeters/vim-better-whitespace
 " TODO Integrate xolox/vim-session, ss->save-session, sd->deleteSession,
 " so-open session, sc-close session
 " Vim-plug core installation {{{
@@ -45,7 +44,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
-Plug 'bronson/vim-trailing-whitespace'
+Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
 
 Plug 'tpope/vim-capslock'
@@ -367,41 +366,69 @@ augroup vimrc-python
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
 "}}}
+if has('nvim')
+    autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
+    autocmd BufLeave term://* stopinsert
+endif
 "}}}
 " Mappings {{{
 let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
+
 " Line numbers - default off
 noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
 
 " Split
-noremap <Leader>sp :<C-u>split<CR>
-noremap <Leader>vs :<C-u>vsplit<CR>
+noremap <Leader>h :<C-u>split<CR>
+noremap <Leader>v :<C-u>vsplit<CR>
 set splitbelow
 set splitright
 
 " Switching windows
-noremap <Leader>j <C-w>j
-noremap <Leader>k <C-w>k
-noremap <Leader>l <C-w>l
-noremap <Leader>h <C-w>h
+if has('nvim')
+    inoremap <C-j> <Esc><C-w>j
+    inoremap <C-k> <Esc><C-w>k
+    inoremap <C-l> <Esc><C-w>l
+    inoremap <C-h> <Esc><C-w>h
+    noremap <C-j> <C-w>j
+    noremap <C-k> <C-w>k
+    noremap <C-l> <C-w>l
+    noremap <C-h> <C-w>h
+    tnoremap <C-j> <C-\><C-n><C-w>j
+    tnoremap <C-k> <C-\><C-n><C-w>k
+    tnoremap <C-l> <C-\><C-n><C-w>l
+    tnoremap <C-h> <C-\><C-n><C-w>h
+else
+    noremap <C-j> <C-w>j
+    noremap <C-k> <C-w>k
+    noremap <C-l> <C-w>l
+    noremap <C-h> <C-w>h
+endif
 
 " Git
 noremap <Leader>gc :Gcommit<CR>
-noremap <Leader>gsh :Gpush<CR>
-noremap <Leader>gll :Gpull<CR>
+noremap <Leader>gp :Gpush<CR>
+noremap <Leader>gl :Gpull<CR>
 noremap <Leader>gs :Gstatus<CR>
 noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
 
-" Shell
+" Shell, shell splits
 if has('nvim')
     nnoremap <Leader>sh :terminal<CR>
+    nnoremap <Leader>tv :<C-u>vsplit<CR>:term<CR>
+    nnoremap <Leader>th :<C-u>split<CR>:term<CR>
+    tnoremap <Esc> <C-\><C-n>
+    tnoremap <C-d> <C-\><C-n>:bd!<CR>
+    tnoremap <C-w> <C-\><C-n>:bdelete!<CR>
+else
+    nnoremap <Leader>sh :shell<CR>
 endif
 
-" Buffers and Tabs
+" Buffers and Windows
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
-nnoremap <Leader>w :bdelete<CR>
+nnoremap <C-w> :bdelete<CR>
+nnoremap <C-d> :q<CR>
 
 " Opens an edit command with path of the currently edited file filled in
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
@@ -410,11 +437,16 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-" Disable arrow keys for hardmode
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
+" Disable arrow keys for hardmode, but do something useful
+inoremap <Up> <NOP>
+inoremap <Down> <NOP>
+inoremap <Left> <NOP>
+inoremap <Right> <NOP>
+
+noremap <Up> :resize -1<CR>
+noremap <Down> :resize +1<CR>
+noremap <Left> :vertical resize -1<CR>
+noremap <Right> :vertical resize +1<CR>
 "}}}
 " The Silver Searcher {{{
 if executable('ag')
