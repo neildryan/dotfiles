@@ -95,8 +95,16 @@ bindkey -r "^l"
 bindkey "^o" clear-screen
 
 alias lc="colorls -sd"
+alias vim="nvim"
+
+setopt correctall
+export DEFAULT_USER="neil"
 
 if [[ "$OSTYPE" != "darwin"* ]]; then
+    if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+        source /etc/profile.d/vte-2.91.sh
+    fi
+
     alias fix_res="xrandr --output eDP-1 --scale 1x1 --pos 0x0 ; xrandr --output DP-1 --scale 2x2 --mode 1920x1080 --fb 7680x2160 --auto --pos 3840x0"
     alias upgrade="sudo apt-get update && sudo apt-get upgrade && sudo apt-get autoremove"
     # 18349
@@ -107,9 +115,6 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
     export PATH=$PATH:$TOOLCHAIN_ROOT/bin
 fi
-
-setopt correctall
-export DEFAULT_USER="neil"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

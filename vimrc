@@ -67,8 +67,6 @@ let g:nerdtree_tabs_focus_on_files=1
 let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
 let g:NERDTreeWinSize = 50
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
-nnoremap <silent> <F2> :NERDTreeFind<CR>
-noremap <F3> :NERDTreeToggle<CR>
 "}}}
 " Ctrlp.vim {{{
 set wildmode=list:longest,list:full
@@ -102,12 +100,7 @@ if !has('nvim')
     let g:syntastic_mode_map = { 'mode': 'passive',
                 \'active_filetypes': ["python"],
                 \'passive_filetypes': [] }
-
-    noremap <Leader>c :SyntasticCheck<CR>
-    noremap <Leader>r :SyntasticReset<CR>
-    noremap <Leader>i :SyntasticInfo<CR>
 endif
-
 "}}}
 " Neomake - Auto-run on read/write disabled {{{
 if has('nvim')
@@ -115,12 +108,10 @@ if has('nvim')
     let g:neomake_open_list = 2 " Auto-open error window
     let g:neomake_error_sign = {
                 \ 'text': '✗',
-                \ 'texthl': 'WarningMsg',
-                \ }
+                \ 'texthl': 'WarningMsg'}
     let g:neomake_warning_sign = {
                 \ 'text': '⚠',
-                \ 'texthl': 'ErrorMsg',
-            \ }
+                \ 'texthl': 'ErrorMsg'}
 endif
 "}}}
 " vim-airline {{{
@@ -175,7 +166,7 @@ endif
 let g:localvimrc_name = [".lvimrc"]
 let g:localvimrc_event = ["BufWinEnter", "BufEnter"]
 let g:localvimrc_sandbox = 0
-let g:localvimrc_whitelist = ['/home/neil/Desktop/18349/',
+let g:localvimrc_whitelist = ['/home/neil/Documents/18349/',
             \ '/home/neil/Desktop/Chain-MiBench',
             \ '/home/neil/Desktop/app-blinker-chain']
 "}}}
@@ -383,7 +374,7 @@ noremap <Leader>v :<C-u>vsplit<CR>
 set splitbelow
 set splitright
 
-" Switching windows
+" Switching windows {{{
 if has('nvim')
     inoremap <C-j> <Esc><C-w>j
     inoremap <C-k> <Esc><C-w>k
@@ -403,6 +394,7 @@ else
     noremap <C-l> <C-w>l
     noremap <C-h> <C-w>h
 endif
+"}}}
 
 " Git
 noremap <Leader>gc :Gcommit<CR>
@@ -412,7 +404,7 @@ noremap <Leader>gs :Gstatus<CR>
 noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
 
-" Shell, shell splits
+" Shell, shell splits {{{
 if has('nvim')
     nnoremap <Leader>sh :terminal<CR>
     nnoremap <Leader>tv :<C-u>vsplit<CR>:term<CR>
@@ -423,6 +415,7 @@ if has('nvim')
 else
     nnoremap <Leader>sh :shell<CR>
 endif
+"}}}
 
 " Buffers and Windows
 nnoremap <Tab> :bnext<CR>
@@ -447,6 +440,19 @@ noremap <Up> :resize -1<CR>
 noremap <Down> :resize +1<CR>
 noremap <Left> :vertical resize -1<CR>
 noremap <Right> :vertical resize +1<CR>
+
+" Neomake/Syntastic
+if has('nvim')
+    noremap <Leader>c :Neomake!<CR>
+    noremap <Leader>r :NeomakeCancelJobs<CR>
+    noremap <Leader>i :NeomakeInfo<CR>
+else
+    nnoremap <Leader>c :SyntasticCheck<CR>
+    nnoremap <Leader>r :SyntasticReset<CR>
+    nnoremap <Leader>i :SyntasticInfo<CR>
+endif
+
+noremap <F2> :NERDTreeToggle<CR>
 "}}}
 " The Silver Searcher {{{
 if executable('ag')
