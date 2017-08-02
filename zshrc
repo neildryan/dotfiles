@@ -94,7 +94,6 @@ bindkey -r "^o"
 bindkey -r "^l"
 bindkey "^o" clear-screen
 
-alias lc="colorls -sd"
 alias vim="nvim"
 
 setopt correctall

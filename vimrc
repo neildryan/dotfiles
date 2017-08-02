@@ -45,6 +45,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
+Plug 'xolox/vim-misc' "Pre-req for vim-session
 Plug 'xolox/vim-session'
 
 Plug 'tpope/vim-capslock'
