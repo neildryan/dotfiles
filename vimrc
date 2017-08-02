@@ -1,4 +1,3 @@
-" TODO Switch from Vim-plug to dien-vim (vim/nvim async plugin manager)
 " Vim-plug core installation {{{
 set nocompatible               " Be iMproved
 
