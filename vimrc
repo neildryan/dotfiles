@@ -1,5 +1,4 @@
-" TODO Integrate xolox/vim-session, ss->save-session, sd->deleteSession,
-" so-open session, sc-close session
+" TODO Switch from Vim-plug to dien-vim (vim/nvim async plugin manager)
 " Vim-plug core installation {{{
 set nocompatible               " Be iMproved
 
@@ -46,6 +45,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
+Plug 'xolox/vim-session'
 
 Plug 'tpope/vim-capslock'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -216,22 +216,19 @@ cnoreabbrev Qall qall
 " Tabs {{{
 set tabstop=4      "number of visual spaces per TAB
 set softtabstop=4  "number of spaces in tab when editing
-set shiftwidth=4   "
+set shiftwidth=4   "number of spaces for << and >>
 set expandtab      "tabs are spaces
-set shiftround "Round indentation to nearest multiple of shiftwidth
+set shiftround     "Round indentation to nearest multiple of shiftwidth
 "}}}
 " Searching {{{
 set hlsearch   "highlight search matches
 set incsearch  "Search as characters are entered
-set ignorecase
-set smartcase
+set ignorecase "Ignore case in searching
+set smartcase  "Don't ignore case if query has uppercase letters
 set showmatch  "highlight matching [{()}]
 
-"" Clean search (highlight)
-nnoremap <silent> <leader><space> :noh<cr>
-
 " Search mappings: These will make it so that going to the next one in a
-" search will center on the line it's found in.
+" search will center on the line it's found in and open folds
 nnoremap n nzzzv
 nnoremap N Nzzzv
 "}}}
@@ -259,25 +256,6 @@ let g:session_autoload = "no"
 let g:session_autosave = "no"
 let g:session_command_aliases = 1
 "}}}
-" Terminal emulation (neovim) {{{
-if has('nvim')
-  " vimshell.vim
-  let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
-  let g:vimshell_prompt =  '$ '
-endif
-"}}}
-let mapleader=' '
-
-"" Directories for swp files
-set nobackup      " No backup file create when overwriting
-set noswapfile    " No swap files
-
-set shortmess=atI "All abbreviations, truncate file message, no intro
-set ttimeoutlen=50  " Time to wait for keycode/sequence to complete
-set scrolloff=3 " Minimum number of lines to keep above & below cursor
-set mouse=a " Fix mouse scroll
-set autoread "Autoread if modified outside of vim
-set lazyredraw
 " iTerm Cursor Fix {{{
 if has("osx")
     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
@@ -285,9 +263,23 @@ if has("osx")
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 "}}}
+" Leader & Misc {{{
+let mapleader=' '
+
+" Directories for swp files
+set nobackup        " No backup file create when overwriting
+set noswapfile      " No swap files
+
+set shortmess=atI   "All abbreviations, truncate file message, no intro
+set ttimeoutlen=50  "Time to wait for keycode/sequence to complete
+set scrolloff=3     "Minimum number of lines to keep above & below cursor
+set mouse=a         "Fix mouse scroll
+set autoread        "Autoread if modified outside of vim
+set lazyredraw      "Don't redraw when executing macros/registers
+"}}}
 " }}}
 " Colors {{{
-" Colorscheme {{{
+" Colorschemes {{{
 if !exists('g:not_finish_vimplug')
    colorscheme onedark
    let g:onedark_termcolors=16
@@ -304,7 +296,6 @@ if !has('nvim')
             set term=xterm-256color
         endif
     endif
-
     if &term =~ '256color'
         set t_ut=
     endif
@@ -357,16 +348,21 @@ augroup vimrc-python
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
 "}}}
+"Neovim - start insert on entering terminal buffer {{{
 if has('nvim')
     autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
     autocmd BufLeave term://* stopinsert
 endif
+"}}}
 "}}}
 " Mappings {{{
 let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
 
 " Line numbers - default off
 noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
+
+"" Clean search (highlight)
+nnoremap <silent> <leader><space> :noh<cr>
 
 " Split
 noremap <Leader>h :<C-u>split<CR>
@@ -395,15 +391,14 @@ else
     noremap <C-h> <C-w>h
 endif
 "}}}
-
-" Git
+" Git - fugitive {{{
 noremap <Leader>gc :Gcommit<CR>
 noremap <Leader>gp :Gpush<CR>
 noremap <Leader>gl :Gpull<CR>
 noremap <Leader>gs :Gstatus<CR>
 noremap <Leader>gb :Gblame<CR>
 noremap <Leader>gd :Gvdiff<CR>
-
+"}}}
 " Shell, shell splits {{{
 if has('nvim')
     nnoremap <Leader>sh :terminal<CR>
@@ -430,7 +425,7 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
-" Disable arrow keys for hardmode, but do something useful
+" Disable arrow keys for hardmode, resize instead {{{
 inoremap <Up> <NOP>
 inoremap <Down> <NOP>
 inoremap <Left> <NOP>
@@ -440,8 +435,8 @@ noremap <Up> :resize -1<CR>
 noremap <Down> :resize +1<CR>
 noremap <Left> :vertical resize -1<CR>
 noremap <Right> :vertical resize +1<CR>
-
-" Neomake/Syntastic
+"}}}
+" Neomake/Syntastic {{{
 if has('nvim')
     noremap <Leader>c :Neomake!<CR>
     noremap <Leader>r :NeomakeCancelJobs<CR>
@@ -451,6 +446,13 @@ else
     nnoremap <Leader>r :SyntasticReset<CR>
     nnoremap <Leader>i :SyntasticInfo<CR>
 endif
+"}}}
+" Sessions {{{
+nnoremap <Leader>ss :SaveSession<CR>
+nnoremap <Leader>sd :DeleteSession<CR>
+nnoremap <Leader>so :OpenSession<CR>
+nnoremap <Leader>sc :CloseSession<CR>
+" }}}
 
 noremap <F2> :NERDTreeToggle<CR>
 "}}}
