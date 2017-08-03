@@ -1,3 +1,5 @@
+" TODO tdavis/proj-vim - maybe replacement for local-vimrc w/ nicer settings?
+" TODO craigemery/vim-autotag - auto ctag generation
 " Vim-plug core installation {{{
 set nocompatible               " Be iMproved
 
@@ -355,7 +357,7 @@ if has('nvim')
 endif
 "}}}
 "}}}
-" Mappings {{{
+" Key Mappings {{{
 let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
 
 " Line numbers - default off

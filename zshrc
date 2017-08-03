@@ -1,3 +1,4 @@
+# TODO - exa instead of ls? Gives nice sorting and performance
 # Path to your oh-my-zsh installation.
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export ZSH=/Users/neil/.oh-my-zsh
