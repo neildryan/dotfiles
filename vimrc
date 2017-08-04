@@ -1,5 +1,9 @@
 " TODO tdavis/proj-vim - maybe replacement for local-vimrc w/ nicer settings?
 " TODO craigemery/vim-autotag - auto ctag generation
+" TODO Tagbar,taglist
+" TODO Markdown syntax, vim-markdown
+" TODO vim-tmux-navigator w/ tmux?
+" TODO comfortable-motion.vim
 " Vim-plug core installation {{{
 set nocompatible               " Be iMproved
 
