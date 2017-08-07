@@ -56,10 +56,8 @@ Plug 'xolox/vim-session'
 Plug 'tpope/vim-capslock'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'embear/vim-localvimrc'
-Plug 'junegunn/goyo.vim'
 
 "" Color
-Plug 'tomasr/molokai'
 Plug 'joshdick/onedark.vim'
 
 call plug#end()
