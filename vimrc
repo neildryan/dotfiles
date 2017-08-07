@@ -46,7 +46,6 @@ Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
@@ -57,6 +56,7 @@ Plug 'tpope/vim-capslock'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'embear/vim-localvimrc'
 
+Plug 'Yggdroot/indentLine'
 "" Color
 Plug 'joshdick/onedark.vim'
 
@@ -119,7 +119,7 @@ if has('nvim')
 endif
 "}}}
 " vim-airline {{{
-let g:airline_theme = 'wombat'
+let g:airline_theme = 'onedark'
 if has('nvim')
     let g:airline#extensions#neomake#enabled = 1
 else
@@ -174,6 +174,9 @@ let g:localvimrc_whitelist = ['/home/neil/Documents/18349/',
             \ '/home/neil/Desktop/Chain-MiBench',
             \ '/home/neil/Desktop/app-blinker-chain']
 "}}}
+" indentLine {{{
+let g:indentLine_color_term = 252
+" }}}
 "}}}
 " Basic settings {{{
 " Required {{{
@@ -189,7 +192,6 @@ if !has('nvim')
 endif
 set fileformats=unix,dos,mac
 set showcmd       " Show partial command in last line of screen
-syntax on
 set ruler
 
 "" Fix backspace indent
@@ -285,9 +287,12 @@ set lazyredraw      "Don't redraw when executing macros/registers
 " Colors {{{
 " Colorschemes {{{
 if !exists('g:not_finish_vimplug')
-   colorscheme onedark
-   let g:onedark_termcolors=16
-   set background=light
+    if (has("termguicolors"))
+        set termguicolors
+    endif
+    syntax on
+    colorscheme onedark
+    set background=light
 endif
 "}}}
 " Terminal Color Fixes {{{
