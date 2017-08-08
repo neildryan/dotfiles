@@ -367,6 +367,12 @@ endif
 " Key Mappings {{{
 let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
 
+" Use M instead of ` for marks (the former is tmux prefix)
+nnoremap M `
+nnoremap ` M
+onoremap M `
+onoremap ` M
+
 " Line numbers - default off
 noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
 
