@@ -57,6 +57,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'embear/vim-localvimrc'
 
 Plug 'Yggdroot/indentLine'
+Plug 'christoomey/vim-tmux-navigator'
 "" Color
 Plug 'joshdick/onedark.vim'
 
