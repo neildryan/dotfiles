@@ -381,8 +381,8 @@ noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
 nnoremap <silent> <leader><space> :noh<cr>
 
 " Split
-noremap <Leader>h :<C-u>split<CR>
-noremap <Leader>v :<C-u>vsplit<CR>
+nnoremap <Leader>- :<C-u>split<CR>
+nnoremap <Leader>\| :<C-u>vsplit<CR>
 set splitbelow
 set splitright
 
