@@ -9,16 +9,17 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install zsh-syntax-highlighting
     brew cask install iterm2
     brew install the_silver_searcher
+    brew install tmux
+    brew link --overwrite tmux
     cp "$DOTFILES/$ITERM" "$HOME/Documents/$ITERM"
     cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts"
     open "$DOTFILES/one_dark.itermcolors"
 else
-    sudo add-apt-repository ppa:webupd8team/terminix
     sudo apt-get update
     sudo apt-get -y install make wget curl git python python3
-    sudo apt-get -y install zsh zsh-common vim vim-common vim-runtime vim-tiny
+    sudo apt-get -y install zsh zsh-common neovim
     sudo apt-get -y install silversearcher-ag
-    sudo apt-get -y install tilix
+    sudo apt-get -y install tmux
     sudo apt-get -y autoremove
     mkdir -p "$HOME/.fonts"
     cp "$DOTFILES/fonts/*" "$HOME/.fonts"
@@ -46,6 +47,7 @@ rm -f "$HOME/.gdbinit"
 rm -f "$HOME/.config/nvim/init.vim"
 rm -f "$HOME/.gitconfig"
 rm -f "$HOME/.vimrc"
+rm -f "$HOME/.tmux.conf"
 
 # Setup symlinks
 ln -s "$DOTFILES/zshrc" "$HOME/.zshrc"
@@ -55,9 +57,13 @@ mkdir -p "$HOME/.config/nvim"
 ln -s "$DOTFILES/vimrc" "$HOME/.config/nvim/init.vim"
 ln -s "$DOTFILES/gitconfig" "$HOME/.gitconfig"
 ln -s "$DOTFILES/vimrc" "$HOME/.vimrc"
+ln -s "$DOTFILES/tmux.conf" "$HOME/.tmux.conf"
 
 # Complete vim setup
 vim -c "PlugInstall" -c "qall"
 
+# Complete tmux setup
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+~/.tmux/plugins/tpm/bin/install_plugins
 
 source "$HOME/.zshrc"
