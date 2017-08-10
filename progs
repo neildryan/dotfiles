@@ -2,12 +2,15 @@ audacity
 binutils
 build-essential
 cmake
+ctags
 doxygen
 etckeeper
+firefox
 gdb
 gdbserver
-keepass2
+keepassxc (macPass on OSX)
 neovim
 nscd
+shellcheck
 spotify-client
-vivaldi
+xcape (karabiner-elements on OSX)

@@ -17,28 +17,17 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
     sudo apt-get update
     sudo apt-get -y install make wget curl git python python3
-    sudo apt-get -y install zsh zsh-common neovim
+    sudo apt-get -y install zsh zsh-common neovim tmux
     sudo apt-get -y install silversearcher-ag
-    sudo apt-get -y install tmux
     sudo apt-get -y autoremove
     mkdir -p "$HOME/.fonts"
     cp "$DOTFILES/fonts/*" "$HOME/.fonts"
     sudo fc-cache -vf ~/.fonts
-    # Stuff for agnoster
-    wget https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-    wget https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
-    mv PowerlineSymbols.otf ~/.fonts
-    mkdir -p .config/fontconfig/conf.d
-    mv 10-powerline-symbols.conf ~/.config/fontconfig/conf.d
 fi
-
 
 # Get oh-my-zsh, set shell to zsh
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
-cp ~/.zshrc ~/.zshrc.orig
-cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
 chsh -s /bin/zsh
-
 
 # Remove symlinks if they exist
 rm -f "$HOME/.zshrc"
@@ -61,9 +50,5 @@ ln -s "$DOTFILES/tmux.conf" "$HOME/.tmux.conf"
 
 # Complete vim setup
 vim -c "PlugInstall" -c "qall"
-
-# Complete tmux setup
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-~/.tmux/plugins/tpm/bin/install_plugins
 
 source "$HOME/.zshrc"
