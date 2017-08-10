@@ -11,6 +11,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install the_silver_searcher
     brew install tmux
     brew link --overwrite tmux
+    brew install reattach-to-user-namespace
     cp "$DOTFILES/$ITERM" "$HOME/Documents/$ITERM"
     cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts"
     open "$DOTFILES/one_dark.itermcolors"
@@ -49,6 +50,6 @@ ln -s "$DOTFILES/vimrc" "$HOME/.vimrc"
 ln -s "$DOTFILES/tmux.conf" "$HOME/.tmux.conf"
 
 # Complete vim setup
-vim -c "PlugInstall" -c "qall"
+nvim -c "PlugInstall" -c "qall"
 
 source "$HOME/.zshrc"
