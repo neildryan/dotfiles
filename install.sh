@@ -40,4 +40,8 @@ ln -s -f "$DOTFILES/tmux.conf" "$HOME/.tmux.conf"
 # Complete vim setup
 nvim -c "PlugInstall" -c "qall"
 
+# Complete tmux setup
+mkdir -p "$HOME/.tmux"
+git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/tmux-resurrect
+
 source "$HOME/.zshrc"

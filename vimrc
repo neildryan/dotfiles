@@ -2,8 +2,6 @@
 " TODO craigemery/vim-autotag - auto ctag generation
 " TODO Tagbar,taglist
 " TODO Markdown syntax, vim-markdown
-" TODO vim-tmux-navigator w/ tmux?
-" TODO comfortable-motion.vim
 " Vim-plug core installation {{{
 set nocompatible               " Be iMproved
 
@@ -58,6 +56,7 @@ Plug 'embear/vim-localvimrc'
 
 Plug 'Yggdroot/indentLine'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'tpope/vim-obsession'
 "" Color
 Plug 'joshdick/onedark.vim'
 
