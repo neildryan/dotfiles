@@ -70,12 +70,7 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR='vim'
-else
-    export EDITOR='mvim'
-fi
+export EDITOR='vim'
 
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
@@ -114,6 +109,10 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     # 18742
     export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
     export PATH=$PATH:$TOOLCHAIN_ROOT/bin
+
+    #18643
+    export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
+    export PATH=$PATH:/opt/Xilinx/Vivado/2017.2/bin
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then

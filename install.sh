@@ -16,13 +16,10 @@ else # Debian Linux
     sudo apt-get update
     sudo apt-get -y install make wget curl git python python3
     sudo apt-get -y install zsh zsh-common neovim tmux silversearcher-ag
+    sudo apt-get -y install zsh-syntax-highlighting
     sudo apt-get -y install libevdev-dev libudev-dev
     sudo apt-get -y autoremove
     mkdir -p "$HOME/.fonts" && cp "$DOTFILES/fonts/*" "$HOME/.fonts"
-    mkdir -p "$HOME/utils"
-    cd "$HOME/utils"
-    curl https://raw.githubusercontent.com/oblitnum/caps2esc/master/caps2esc.c
-    gcc caps2esc.c -o caps2esc -I/usr/include/libevdev-1.0 -levdev -ludev
     sudo fc-cache -vf ~/.fonts
 fi
 
