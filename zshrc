@@ -101,14 +101,16 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     fi
 
     alias fix_res="xrandr --output eDP-1 --scale 1x1 --pos 0x0 ; xrandr --output DP-1 --scale 2x2 --mode 1920x1080 --fb 7680x2160 --auto --pos 3840x0"
-    alias upgrade="sudo apt-get update && sudo apt-get upgrade && sudo apt-get autoremove"
+    alias upgrade="sudo apt update && sudo apt dist-upgrade && sudo apt autoremove"
     # 18349
-    export PATH=$PATH:~/Desktop/18349/repos/ftditerm
+    export PATH=$PATH:~/Documents/18349/18349/repos/ftditerm
     export PATH=$PATH:/opt/gcc-arm-none-eabi/bin
 
     # 18742
     export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
     export PATH=$PATH:$TOOLCHAIN_ROOT/bin
+    export LLVM_ROOT=/opt/llvm/llvm-install
+    export PATH=$PATH:$LLVM_ROOT/bin
 
     #18643
     export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
