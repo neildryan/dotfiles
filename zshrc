@@ -103,7 +103,7 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     alias fix_res="xrandr --output eDP-1 --scale 1x1 --pos 0x0 ; xrandr --output DP-1 --scale 2x2 --mode 1920x1080 --fb 7680x2160 --auto --pos 3840x0"
     alias upgrade="sudo apt update && sudo apt dist-upgrade && sudo apt autoremove"
     # 18349
-    export PATH=$PATH:~/Documents/18349/18349/repos/ftditerm
+    export PATH=$PATH:~/Documents/18349/ftditerm/
     export PATH=$PATH:/opt/gcc-arm-none-eabi/bin
 
     # 18742
