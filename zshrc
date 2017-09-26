@@ -115,6 +115,7 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     #18643
     export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
     export PATH=$PATH:/opt/Xilinx/Vivado/2017.2/bin
+    export PATH=$PATH:/opt/Xilinx/Vivado_HLS/2017.2/bin
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
