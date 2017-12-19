@@ -16,20 +16,22 @@ else # Debian Linux
     sudo add-apt-repository ppa:snwh/pulp
     sudo dpkg --add-architecture i386
     sudo apt-get update
-    sudo apt-get -y install make wget curl git python python3
+    sudo apt-get -y install make wget curl git python python3 cmake doxygen
     sudo apt-get -y install zsh zsh-common neovim tmux silversearcher-ag
     sudo apt-get -y install zsh-syntax-highlighting
     sudo apt-get -y install paper-icon-theme paper-cursor-theme paper-gtk-theme
     sudo apt-get -y install arc-theme
-    sudo apt-get -y install python-pip
-    sudo apt-get -y install mulitarch-support
-    sudo apt-get -y install libc6:i386 libncurses5:i386
-    sudo apt-get -y install keepassx
+    sudo apt-get -y install python-pip docker powertop tlp
+    sudo apt-get -y install multiarch-suppport libc6:i386 libncurses5:i386
+    sudo apt-get -y install keepassx audacity pinta radare2 virtualbox
+    sudo apt-get -y virtualbox-ext-pack
+    sudo apt-get -y youtube-dl mkchromecast
     sudo apt-get -y autoremove
     mkdir -p "$HOME/.fonts"
     cp $DOTFILES/fonts/* $HOME/.fonts
     sudo fc-cache -vf ~/.fonts
     rmdir -f ~/Videos ~/Templates ~/Music ~/Public
+    echo "\n\n"
 fi
 
 # Get oh-my-zsh, set shell to zsh
@@ -51,8 +53,8 @@ ln -s -f "$DOTFILES/tmux.conf" "$HOME/.tmux.conf"
 # Complete vim setup
 nvim -c "PlugInstall" -c "qall"
 
-# Complete tmux setup
-mkdir -p "$HOME/.tmux"
-git clone https://github.com/tmux-plugins/tmux-resurrect ~/.tmux/tmux-resurrect
-
 source "$HOME/.zshrc"
+echo "\n\n"
+echo "1) spotify and google-chrome-stable"
+echo "2) texlive-full"
+echo "3) mkchromecast requirements"
