@@ -57,6 +57,7 @@ Plug 'embear/vim-localvimrc'
 Plug 'Yggdroot/indentLine'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-obsession'
+Plug 'junegunn/goyo.vim'
 "" Color
 Plug 'joshdick/onedark.vim'
 
@@ -171,7 +172,7 @@ let g:localvimrc_name = [".lvimrc"]
 let g:localvimrc_event = ["BufWinEnter", "BufEnter"]
 let g:localvimrc_sandbox = 0
 let g:localvimrc_whitelist = ['/home/neil/Documents/18349/',
-            \ '/home/neil/Desktop/Chain-MiBench',
+            \ '/home/neil/Documents/coati-ecosystem/',
             \ '/home/neil/Desktop/app-blinker-chain']
 "}}}
 " indentLine {{{
@@ -440,6 +441,9 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" Easy making
+nnoremap <Leader>m :w<CR> :! make<CR>
+
 " Disable arrow keys for hardmode, resize instead {{{
 inoremap <Up> <NOP>
 inoremap <Down> <NOP>
@@ -482,4 +486,5 @@ if executable('ag')
   endif
 endif
 "}}}
+let g:tex_conceal = " "
 " vim:foldmethod=marker:foldlevel=0
