@@ -14,6 +14,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     open "$DOTFILES/one_dark.itermcolors"
 else # Debian Linux
     sudo add-apt-repository ppa:snwh/pulp
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
+    echo deb http://repository.spotify.com stable non-free | sudo tee /etc/apt/sources.list.d/spotify.list
     sudo dpkg --add-architecture i386
     sudo apt-get update
     sudo apt-get -y install make wget curl git python python3 cmake doxygen
@@ -24,13 +26,16 @@ else # Debian Linux
     sudo apt-get -y install python-pip docker powertop tlp
     sudo apt-get -y install multiarch-suppport libc6:i386 libncurses5:i386
     sudo apt-get -y install keepassx audacity pinta radare2 virtualbox
-    sudo apt-get -y virtualbox-ext-pack
-    sudo apt-get -y youtube-dl mkchromecast
+    sudo apt-get -y install virtualbox-ext-pack
+    sudo apt-get -y install youtube-dl mkchromecast
+    sudo apt-get -y install gnome-tweak-tool chrome-gnome-shell gnome-shell-pomodoro
+    sudo apt-get -y install spotify-client
+    sudo apt-get -y dist-upgrade
     sudo apt-get -y autoremove
     mkdir -p "$HOME/.fonts"
     cp $DOTFILES/fonts/* $HOME/.fonts
     sudo fc-cache -vf ~/.fonts
-    rmdir -f ~/Videos ~/Templates ~/Music ~/Public
+    rmdir ~/Videos ~/Templates ~/Music ~/Public
     echo "\n\n"
 fi
 
