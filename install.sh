@@ -19,7 +19,7 @@ else # Debian Linux
     sudo apt-get -y install make wget curl git python python3 cmake doxygen
     sudo apt-get -y install zsh zsh-common neovim tmux silversearcher-ag
     sudo apt-get -y install zsh-syntax-highlighting
-    sudo apt-get -y install paper-icon-theme paper-cursor-theme paper-gtk-theme
+    sudo apt-get -y install paper-icon-theme paper-cursor-theme
     sudo apt-get -y install arc-theme
     sudo apt-get -y install python-pip docker powertop tlp
     sudo apt-get -y install multiarch-suppport libc6:i386 libncurses5:i386
