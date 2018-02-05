@@ -70,7 +70,7 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-export EDITOR='vim'
+export EDITOR='nvim'
 
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
@@ -91,8 +91,9 @@ bindkey -r "^l"
 bindkey "^o" clear-screen
 
 alias vim="nvim"
+alias r2="r2 -A"
 
-setopt correctall
+setopt correct
 export DEFAULT_USER="neil"
 
 if [[ "$OSTYPE" != "darwin"* ]]; then
@@ -100,19 +101,20 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
         source /etc/profile.d/vte-2.91.sh
     fi
 
-    alias fix_res="xrandr --output eDP-1 --scale 1x1 --pos 0x0 ; xrandr --output DP-1 --scale 2x2 --mode 1920x1080 --fb 7680x2160 --auto --pos 3840x0"
-    alias upgrade="sudo apt-get update && sudo apt-get upgrade && sudo apt-get autoremove"
     # 18349
-    export PATH=$PATH:~/Desktop/18349/repos/ftditerm
+    export PATH=$PATH:~/Documents/18349/ftditerm/
     export PATH=$PATH:/opt/gcc-arm-none-eabi/bin
 
     # 18742
     export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
     export PATH=$PATH:$TOOLCHAIN_ROOT/bin
+    export LLVM_ROOT=/opt/llvm/llvm-install
+    export PATH=$PATH:$LLVM_ROOT/bin
 
     #18643
     export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
     export PATH=$PATH:/opt/Xilinx/Vivado/2017.2/bin
+    export PATH=$PATH:/opt/Xilinx/Vivado_HLS/2017.2/bin
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
