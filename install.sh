@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e
+
 DOTFILES=$HOME/.files/
 ITERM=com.googlecode.iterm2.plist
 
@@ -24,7 +26,7 @@ else # Debian Linux
     sudo apt-get -y install paper-icon-theme paper-cursor-theme
     sudo apt-get -y install arc-theme
     sudo apt-get -y install python-pip docker powertop tlp
-    sudo apt-get -y install multiarch-suppport libc6:i386 libncurses5:i386
+    sudo apt-get -y install libc6:i386 libncurses5:i386
     sudo apt-get -y install keepassx audacity pinta radare2 virtualbox
     sudo apt-get -y install virtualbox-ext-pack
     sudo apt-get -y install youtube-dl mkchromecast

@@ -1,10 +1,6 @@
-" TODO tdavis/proj-vim - maybe replacement for local-vimrc w/ nicer settings?
 " TODO craigemery/vim-autotag - auto ctag generation
 " TODO Tagbar,taglist
-" TODO Markdown syntax, vim-markdown
 " Vim-plug core installation {{{
-set nocompatible               " Be iMproved
-
 if has('nvim')
     let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
     if !filereadable(vimplug_exists)
@@ -171,9 +167,8 @@ endif
 let g:localvimrc_name = [".lvimrc"]
 let g:localvimrc_event = ["BufWinEnter", "BufEnter"]
 let g:localvimrc_sandbox = 0
-let g:localvimrc_whitelist = ['/home/neil/Documents/18349/',
-            \ '/home/neil/Documents/coati-ecosystem/',
-            \ '/home/neil/Desktop/app-blinker-chain']
+let g:localvimrc_whitelist = ['/home/neil/Documents/docker-coati/coati/',
+            \ '/home/neil/Documents/349-s17']
 "}}}
 " indentLine {{{
 let g:indentLine_color_term = 252
@@ -221,7 +216,7 @@ cnoreabbrev Q q
 cnoreabbrev Qall qall
 "}}}
 " Tabs {{{
-set tabstop=4      "number of visual spaces per TAB
+set tabstop=8      "number of visual spaces per TAB
 set softtabstop=4  "number of spaces in tab when editing
 set shiftwidth=4   "number of spaces for << and >>
 set expandtab      "tabs are spaces
