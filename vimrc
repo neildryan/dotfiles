@@ -345,9 +345,6 @@ augroup END
 " .c, .h files {{{
 autocmd BufRead,BufNewFile *.h,*.c set filetype=c
 "}}}
-"System verilog files {{{
-autocmd BufRead,BufNewFile *.sv,*.v set filetype=verilog_systemverilog
-"}}}
 " python files {{{
 augroup vimrc-python
   autocmd!
