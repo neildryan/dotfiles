@@ -281,16 +281,6 @@ set lazyredraw      "Don't redraw when executing macros/registers
 "}}}
 " }}}
 " Colors {{{
-" Colorschemes {{{
-if !exists('g:not_finish_vimplug')
-    if (has("termguicolors"))
-        set termguicolors
-    endif
-    syntax on
-    colorscheme onedark
-    set background=light
-endif
-"}}}
 " Terminal Color Fixes {{{
 set t_Co=256   " 256 color
 if !has('nvim')
@@ -304,6 +294,18 @@ if !has('nvim')
     if &term =~ '256color'
         set t_ut=
     endif
+endif
+if (has("nvim"))
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+"}}}
+" Colorschemes {{{
+if !exists('g:not_finish_vimplug')
+    if (has("termguicolors"))
+        set termguicolors
+    endif
+    syntax on
+    colorscheme onedark
 endif
 "}}}
 "}}}
@@ -333,6 +335,7 @@ augroup END
 augroup vimrc-wrapping
   autocmd!
   autocmd BufRead,BufNewFile *.txt,*.tex call s:setupWrapping()
+  autocmd BufRead,BufNewFile *.txt,*.tex setlocal spell colorcolumn=80
 augroup END
 "}}}
 " make/cmake files {{{
@@ -343,13 +346,13 @@ augroup vimrc-make-cmake
 augroup END
 "}}}
 " .c, .h files {{{
-autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+autocmd BufRead,BufNewFile *.h,*.c set filetype=c colorcolumn=80
 "}}}
 " python files {{{
 augroup vimrc-python
   autocmd!
-  autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4 colorcolumn=79
-      \ formatoptions+=croq softtabstop=4
+  autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4
+      \ colorcolumn=79 formatoptions+=croq softtabstop=4
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
 "}}}

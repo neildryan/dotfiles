@@ -51,13 +51,11 @@ HIST_STAMPS="mm/dd/yyyy"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
+# TODO ADD gitfast
 if [[ "$OSTYPE" == "darwin"* ]]; then
     plugins=(git ssh-agent colorize colored-man-pages cp)
 else
-    plugins=(git colorize colored-man-pages cp python debian common-aliases)
+    plugins=(git colorize colored-man-pages ubuntu common-aliases)
 fi
 
 # User configuration
@@ -102,19 +100,15 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     fi
 
     # 18349
-    export PATH=$PATH:~/Documents/18349/ftditerm/
+    export PATH=$PATH:/opt/ftditerm/
     export PATH=$PATH:/opt/gcc-arm-none-eabi/bin
 
-    # 18742
+    # Coati
     export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
     export PATH=$PATH:$TOOLCHAIN_ROOT/bin
     export LLVM_ROOT=/opt/llvm/llvm-install
     export PATH=$PATH:$LLVM_ROOT/bin
 
-    #18643
-    export XILINXD_LICENSE_FILE="2101@xilinx-lic.ece.cmu.edu"
-    export PATH=$PATH:/opt/Xilinx/Vivado/2017.2/bin
-    export PATH=$PATH:/opt/Xilinx/Vivado_HLS/2017.2/bin
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
