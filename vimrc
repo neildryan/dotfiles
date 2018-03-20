@@ -442,6 +442,9 @@ vnoremap K :m '<-2<CR>gv=gv
 " Easy making
 nnoremap <Leader>m :w<CR> :! make<CR>
 
+" Timestamps
+nnoremap <Leader>log :r!getlogtime<CR>A
+
 " Disable arrow keys for hardmode, resize instead {{{
 inoremap <Up> <NOP>
 inoremap <Down> <NOP>

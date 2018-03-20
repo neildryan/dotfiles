@@ -94,6 +94,8 @@ alias r2="r2 -A"
 setopt correct
 export DEFAULT_USER="neil"
 
+export PATH=$PATH:~/.files/util
+
 if [[ "$OSTYPE" != "darwin"* ]]; then
     if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         source /etc/profile.d/vte-2.91.sh
