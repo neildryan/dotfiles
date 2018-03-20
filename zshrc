@@ -1,32 +1,23 @@
-# TODO - exa instead of ls? Gives nice sorting and performance
-# Path to your oh-my-zsh installation.
+# Path to your oh-my-zsh installation. {{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export ZSH=/Users/neil/.oh-my-zsh
 else
     export ZSH=/home/neil/.oh-my-zsh
 fi
-
+#}}}
+# Theme {{{
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 ZSH_THEME="agnoster"
-
+#}}}
+# Other ZSH config {{{
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
 # Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=7
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
@@ -42,14 +33,16 @@ COMPLETION_WAITING_DOTS="true"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+
+# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+# export MANPATH="/usr/local/man:$MANPATH"
+#}}}
+# Oh-my-zsh config {{{
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # TODO ADD gitfast
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -57,64 +50,85 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
     plugins=(git colorize colored-man-pages ubuntu common-aliases)
 fi
-
-# User configuration
-
-# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
-# export MANPATH="/usr/local/man:$MANPATH"
-
 source $ZSH/oh-my-zsh.sh
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
+#}}}
+# User configuration {{{
+export LANG=en_US.UTF-8
 export EDITOR='nvim'
 
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+setopt correct
+export DEFAULT_USER="neil"
+export MARKPATH=~/.files/marks
+#}}}
+# Aliases {{{
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 bindkey -r "^o"
 bindkey -r "^l"
 bindkey "^o" clear-screen
 
 alias vim="nvim"
 alias r2="r2 -A"
-
-setopt correct
-export DEFAULT_USER="neil"
-
+#}}}
+#Functions {{{
+bookmark() { # From https://vincent.bernat.im/en/blog/2015-zsh-directory-bookmarks {{{
+    if (( $# == 0 )); then
+        # When no arguments are provided, just display existing
+        # bookmarks
+        for link in $MARKPATH/*(N@); do
+            local markname="$fg[green]${link:t}$reset_color"
+            local markpath="$fg[blue]${link:A}$reset_color"
+            printf "%-30s -> %s\n" $markname $markpath
+        done
+    else
+        # Otherwise, we may want to add a bookmark or delete an
+        # existing one.
+        local -a delete
+        zparseopts -D d=delete
+        if (( $+delete[1] )); then
+            # With `-d`, we delete an existing bookmark
+            command rm "$MARKPATH/$1"
+        else
+            # Otherwise, add a bookmark to the current
+            # directory. The first argument is the bookmark
+            # name. `.` is special and means the bookmark should
+            # be named after the current directory.
+            local name=$1
+            if [[ $name == "." ]]; then
+                name=${PWD:t}
+            fi
+            ln -s $PWD $MARKPATH/$name
+            hash -d -- $name=$PWD
+        fi
+    fi
+}
+#}}}
+#}}}
+# Path changes{{{
 export PATH=$PATH:~/.files/util
-
 if [[ "$OSTYPE" != "darwin"* ]]; then
     if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         source /etc/profile.d/vte-2.91.sh
     fi
-
-    # 18349
+    # 18349 {{{
     export PATH=$PATH:/opt/ftditerm/
     export PATH=$PATH:/opt/gcc-arm-none-eabi/bin
-
-    # Coati
+    #}}}
+    # Coati {{{
     export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
     export PATH=$PATH:$TOOLCHAIN_ROOT/bin
     export LLVM_ROOT=/opt/llvm/llvm-install
     export PATH=$PATH:$LLVM_ROOT/bin
-
+    #}}}
 fi
-
+#}}}
+# Zsh-syntax-highlighting{{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
+#}}}
+# vim:foldmethod=marker:foldlevel=0
