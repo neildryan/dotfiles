@@ -487,5 +487,7 @@ if executable('ag')
   endif
 endif
 "}}}
+let g:python_host_prog = "/usr/bin/python"
+let g:python3_host_prog = "/usr/bin/python3"
 let g:tex_conceal = " "
 " vim:foldmethod=marker:foldlevel=0

@@ -71,6 +71,7 @@ bindkey "^o" clear-screen
 
 alias vim="nvim"
 alias r2="r2 -A"
+alias open='xdg-open'
 #}}}
 #Functions {{{
 bookmark() { # From https://vincent.bernat.im/en/blog/2015-zsh-directory-bookmarks {{{
@@ -106,22 +107,18 @@ bookmark() { # From https://vincent.bernat.im/en/blog/2015-zsh-directory-bookmar
 }
 #}}}
 #}}}
+# Bookmark Setup {{{
+for link in $MARKPATH/*(N@); do
+    hash -d -- "${link:t}=${link:A}"
+done
+# }}}
 # Path changes{{{
 export PATH=$PATH:~/.files/util
+export PATH=$PATH:~/.local/bin
 if [[ "$OSTYPE" != "darwin"* ]]; then
     if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         source /etc/profile.d/vte-2.91.sh
     fi
-    # 18349 {{{
-    export PATH=$PATH:/opt/ftditerm/
-    export PATH=$PATH:/opt/gcc-arm-none-eabi/bin
-    #}}}
-    # Coati {{{
-    export TOOLCHAIN_ROOT=/opt/ti/msp430-gcc
-    export PATH=$PATH:$TOOLCHAIN_ROOT/bin
-    export LLVM_ROOT=/opt/llvm/llvm-install
-    export PATH=$PATH:$LLVM_ROOT/bin
-    #}}}
 fi
 #}}}
 # Zsh-syntax-highlighting{{{
