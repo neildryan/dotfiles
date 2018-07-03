@@ -12,7 +12,7 @@ sudo apt-get -y install pep8 pycodestyle python-pip
 sudo apt-get -y install htop
 sudo apt-get -y install keepassx pinta radare2
 sudo apt-get -y install paper-icon-theme paper-cursor-theme arc-theme
-sudo apt-get -y install jackd
+sudo apt-get -y install jackd patchage qsynth
 sudo apt-get -y install teamviewer
 sudo snap install spotify
 
