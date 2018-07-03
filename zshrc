@@ -115,6 +115,8 @@ done
 # Path changes{{{
 export PATH=$PATH:~/.files/util
 export PATH=$PATH:~/.local/bin
+export PATH=$PATH:~/Dropbox/bin
+export PATH=$PATH:/snap/bin
 if [[ "$OSTYPE" != "darwin"* ]]; then
     if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         source /etc/profile.d/vte-2.91.sh
