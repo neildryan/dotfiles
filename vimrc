@@ -278,6 +278,7 @@ set scrolloff=3     "Minimum number of lines to keep above & below cursor
 set mouse=a         "Fix mouse scroll
 set autoread        "Autoread if modified outside of vim
 set lazyredraw      "Don't redraw when executing macros/registers
+set conceallevel=0  "Never hide text (.tex/.md files will auto-bold
 "}}}
 " }}}
 " Colors {{{
@@ -334,8 +335,8 @@ augroup END
 " Auto-wrap text for .txt, .tex files {{{
 augroup vimrc-wrapping
   autocmd!
-  autocmd BufRead,BufNewFile *.txt,*.tex call s:setupWrapping()
-  autocmd BufRead,BufNewFile *.txt,*.tex setlocal spell colorcolumn=80
+  autocmd BufRead,BufNewFile *.txt,*.tex,*.md call s:setupWrapping()
+  autocmd BufRead,BufNewFile *.txt,*.tex,*.md setlocal spell colorcolumn=80
 augroup END
 "}}}
 " make/cmake files {{{

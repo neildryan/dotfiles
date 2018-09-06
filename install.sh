@@ -29,6 +29,8 @@ else # Debian Linux
     cp $DOTFILES/fonts/* $HOME/.fonts
     sudo fc-cache -vf ~/.fonts
     rmdir ~/Videos ~/Templates ~/Music ~/Public
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
     printf "\n\n"
 fi
 

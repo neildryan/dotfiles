@@ -48,13 +48,14 @@ HIST_STAMPS="mm/dd/yyyy"
 if [[ "$OSTYPE" == "darwin"* ]]; then
     plugins=(git ssh-agent colorize colored-man-pages cp)
 else
-    plugins=(git colorize colored-man-pages ubuntu common-aliases)
+    plugins=(git colorize colored-man-pages)
 fi
 source $ZSH/oh-my-zsh.sh
 #}}}
 # User configuration {{{
 export LANG=en_US.UTF-8
 export EDITOR='nvim'
+export VISUAL='nvim'
 
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
@@ -62,6 +63,9 @@ export ARCHFLAGS="-arch x86_64"
 setopt correct
 export DEFAULT_USER="neil"
 export MARKPATH=~/.files/marks
+
+export BAT_THEME="TwoDark"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 #}}}
 # Aliases {{{
 # For a full list of active aliases, run `alias`.
@@ -69,9 +73,18 @@ bindkey -r "^o"
 bindkey -r "^l"
 bindkey "^o" clear-screen
 
+alias sudo='sudo ' # Let aliases work under sudo
 alias vim="nvim"
 alias r2="r2 -A"
-alias open='xdg-open'
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    alias open='xdg-open'
+fi
+
+alias lg="lazygit"
+
+alias top='htop'
+alias cat='bat'
+alias ping='prettyping --nolegend'
 #}}}
 #Functions {{{
 bookmark() { # From https://vincent.bernat.im/en/blog/2015-zsh-directory-bookmarks {{{
@@ -114,7 +127,6 @@ done
 # }}}
 # Path changes{{{
 export PATH=$PATH:~/.files/util
-export PATH=$PATH:~/.local/bin
 export PATH=$PATH:~/Dropbox/bin
 export PATH=$PATH:/snap/bin
 if [[ "$OSTYPE" != "darwin"* ]]; then

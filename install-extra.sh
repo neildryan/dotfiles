@@ -10,10 +10,11 @@ sudo apt-get -y install kdeconnect okular
 sudo apt-get -y install openconnect
 sudo apt-get -y install pep8 pycodestyle python-pip
 sudo apt-get -y install htop
-sudo apt-get -y install keepassx pinta radare2
+sudo apt-get -y install keepassx pinta radare2 vlc
 sudo apt-get -y install paper-icon-theme paper-cursor-theme arc-theme
 sudo apt-get -y install jackd patchage qsynth
 sudo snap install spotify
+sudo snap install tldr
 
 echo "1)  google-chrome-stable"
 echo "git clone git@github.com:CMUAbstract/cnn-graph-sim.git"
