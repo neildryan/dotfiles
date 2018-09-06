@@ -1,8 +1,8 @@
 # Path to your oh-my-zsh installation. {{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    export ZSH=/Users/neil/.oh-my-zsh
+    export ZSH=/Users/neilryan/.oh-my-zsh
 else
-    export ZSH=/home/neil/.oh-my-zsh
+    export ZSH=/home/neilryan/.oh-my-zsh
 fi
 #}}}
 # Theme {{{
@@ -61,7 +61,7 @@ export VISUAL='nvim'
 export ARCHFLAGS="-arch x86_64"
 
 setopt correct
-export DEFAULT_USER="neil"
+export DEFAULT_USER="neilryan"
 export MARKPATH=~/.files/marks
 
 export BAT_THEME="TwoDark"
