@@ -73,7 +73,6 @@ bindkey -r "^o"
 bindkey -r "^l"
 bindkey "^o" clear-screen
 
-alias sudo='sudo ' # Let aliases work under sudo
 alias vim="nvim"
 alias r2="r2 -A"
 if [[ "$OSTYPE" != "darwin"* ]]; then
