@@ -12,5 +12,11 @@
     autosquash = true
 [diff]
     tool = vimdiff
+    color = true
+    wsErrorHighlight = old,new
+[color]
+    status = true
+    branch = true
+    ui = true
 [github]
     name = soctar
