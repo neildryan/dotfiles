@@ -195,13 +195,17 @@ set backspace=indent,eol,start
 
 "" Enable hidden buffers
 set hidden
-"
+
 "" Disable visualbell
 set noerrorbells visualbell t_vb=
 
 "" Use modeline overrides
 set modeline
 set modelines=10
+
+"" Move vertically by visual line -- move around wrapped lines easier
+nnoremap j gj
+nnoremap k gk
 "}}}
 "Abbreviations {{{
 cnoreabbrev W! w!
@@ -233,6 +237,17 @@ set showmatch  "highlight matching [{()}]
 " search will center on the line it's found in and open folds
 nnoremap n nzzzv
 nnoremap N Nzzzv
+" The Silver Searcher {{{
+if executable('ag')
+    " Use Ag instead of grep
+    set grepprg=ag\ --nogroup\ --nocolor
+
+    if !exists(":Ag")
+        command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+        nnoremap \ :Ag<SPACE>
+  endif
+endif
+"}}}
 "}}}
 " Status bar {{{
 set laststatus=2
@@ -278,7 +293,14 @@ set scrolloff=3     "Minimum number of lines to keep above & below cursor
 set mouse=a         "Fix mouse scroll
 set autoread        "Autoread if modified outside of vim
 set lazyredraw      "Don't redraw when executing macros/registers
+
 set conceallevel=0  "Never hide text (.tex/.md files will auto-bold
+let g:tex_conceal = " " "Don't try to visualize Tex in Vim
+let g:md_conceal = " "  "Also, don't try to visualize markdown
+
+" Make sure that NeoVim knows where to look
+let g:python_host_prog = "/usr/bin/python"
+let g:python3_host_prog = "/usr/bin/python3"
 "}}}
 " }}}
 " Colors {{{
@@ -443,9 +465,6 @@ vnoremap K :m '<-2<CR>gv=gv
 " Easy making
 nnoremap <Leader>m :w<CR> :! make<CR>
 
-" Timestamps
-nnoremap <Leader>log :r!getlogtime<CR>A
-
 " Disable arrow keys for hardmode, resize instead {{{
 inoremap <Up> <NOP>
 inoremap <Down> <NOP>
@@ -477,18 +496,4 @@ nnoremap <Leader>sc :CloseSession<CR>
 
 noremap <F2> :NERDTreeToggle<CR>
 "}}}
-" The Silver Searcher {{{
-if executable('ag')
-    " Use Ag instead of grep
-    set grepprg=ag\ --nogroup\ --nocolor
-
-    if !exists(":Ag")
-        command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
-        nnoremap \ :Ag<SPACE>
-  endif
-endif
-"}}}
-let g:python_host_prog = "/usr/bin/python"
-let g:python3_host_prog = "/usr/bin/python3"
-let g:tex_conceal = " "
 " vim:foldmethod=marker:foldlevel=0

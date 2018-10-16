@@ -1494,3 +1494,4 @@ db assembly -style context 8
 # Local Variables:
 # mode: python
 # End:
+set startup-with-shell off

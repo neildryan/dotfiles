@@ -73,17 +73,23 @@ bindkey -r "^o"
 bindkey -r "^l"
 bindkey "^o" clear-screen
 
-alias vim="nvim"
+if [ $(/usr/bin/type -P nvim) ]; then
+    alias vim="nvim"
+fi
 alias r2="r2 -A"
 if [[ "$OSTYPE" != "darwin"* ]]; then
     alias open='xdg-open'
 fi
 
-alias lg="lazygit"
-
-alias top='htop'
-alias cat='bat'
-alias ping='prettyping --nolegend'
+if [ $(/usr/bin/type -P htop) ]; then
+    alias top='htop'
+fi
+if [ $(/usr/bin/type -P bat) ]; then
+    alias cat='bat'
+fi
+if [ $(/usr/bin/type -P pettyping) ]; then
+    alias ping='prettyping --nolegend'
+fi
 #}}}
 #Functions {{{
 bookmark() { # From https://vincent.bernat.im/en/blog/2015-zsh-directory-bookmarks {{{

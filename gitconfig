@@ -12,5 +12,6 @@
     autosquash = true
 [diff]
     tool = vimdiff
+    wsErrorHighlight = old,new,context
 [github]
     name = soctar
