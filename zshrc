@@ -54,8 +54,14 @@ source $ZSH/oh-my-zsh.sh
 #}}}
 # User configuration {{{
 export LANG=en_US.UTF-8
-export EDITOR='nvim'
-export VISUAL='nvim'
+
+if [ $(/usr/bin/type -P nvim) ]; then
+    export EDITOR='nvim'
+    export VISUAL='nvim'
+else
+    export EDITOR='vim'
+    export VISUAL='vim'
+fi
 
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
@@ -73,21 +79,21 @@ bindkey -r "^o"
 bindkey -r "^l"
 bindkey "^o" clear-screen
 
-if [ $(/usr/bin/type -P nvim) ]; then
-    alias vim="nvim"
-fi
 alias r2="r2 -A"
 if [[ "$OSTYPE" != "darwin"* ]]; then
     alias open='xdg-open'
 fi
 
-if [ $(/usr/bin/type -P htop) ]; then
+if hash nvim ; then
+    alias vim="nvim"
+fi
+if hash htop ; then
     alias top='htop'
 fi
-if [ $(/usr/bin/type -P bat) ]; then
+if hash bat ; then
     alias cat='bat'
 fi
-if [ $(/usr/bin/type -P pettyping) ]; then
+if hash prettyping ; then
     alias ping='prettyping --nolegend'
 fi
 #}}}
