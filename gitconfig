@@ -13,5 +13,10 @@
 [diff]
     tool = vimdiff
     wsErrorHighlight = old,new,context
+    color = true
+[color]
+    status = true
+    branch = true
+    ui = true
 [github]
     name = soctar
