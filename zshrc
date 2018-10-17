@@ -55,7 +55,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration {{{
 export LANG=en_US.UTF-8
 
-if [ $(/usr/bin/type -P nvim) ]; then
+if hash nvim 2> /dev/null; then
     export EDITOR='nvim'
     export VISUAL='nvim'
 else
@@ -84,16 +84,16 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     alias open='xdg-open'
 fi
 
-if hash nvim ; then
+if hash nvm 2> /dev/null; then
     alias vim="nvim"
 fi
-if hash htop ; then
+if hash htop 2> /dev/null; then
     alias top='htop'
 fi
-if hash bat ; then
+if hash bat 2> /dev/null; then
     alias cat='bat'
 fi
-if hash prettyping ; then
+if hash prettyping 2> /dev/null; then
     alias ping='prettyping --nolegend'
 fi
 #}}}
