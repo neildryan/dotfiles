@@ -83,8 +83,7 @@ alias r2="r2 -A"
 if [[ "$OSTYPE" != "darwin"* ]]; then
     alias open='xdg-open'
 fi
-
-if hash nvm 2> /dev/null; then
+if hash nvim 2> /dev/null; then
     alias vim="nvim"
 fi
 if hash htop 2> /dev/null; then
@@ -137,6 +136,7 @@ for link in $MARKPATH/*(N@); do
 done
 # }}}
 # Path changes{{{
+export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
 export PATH=$PATH:~/.files/util
 export PATH=$PATH:~/Dropbox/bin
 export PATH=$PATH:/snap/bin

@@ -202,10 +202,6 @@ set noerrorbells visualbell t_vb=
 "" Use modeline overrides
 set modeline
 set modelines=10
-
-"" Move vertically by visual line -- move around wrapped lines easier
-nnoremap j gj
-nnoremap k gk
 "}}}
 "Abbreviations {{{
 cnoreabbrev W! w!
@@ -300,7 +296,7 @@ let g:md_conceal = " "  "Also, don't try to visualize markdown
 
 " Make sure that NeoVim knows where to look
 let g:python_host_prog = "/usr/bin/python"
-let g:python3_host_prog = "/usr/bin/python3"
+let g:python3_host_prog = "/usr/local/bin/python3"
 "}}}
 " }}}
 " Colors {{{

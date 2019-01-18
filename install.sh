@@ -6,10 +6,12 @@ DOTFILES=$HOME/.files
 ITERM=com.googlecode.iterm2.plist
 
 # Get some essentials
-if [[ "$OSTYPE" == "darwin"* ]]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then  #OSX
+    # Install Brew
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew cask install iterm2
-    brew install zsh-syntax-highlighting the_silver_searcher tmux reattach-to-user-namespace
+    brew install zsh-syntax-highlighting the_silver_searcher wget
+    brew install tmux reattach-to-user-namespace shellcheck
     brew link --overwrite tmux
     cp "$DOTFILES/$ITERM" "$HOME/Documents/$ITERM"
     cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts"
