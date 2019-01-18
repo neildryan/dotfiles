@@ -4,7 +4,7 @@ set -e
 
 if [[ "$OSTYPE" == "darwin"* ]]; then  # OSX
     brew update
-    brew install tldr htop bat prettyping fzf
+    brew install tldr htop bat prettyping fzf tldr radare2
     /usr/local/opt/fzf/install
     brew install hugo msgpack pipenv cmake npm telnet
     curl https://bootstrap.pypa.io/ez_setup.py -o - | sudo python
