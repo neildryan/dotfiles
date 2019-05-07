@@ -1,5 +1,6 @@
 " TODO craigemery/vim-autotag - auto ctag generation
 " TODO Tagbar,taglist
+" TODO C-d in normal mode should exit buffer if buffer is a terminal
 " Vim-plug core installation {{{
 if has('nvim')
     let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -449,14 +450,9 @@ endif
 nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
 nnoremap <C-w> :bdelete<CR>
-nnoremap <C-d> :q<CR>
 
 " Opens an edit command with path of the currently edited file filled in
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-
-" Move visual block
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
 
 " Easy making
 nnoremap <Leader>m :w<CR> :! make<CR>
