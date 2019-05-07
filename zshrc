@@ -48,7 +48,7 @@ HIST_STAMPS="mm/dd/yyyy"
 if [[ "$OSTYPE" == "darwin"* ]]; then
     plugins=(git ssh-agent colorize colored-man-pages cp)
 else
-    plugins=(git colorize colored-man-pages)
+    plugins=(git ssh-agent colorize colored-man-pages)
 fi
 source $ZSH/oh-my-zsh.sh
 #}}}
@@ -137,13 +137,13 @@ done
 # }}}
 # Path changes{{{
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
-export PATH=$PATH:~/.files/util
-export PATH=$PATH:~/Dropbox/bin
-export PATH=$PATH:/snap/bin
+export PATH=$PATH:~/Library/Python/3.7/bin
+export PATH="/usr/local/opt/llvm/bin":$PATH
 if [[ "$OSTYPE" != "darwin"* ]]; then
     if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         source /etc/profile.d/vte-2.91.sh
     fi
+    export PATH=$PATH:/snap/bin
 fi
 #}}}
 # Zsh-syntax-highlighting{{{
