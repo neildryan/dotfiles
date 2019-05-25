@@ -1,6 +1,7 @@
 " TODO craigemery/vim-autotag - auto ctag generation
 " TODO Tagbar,taglist
 " TODO C-d in normal mode should exit buffer if buffer is a terminal
+" TODO Ideally only install vim-markdown-preview when I have sudo on that machine
 " Vim-plug core installation {{{
 if has('nvim')
     let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -30,12 +31,8 @@ endif
 "}}}
 " Plugins {{{
 " Installation {{{
-if has('nvim')
-    Plug 'neomake/neomake'
-else
-    Plug 'scrooloose/syntastic'
-endif
 
+Plug 'w0rp/ale'
 
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
@@ -44,17 +41,16 @@ Plug 'vim-airline/vim-airline'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
-Plug 'xolox/vim-misc' "Pre-req for vim-session
-Plug 'xolox/vim-session'
 
-Plug 'tpope/vim-capslock'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'embear/vim-localvimrc'
 
 Plug 'Yggdroot/indentLine'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-obsession'
 Plug 'junegunn/goyo.vim'
+Plug 'reedes/vim-pencil'
+Plug 'vimwiki/vimwiki'
+
 "" Color
 Plug 'joshdick/onedark.vim'
 
@@ -90,43 +86,25 @@ else
     let g:ctrlp_use_caching = 1
 endif
 "}}}
-" Syntastic {{{
-if !has('nvim')
-    let g:syntastic_always_populate_loc_list=1
-    let g:syntastic_error_symbol='✗'
-    let g:syntastic_warning_symbol='⚠'
-    let g:syntastic_style_error_symbol = '✗'
-    let g:syntastic_style_warning_symbol = '⚠'
-    let g:syntastic_auto_loc_list=1
-    let g:syntastic_aggregate_errors = 1
-    let g:syntastic_mode_map = { 'mode': 'passive',
-                \'active_filetypes': ["python"],
-                \'passive_filetypes': [] }
-endif
-"}}}
-" Neomake - Auto-run on read/write disabled {{{
-if has('nvim')
-    "autocmd! BufWritePost,BufEnter * Neomake " Run on read/write
-    let g:neomake_open_list = 2 " Auto-open error window
-    let g:neomake_error_sign = {
-                \ 'text': '✗',
-                \ 'texthl': 'WarningMsg'}
-    let g:neomake_warning_sign = {
-                \ 'text': '⚠',
-                \ 'texthl': 'ErrorMsg'}
-endif
-"}}}
+" Ale {{{
+let g:ale_close_preview_on_insert = 1 " Close preview window on insert mode
+let g:ale_sign_error='✗'
+let g:ale_sign_warning='⚠'
+let g:ale_sign_style_error='✗'
+let g:ale_sign_style_warning='⚠'
+let g:ale_warn_about_trailing_whitespace = 0
+let g:ale_history_enabled=0
+let g:ale_linters= { 'python': ['pylint']}
+let g:ale_maximum_file_size=100000
+let g:ale_lint_on_text_changed=0
+let g:ale_lint_on_insert_leave = 0
+" }}}
 " vim-airline {{{
 let g:airline_theme = 'onedark'
-if has('nvim')
-    let g:airline#extensions#neomake#enabled = 1
-else
-    let g:airline#extensions#syntastic#enabled = 1
-endif
 
 let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#capslock#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline_skip_empty_sections = 1
 
 if !exists('g:airline_symbols')
@@ -164,15 +142,23 @@ else
   let g:airline_symbols.linenr = ''
 endif
 "}}}
-" vim-localvimrc {{{
-let g:localvimrc_name = [".lvimrc"]
-let g:localvimrc_event = ["BufWinEnter", "BufEnter"]
-let g:localvimrc_sandbox = 0
-let g:localvimrc_whitelist = ['/home/neil/Documents/docker-coati/coati/',
-            \ '/home/neil/Documents/349-s17']
-"}}}
 " indentLine {{{
 let g:indentLine_color_term = 252
+" }}}
+" vimwiki {{{
+" TODO Conceal level still set at 2?
+" TODO Latex support would be nice, but unnecessary
+" customwiki2html from https://github.com/vimwiki/vimwiki/issues/642
+
+let g:vimwiki_list = [{'path': '~/wiki/',
+                    \ 'path_html': '~/wiki/html',
+                    \ 'custom_wiki2html' : '~/.files/convert.py',
+                    \ 'syntax': 'markdown',
+                    \'ext': '.md'}]
+let g:vim_markdown_conceal=1
+let g:vimwiki_conceallevel=1
+let g:vimwiki_url_maxsave = 0
+let g:vimwiki_folding = 'expr:quick'
 " }}}
 "}}}
 " Basic settings {{{
@@ -291,9 +277,7 @@ set mouse=a         "Fix mouse scroll
 set autoread        "Autoread if modified outside of vim
 set lazyredraw      "Don't redraw when executing macros/registers
 
-set conceallevel=0  "Never hide text (.tex/.md files will auto-bold
-let g:tex_conceal = " " "Don't try to visualize Tex in Vim
-let g:md_conceal = " "  "Also, don't try to visualize markdown
+set conceallevel=1  "Give placeholder for hidden text
 
 " Make sure that NeoVim knows where to look
 let g:python_host_prog = "/usr/bin/python"
@@ -398,6 +382,9 @@ noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
 
+"" Goyo mode with Gitgutter
+nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
+
 " Split
 nnoremap <Leader>- :<C-u>split<CR>
 nnoremap <Leader>\| :<C-u>vsplit<CR>
@@ -468,24 +455,12 @@ noremap <Down> :resize +1<CR>
 noremap <Left> :vertical resize -1<CR>
 noremap <Right> :vertical resize +1<CR>
 "}}}
-" Neomake/Syntastic {{{
-if has('nvim')
-    noremap <Leader>c :Neomake!<CR>
-    noremap <Leader>r :NeomakeCancelJobs<CR>
-    noremap <Leader>i :NeomakeInfo<CR>
-else
-    nnoremap <Leader>c :SyntasticCheck<CR>
-    nnoremap <Leader>r :SyntasticReset<CR>
-    nnoremap <Leader>i :SyntasticInfo<CR>
-endif
+" Ale {{{
+nnoremap <Leader>cc :ALEEnableBuffer<CR> :ALELint<CR>
+nnoremap <Leader>cr :ALEDisableBuffer<CR>
+nnoremap <Leader>ci :ALEInfo<CR>
 "}}}
-" Sessions {{{
-nnoremap <Leader>ss :SaveSession<CR>
-nnoremap <Leader>sd :DeleteSession<CR>
-nnoremap <Leader>so :OpenSession<CR>
-nnoremap <Leader>sc :CloseSession<CR>
-" }}}
 
-noremap <F2> :NERDTreeToggle<CR>
+map <silent> <C-n> :NERDTreeToggle<CR>
 "}}}
 " vim:foldmethod=marker:foldlevel=0

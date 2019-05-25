@@ -28,7 +28,7 @@ else # Debian Linux
     sudo apt-get -y dist-upgrade
     sudo apt-get -y autoremove
     mkdir -p "$HOME/.fonts"
-    cp $DOTFILES/fonts/* $HOME/.fonts
+    cp "$DOTFILES/fonts/*" "$HOME/.fonts"
     sudo fc-cache -vf ~/.fonts
     rmdir ~/Videos ~/Templates ~/Music ~/Public
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
