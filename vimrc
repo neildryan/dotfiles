@@ -148,17 +148,24 @@ let g:indentLine_color_term = 252
 " vimwiki {{{
 " TODO Conceal level still set at 2?
 " TODO Latex support would be nice, but unnecessary
-" customwiki2html from https://github.com/vimwiki/vimwiki/issues/642
 
+" customwiki2html from https://github.com/vimwiki/vimwiki/issues/642
 let g:vimwiki_list = [{'path': '~/wiki/',
                     \ 'path_html': '~/wiki/html',
                     \ 'custom_wiki2html' : '~/.files/convert.py',
                     \ 'syntax': 'markdown',
-                    \'ext': '.md'}]
-let g:vim_markdown_conceal=1
-let g:vimwiki_conceallevel=1
+                    \'ext': '.wiki'}]
+let g:vimwiki_conceallevel=2
 let g:vimwiki_url_maxsave = 0
 let g:vimwiki_folding = 'expr:quick'
+let g:pencil#textwidth = 79
+let g:pencil#conceallevel = 2
+"Default to other applications conceallevel
+augroup vimwiki
+    autocmd!
+    autocmd Filetype vimwiki setlocal spell
+    autocmd Filetype vimwiki call pencil#init({'wrap':'soft')
+augroup END
 " }}}
 "}}}
 " Basic settings {{{
@@ -277,7 +284,8 @@ set mouse=a         "Fix mouse scroll
 set autoread        "Autoread if modified outside of vim
 set lazyredraw      "Don't redraw when executing macros/registers
 
-set conceallevel=1  "Give placeholder for hidden text
+set conceallevel=2   "Give placeholder for hidden text
+set concealcursor=nc "Give placeholder for hidden text
 
 " Make sure that NeoVim knows where to look
 let g:python_host_prog = "/usr/bin/python"
