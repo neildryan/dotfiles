@@ -44,6 +44,7 @@ fi
 
 # Setup symlinks
 ln -s -f "$DOTFILES/zshrc" "$HOME/.zshrc"
+ln -s -f "$DOTFILES/zshenv" "$HOME/.zshenv"
 ln -s -f "$DOTFILES/gitignore" "$HOME/.gitignore"
 ln -s -f "$DOTFILES/gdbinit" "$HOME/.gdbinit"
 mkdir -p "$HOME/.config/nvim"

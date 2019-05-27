@@ -37,10 +37,6 @@ HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
-
-
-# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
-# export MANPATH="/usr/local/man:$MANPATH"
 #}}}
 # Oh-my-zsh config {{{
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
@@ -52,27 +48,10 @@ else
 fi
 source $ZSH/oh-my-zsh.sh
 #}}}
-# User configuration {{{
-export LANG=en_US.UTF-8
-
-if hash nvim 2> /dev/null; then
-    export EDITOR='nvim'
-    export VISUAL='nvim'
-else
-    export EDITOR='vim'
-    export VISUAL='vim'
-fi
-
-# Compilation flags
-export ARCHFLAGS="-arch x86_64"
-
+# User added config {{{
 setopt correct
-export DEFAULT_USER="neilryan"
-export MARKPATH=~/.files/marks
-
-export BAT_THEME="TwoDark"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-#}}}
+# }}}
 # Aliases {{{
 # For a full list of active aliases, run `alias`.
 bindkey -r "^o"
@@ -95,56 +74,7 @@ fi
 if hash prettyping 2> /dev/null; then
     alias ping='prettyping --nolegend'
 fi
-#}}}
-#Functions {{{
-bookmark() { # From https://vincent.bernat.im/en/blog/2015-zsh-directory-bookmarks {{{
-    if (( $# == 0 )); then
-        # When no arguments are provided, just display existing
-        # bookmarks
-        for link in $MARKPATH/*(N@); do
-            local markname="$fg[green]${link:t}$reset_color"
-            local markpath="$fg[blue]${link:A}$reset_color"
-            printf "%-30s -> %s\n" $markname $markpath
-        done
-    else
-        # Otherwise, we may want to add a bookmark or delete an
-        # existing one.
-        local -a delete
-        zparseopts -D d=delete
-        if (( $+delete[1] )); then
-            # With `-d`, we delete an existing bookmark
-            command rm "$MARKPATH/$1"
-        else
-            # Otherwise, add a bookmark to the current
-            # directory. The first argument is the bookmark
-            # name. `.` is special and means the bookmark should
-            # be named after the current directory.
-            local name=$1
-            if [[ $name == "." ]]; then
-                name=${PWD:t}
-            fi
-            ln -s $PWD $MARKPATH/$name
-            hash -d -- $name=$PWD
-        fi
-    fi
-}
-#}}}
-#}}}
-# Bookmark Setup {{{
-for link in $MARKPATH/*(N@); do
-    hash -d -- "${link:t}=${link:A}"
-done
-# }}}
-# Path changes{{{
-export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
-export PATH=$PATH:~/Library/Python/3.7/bin
-export PATH="/usr/local/opt/llvm/bin":$PATH
-if [[ "$OSTYPE" != "darwin"* ]]; then
-    if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-        source /etc/profile.d/vte-2.91.sh
-    fi
-    export PATH=$PATH:/snap/bin
-fi
+alias emacs="/usr/local/Cellar/emacs-plus/26.2/bin/emacs"
 #}}}
 # Zsh-syntax-highlighting{{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
