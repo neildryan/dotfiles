@@ -1,3 +1,4 @@
+# If custom $PATH is needed for a server, check $HOST and set based on that!
 # User configuration {{{
 export LANG=en_US.UTF-8
 
