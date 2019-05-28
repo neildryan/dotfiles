@@ -11,7 +11,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then  #OSX
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew cask install iterm2
     brew install zsh-syntax-highlighting the_silver_searcher wget
-    brew install tmux reattach-to-user-namespace shellcheck
+    brew install tmux reattach-to-user-namespace shellcheck aspell
     brew link --overwrite tmux
     cp "$DOTFILES/$ITERM" "$HOME/Documents/$ITERM"
     cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts"
@@ -21,10 +21,10 @@ else # Debian Linux
     sudo apt-get update
     sudo apt-get -y install make wget curl git python python3 cmake doxygen
     sudo apt-get -y install zsh zsh-common neovim tmux silversearcher-ag
-    sudo apt-get -y install zsh-syntax-highlighting
+    sudo apt-get -y install zsh-syntax-highlighting aspell
     sudo apt-get -y install docker powertop tlp
     sudo apt-get -y install libc6:i386 libncurses5:i386
-    sudo apt-get -y install gnome-tweak-tool chrome-gnome-shell gnome-shell-pomodoro
+    sudo apt-get -y install gnome-tweak-tool chrome-gnome-shell
     sudo apt-get -y dist-upgrade
     sudo apt-get -y autoremove
     mkdir -p "$HOME/.fonts"
