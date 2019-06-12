@@ -13,6 +13,7 @@ fi
 export ARCHFLAGS="-arch x86_64"
 export DEFAULT_USER="neilryan"
 export BAT_THEME="TwoDark"
+export TERM=xterm-256color
 #}}}
 # Path changes{{{
 export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin

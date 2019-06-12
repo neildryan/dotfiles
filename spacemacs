@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     python
      html
      markdown
      ;; ----------------------------------------------------------------
@@ -42,7 +43,7 @@ values."
      ;; auto-completion
      ;; better-defaults
      emacs-lisp
-     ;; git
+     git
      ;; markdown
      (org :variables
           org-enable-github-support t
@@ -55,8 +56,7 @@ values."
                      spell-checking-enable-by-default nil
                      spell-checking-enable-auto-dictionary t
                      )
-     ;; syntax-checking
-     ;; version-control
+     syntax-checking
      osx
      )
    ;; List of additional packages that will be installed without being
@@ -326,6 +326,13 @@ you should place your code here."
   ;; Entering org files and text files should wrap text by default
   (add-hook 'org-mode-hook #'visual-line-mode)
   (add-hook 'text-mode-hook #'visual-line-mode)
+  ;; Default shell to eshll, fix ssh-agent
+  (setq shell-default-shell 'eshell)
+  (exec-path-from-shell-copy-env "SSH_AGENT_PID")
+  (exec-path-from-shell-copy-env "SSH_AGENT_SOCK")
+  ;; Move by visual line instead of by line (easier Org navigation)
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
