@@ -1,7 +1,5 @@
 " TODO craigemery/vim-autotag - auto ctag generation
 " TODO Tagbar,taglist
-" TODO C-d in normal mode should exit buffer if buffer is a terminal
-" TODO Ideally only install vim-markdown-preview when I have sudo on that machine
 " Vim-plug core installation {{{
 if has('nvim')
     let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -44,11 +42,12 @@ Plug 'sheerun/vim-polyglot'
 
 Plug 'ctrlpvim/ctrlp.vim'
 
-Plug 'Yggdroot/indentLine'
+Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-obsession'
 Plug 'junegunn/goyo.vim'
-Plug 'reedes/vim-pencil'
+
+Plug 'mattn/calendar-vim'
 Plug 'vimwiki/vimwiki'
 
 "" Color
@@ -146,25 +145,28 @@ endif
 let g:indentLine_color_term = 252
 " }}}
 " vimwiki {{{
-" TODO Conceal level still set at 2?
-" TODO Latex support would be nice, but unnecessary
-
+" TODO highlighting folds (pending github issue)
+" TODO Taskwarrior and vim-taskwarrior integration
+" TODO 
 " customwiki2html from https://github.com/vimwiki/vimwiki/issues/642
-let g:vimwiki_list = [{'path': '~/wiki/',
-                    \ 'path_html': '~/wiki/html',
+let g:vimwiki_list = [{'path': '~/All-Sync/wiki/',
+                    \ 'path_html': '~/All-Sync/wiki/html',
                     \ 'custom_wiki2html' : '~/.files/convert.py',
+                    \ 'auto_export' : 1,
                     \ 'syntax': 'markdown',
-                    \'ext': '.wiki'}]
+                    \ 'ext': '.md'}]
+let g:vimwiki_global_ext=0 " Don't treat every .md file as Vimwiki
 let g:vimwiki_conceallevel=2
 let g:vimwiki_url_maxsave = 0
 let g:vimwiki_folding = 'expr:quick'
-let g:pencil#textwidth = 79
-let g:pencil#conceallevel = 2
+let g:vimwiki_hl_headers = 1
+
 "Default to other applications conceallevel
-augroup vimwiki
+augroup vimrc-vimwiki
     autocmd!
-    autocmd Filetype vimwiki setlocal spell
-    autocmd Filetype vimwiki call pencil#init({'wrap':'soft')
+    autocmd FileType vimwiki setlocal spell textwidth=80
+        \ concealcursor=nc formatoptions=na autoindent
+    autocmd FileType vimwiki highlight Folded gui=italic guifg=5 guibg=Grey20
 augroup END
 " }}}
 "}}}
@@ -385,7 +387,7 @@ onoremap M `
 onoremap ` M
 
 " Line numbers - default off
-noremap <Leader>n :set invrelativenumber<CR> :set invnumber<CR>
+noremap <Leader>l :set invrelativenumber<CR> :set invnumber<CR>
 
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
@@ -394,8 +396,8 @@ nnoremap <silent> <leader><space> :noh<cr>
 nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
 
 " Split
-nnoremap <Leader>- :<C-u>split<CR>
-nnoremap <Leader>\| :<C-u>vsplit<CR>
+nnoremap <Leader>w- :<C-u>split<CR>
+nnoremap <Leader>w\| :<C-u>vsplit<CR>
 set splitbelow
 set splitright
 
@@ -430,9 +432,9 @@ noremap <Leader>gd :Gvdiff<CR>
 "}}}
 " Shell, shell splits {{{
 if has('nvim')
-    nnoremap <Leader>sh :terminal<CR>
-    nnoremap <Leader>tv :<C-u>vsplit<CR>:term<CR>
-    nnoremap <Leader>th :<C-u>split<CR>:term<CR>
+    nnoremap <Leader>ss :terminal<CR>
+    nnoremap <Leader>sv :<C-u>vsplit<CR>:term<CR>
+    nnoremap <Leader>sh :<C-u>split<CR>:term<CR>
     tnoremap <Esc> <C-\><C-n>
     tnoremap <C-d> <C-\><C-n>:bd!<CR>
     tnoremap <C-w> <C-\><C-n>:bdelete!<CR>
@@ -442,15 +444,12 @@ endif
 "}}}
 
 " Buffers and Windows
-nnoremap <Tab> :bnext<CR>
-nnoremap <S-Tab> :bprevious<CR>
-nnoremap <C-w> :bdelete<CR>
+nnoremap <Leader>bn :bnext<CR>
+nnoremap <Leader>bp :bprevious<CR>
+nnoremap <Leader>bd :bdelete<CR>
 
 " Opens an edit command with path of the currently edited file filled in
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-
-" Easy making
-nnoremap <Leader>m :w<CR> :! make<CR>
 
 " Disable arrow keys for hardmode, resize instead {{{
 inoremap <Up> <NOP>
