@@ -1,4 +1,3 @@
-" TODO craigemery/vim-autotag - auto ctag generation
 " TODO Tagbar,taglist
 " Vim-plug core installation {{{
 if has('nvim')
@@ -147,25 +146,28 @@ let g:indentLine_color_term = 252
 " vimwiki {{{
 " TODO highlighting folds (pending github issue)
 " TODO Taskwarrior and vim-taskwarrior integration
-" TODO 
+" TODO Look into auto-export at a different frequency than on-save
+"      Can just run VimwikiAll2HTML
+" TODO Look into tags (Tagbar, Taglist)
 " customwiki2html from https://github.com/vimwiki/vimwiki/issues/642
 let g:vimwiki_list = [{'path': '~/All-Sync/wiki/',
                     \ 'path_html': '~/All-Sync/wiki/html',
                     \ 'custom_wiki2html' : '~/.files/convert.py',
-                    \ 'auto_export' : 1,
                     \ 'syntax': 'markdown',
                     \ 'ext': '.md'}]
 let g:vimwiki_global_ext=0 " Don't treat every .md file as Vimwiki
 let g:vimwiki_conceallevel=2
-let g:vimwiki_url_maxsave = 0
+let g:vimwiki_url_maxsave = 0 " Always show entire URL links (consider changing to 15)
 let g:vimwiki_folding = 'expr:quick'
-let g:vimwiki_hl_headers = 1
+let g:vimwiki_hl_headers = 1 " Use different colors for different header levels
+let g:vimwiki_hl_cb_checked = 2 " Grey-out done tasks and their notes
+let g:vimwiki_listsyms = '✗○◐●✓'
 
 "Default to other applications conceallevel
 augroup vimrc-vimwiki
     autocmd!
     autocmd FileType vimwiki setlocal spell textwidth=80
-        \ concealcursor=nc formatoptions=na autoindent
+        \ concealcursor=nc formatoptions=nq autoindent
     autocmd FileType vimwiki highlight Folded gui=italic guifg=5 guibg=Grey20
 augroup END
 " }}}
