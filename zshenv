@@ -25,5 +25,6 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
 else
     export PATH=$PATH:~/Library/Python/3.7/bin
 fi
+export PATH=$PATH:~/.local/bin
 # }}}
 # vim:foldmethod=marker:foldlevel=0
