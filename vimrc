@@ -155,7 +155,7 @@ let g:vimwiki_list = [{'path': '~/All-Sync/wiki/',
                     \ 'custom_wiki2html' : '~/.files/convert.py',
                     \ 'syntax': 'markdown',
                     \ 'ext': '.md'}]
-let g:vimwiki_global_ext=0 " Don't treat every .md file as Vimwiki
+" let g:vimwiki_global_ext=0 " Don't treat every .md file as Vimwiki
 let g:vimwiki_conceallevel=2
 let g:vimwiki_url_maxsave = 0 " Always show entire URL links (consider changing to 15)
 let g:vimwiki_folding = 'expr:quick'
@@ -434,11 +434,10 @@ noremap <Leader>gd :Gvdiff<CR>
 "}}}
 " Shell, shell splits {{{
 if has('nvim')
-    nnoremap <Leader>ss :terminal<CR>
+    nnoremap <Leader>ss :terminal<CR>i
     nnoremap <Leader>sv :<C-u>vsplit<CR>:term<CR>
     nnoremap <Leader>sh :<C-u>split<CR>:term<CR>
     tnoremap <Esc> <C-\><C-n>
-    tnoremap <C-d> <C-\><C-n>:bd!<CR>
     tnoremap <C-w> <C-\><C-n>:bdelete!<CR>
 else
     nnoremap <Leader>sh :shell<CR>
