@@ -49,7 +49,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'mattn/calendar-vim'
 Plug 'vimwiki/vimwiki'
 
-"" Color
+" Color
 Plug 'joshdick/onedark.vim'
 
 call plug#end()
@@ -68,7 +68,7 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
-let g:ctrlp_map = '<Leader>p'
+let g:ctrlp_map = '<Leader>f'
 let g:ctrlp_cmd = 'CtrlPCurWD'
 let g:ctrlp_arg_map = 1
 let g:ctrlp_follow_symlinks = 1 " Follow but avoid recursive
@@ -142,6 +142,7 @@ endif
 "}}}
 " indentLine {{{
 let g:indentLine_color_term = 252
+let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
 " }}}
 " vimwiki {{{
 " TODO highlighting folds (pending github issue)
@@ -149,6 +150,9 @@ let g:indentLine_color_term = 252
 " TODO Look into auto-export at a different frequency than on-save
 "      Can just run VimwikiAll2HTML
 " TODO Look into tags (Tagbar, Taglist)
+" TODO Try lervag/wiki.vim -- probably will work better for markdown
+"      Can use junegunn/vim-easy-align for tables, other stuff seems to
+"      already be there
 " customwiki2html from https://github.com/vimwiki/vimwiki/issues/642
 let g:vimwiki_list = [{'path': '~/All-Sync/wiki/',
                     \ 'path_html': '~/All-Sync/wiki/html',
@@ -162,14 +166,14 @@ let g:vimwiki_folding = 'expr:quick'
 let g:vimwiki_hl_headers = 1 " Use different colors for different header levels
 let g:vimwiki_hl_cb_checked = 2 " Grey-out done tasks and their notes
 let g:vimwiki_listsyms = '✗○◐●✓'
-
-"Default to other applications conceallevel
+"Vimwiki autocmd {{{
 augroup vimrc-vimwiki
     autocmd!
-    autocmd FileType vimwiki setlocal spell textwidth=80
-        \ concealcursor=nc formatoptions=nq autoindent
-    autocmd FileType vimwiki highlight Folded gui=italic guifg=5 guibg=Grey20
+    autocmd FileType vimwiki setlocal textwidth=80 autoindent
+        \ spell formatoptions=nq wrap wm=2 colorcolumn=80
 augroup END
+"}}}
+" autocmd FileType vimwiki highlight Folded gui=italic guifg=5 guibg=Grey20
 " }}}
 "}}}
 " Basic settings {{{
@@ -290,6 +294,8 @@ set lazyredraw      "Don't redraw when executing macros/registers
 
 set conceallevel=2   "Give placeholder for hidden text
 set concealcursor=nc "Give placeholder for hidden text
+set relativenumber   "Show relative number above and below
+set number           "Precede line with number
 
 " Make sure that NeoVim knows where to look
 let g:python_host_prog = "/usr/bin/python"
@@ -350,8 +356,8 @@ augroup END
 " Auto-wrap text for .txt, .tex files {{{
 augroup vimrc-wrapping
   autocmd!
-  autocmd BufRead,BufNewFile *.txt,*.tex,*.md call s:setupWrapping()
-  autocmd BufRead,BufNewFile *.txt,*.tex,*.md setlocal spell colorcolumn=80
+  autocmd BufRead,BufNewFile *.txt,*.tex call s:setupWrapping()
+  autocmd BufRead,BufNewFile *.txt,*.tex setlocal spell colorcolumn=80
 augroup END
 "}}}
 " make/cmake files {{{
@@ -439,8 +445,8 @@ noremap <Leader>gd :Gvdiff<CR>
 " Shell, shell splits {{{
 if has('nvim')
     nnoremap <Leader>ss :terminal<CR>i
-    nnoremap <Leader>sv :<C-u>vsplit<CR>:term<CR>
-    nnoremap <Leader>sh :<C-u>split<CR>:term<CR>
+    nnoremap <Leader>s\| :<C-u>vsplit<CR>:term<CR>
+    nnoremap <Leader>s- :<C-u>split<CR>:term<CR>
     tnoremap <Esc> <C-\><C-n>
     tnoremap <C-w> <C-\><C-n>:bdelete!<CR>
 else
@@ -449,9 +455,9 @@ endif
 "}}}
 
 " Buffers and Windows
-nnoremap <Leader>bn :bnext<CR>
-nnoremap <Leader>bp :bprevious<CR>
-nnoremap <Leader>bd :bdelete<CR>
+nnoremap <Leader>n :bnext<CR>
+nnoremap <Leader>p :bprevious<CR>
+nnoremap <Leader>d :bdelete<CR>
 
 " Opens an edit command with path of the currently edited file filled in
 noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
