@@ -397,9 +397,13 @@ nnoremap <silent> <leader><space> :noh<cr>
 "" Goyo mode with Gitgutter
 nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
 
-" Split
+" Windows
 nnoremap <Leader>w- :<C-u>split<CR>
 nnoremap <Leader>w\| :<C-u>vsplit<CR>
+nnoremap <Leader>wN :tabnew<CR>
+nnoremap <Leader>wp :tabprevious<CR>
+nnoremap <Leader>wn :tabnext<CR>
+nnoremap <Leader>wr <C-W>r
 set splitbelow
 set splitright
 
