@@ -170,7 +170,8 @@ let g:vimwiki_listsyms = '✗○◐●✓'
 augroup vimrc-vimwiki
     autocmd!
     autocmd FileType vimwiki setlocal textwidth=80 autoindent
-        \ spell formatoptions=nq wrap wm=2 colorcolumn=80
+        \ spell formatoptions=tnqrj wrap wm=2 colorcolumn=80
+        \ tabstop=2 shiftwidth=2 softtabstop=2
 augroup END
 "}}}
 " autocmd FileType vimwiki highlight Folded gui=italic guifg=5 guibg=Grey20
@@ -333,11 +334,22 @@ endif
 "}}}
 " Functions {{{
 if !exists('*s:setupWrapping')
-  function s:setupWrapping()
-    set wrap
-    set wm=2
-    set textwidth=79
-  endfunction
+    function s:setupWrapping()
+        set wrap
+        set wm=2
+        set textwidth=79
+    endfunction
+endif
+if !exists('*s:setNumberDisplay')
+    function! s:setNumberDisplay()
+        if &buftype == 'terminal'
+            setlocal nonumber
+            setlocal norelativenumber
+        else
+            set number
+            set relativenumber
+        endif
+    endfunction
 endif
 "}}}
 " Autocmd Rules {{{
@@ -378,11 +390,28 @@ augroup vimrc-python
       \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 augroup END
 "}}}
-"Neovim - start insert on entering terminal buffer {{{
-if has('nvim')
-    autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
-    autocmd BufLeave term://* stopinsert
-endif
+"Startup -- Neovim terminal fixes {{{
+"From hneutr/dotfiles autocommands.vim
+augroup startup
+    autocmd!
+
+    " turn numbers on for normal buffers; turn them off for terminal buffers
+    autocmd TermOpen,BufWinEnter * call s:setNumberDisplay()
+
+    " when in a neovim terminal, add a buffer to the existing vim session
+    " instead of nesting (credit justinmk)
+    autocmd VimEnter * if !empty($NVIM_LISTEN_ADDRESS) && $NVIM_LISTEN_ADDRESS !=# v:servername
+                \ |let g:r=jobstart(['nc', '-U', $NVIM_LISTEN_ADDRESS],{'rpc':v:true})
+                \ |let g:f=fnameescape(expand('%:p'))
+                \ |noau bwipe
+                \ |call rpcrequest(g:r, "nvim_command", "edit ".g:f)
+                \ |call rpcrequest(g:r, "nvim_command", "call lib#SetNumberDisplay()")
+                \ |qa
+                \ |endif
+
+    " enter insert mode whenever we're in a terminal
+    " autocmd TermOpen,BufWinEnter,BufEnter term://* startinsert
+augroup END
 "}}}
 "}}}
 " Key Mappings {{{
@@ -445,10 +474,9 @@ noremap <Leader>gd :Gvdiff<CR>
 " Shell, shell splits {{{
 if has('nvim')
     nnoremap <Leader>ss :terminal<CR>i
-    nnoremap <Leader>s\| :<C-u>vsplit<CR>:term<CR>
-    nnoremap <Leader>s- :<C-u>split<CR>:term<CR>
+    nnoremap <Leader>s\| :<C-u>vsplit<CR>:term<CR>i
+    nnoremap <Leader>s- :<C-u>split<CR>:term<CR>i
     tnoremap <Esc> <C-\><C-n>
-    tnoremap <C-w> <C-\><C-n>:bdelete!<CR>
 else
     nnoremap <Leader>sh :shell<CR>
 endif
