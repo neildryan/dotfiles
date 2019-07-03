@@ -432,13 +432,13 @@ nnoremap <silent> <leader><space> :noh<cr>
 nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
 
 " Windows and Splits {{{
-nnoremap <Leader>s- :<C-u>split<CR>
-nnoremap <Leader>s\| :<C-u>vsplit<CR>
-nnoremap <Leader>sN :tabnew<CR>
-nnoremap <Leader>ss :tabnew<CR>:terminal<CR>i
-nnoremap <Leader>sp :tabprevious<CR>
-nnoremap <Leader>sn :tabnext<CR>
-nnoremap <Leader>sr <C-W>r
+nnoremap <Leader>t- :<C-u>split<CR>
+nnoremap <Leader>t\| :<C-u>vsplit<CR>
+nnoremap <Leader>tN :tabnew<CR>
+nnoremap <Leader>ts :tabnew<CR>:terminal<CR>i
+nnoremap <Leader>tp :tabprevious<CR>
+nnoremap <Leader>tn :tabnext<CR>
+nnoremap <Leader>tr <C-W>r
 set splitbelow
 set splitright
 "}}}
