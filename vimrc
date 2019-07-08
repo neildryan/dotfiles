@@ -432,16 +432,22 @@ nnoremap <silent> <leader><space> :noh<cr>
 nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
 
 " Windows and Splits {{{
-nnoremap <Leader>t- :<C-u>split<CR>
-nnoremap <Leader>t\| :<C-u>vsplit<CR>
-nnoremap <Leader>tN :tabnew<CR>
-nnoremap <Leader>ts :tabnew<CR>:terminal<CR>i
-nnoremap <Leader>tp :tabprevious<CR>
-nnoremap <Leader>tn :tabnext<CR>
-nnoremap <Leader>tr <C-W>r
+nnoremap <Leader>w- :<C-u>split<CR>
+nnoremap <Leader>w\| :<C-u>vsplit<CR>
+nnoremap <Leader>wN :tabnew<CR>
+nnoremap <Leader>ws :tabnew<CR>:terminal<CR>i
+nnoremap <Leader>wp :tabprevious<CR>
+nnoremap <Leader>wn :tabnext<CR>
+nnoremap <Leader>wr <C-W>r
 set splitbelow
 set splitright
 "}}}
+" Vimwiki new bindings {{{
+map <Leader>kk <Plug>VimwikiIndex
+map <Leader>ki <Plug>VimiwkiDiaryIndex
+map <Leader>ks <Plug>VimwikiUISelect
+map <Leader>kt <Plug>VimwikiTabIndex
+" }}}
 " Switching windows {{{
 if has('nvim')
     inoremap <C-j> <Esc><C-w>j
