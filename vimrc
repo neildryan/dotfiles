@@ -38,6 +38,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
+Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
 
 Plug 'ctrlpvim/ctrlp.vim'
 
@@ -490,7 +491,7 @@ endif
 " Buffers {{{
 nnoremap <Leader>n :bnext<CR>
 nnoremap <Leader>p :bprevious<CR>
-nnoremap <Leader>d :bdelete<CR>
+nnoremap <Leader>d :BD<CR>
 "}}}
 
 " Opens an edit command with path of the currently edited file filled in

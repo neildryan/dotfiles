@@ -69,9 +69,6 @@ fi
 if hash htop 2> /dev/null; then
     alias top='htop'
 fi
-if hash bat 2> /dev/null; then
-    alias cat='bat'
-fi
 if hash prettyping 2> /dev/null; then
     alias ping='prettyping --nolegend'
 fi
