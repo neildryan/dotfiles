@@ -49,6 +49,7 @@ Plug 'junegunn/goyo.vim'
 
 Plug 'mattn/calendar-vim'
 Plug 'vimwiki/vimwiki'
+Plug 'blindFS/vim-taskwarrior'
 
 " Color
 Plug 'joshdick/onedark.vim'
@@ -152,11 +153,16 @@ let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
 "      Can just run VimwikiAll2HTML
 " TODO Look into tags (Tagbar, Taglist)
 " customwiki2html from https://github.com/vimwiki/vimwiki/issues/642
-let g:vimwiki_list = [{'path': '~/All-Sync/wiki/',
-                    \ 'path_html': '~/All-Sync/wiki/html',
-                    \ 'custom_wiki2html' : '~/.files/convert.py',
-                    \ 'syntax': 'markdown',
-                    \ 'ext': '.md'}]
+let g:vimwiki_list = [{'path': '~/All-Sync/research-wiki/',
+                    \  'path_html': '~/All-Sync/research-wiki/html',
+                    \  'custom_wiki2html' : '~/.files/convert.py',
+                    \  'syntax': 'markdown',
+                    \  'ext': '.md'},
+                    \ {'path': '~/All-Sync/collection-wiki/',
+                    \  'path_html': '~/All-Sync/collection-wiki/html',
+                    \  'custom_wiki2html' : '~/.files/convert.py',
+                    \  'syntax': 'markdown',
+                    \  'ext': '.md'}]
 " let g:vimwiki_global_ext=0 " Don't treat every .md file as Vimwiki
 let g:vimwiki_conceallevel=2
 let g:vimwiki_url_maxsave = 0 " Always show entire URL links (consider changing to 15)
@@ -385,7 +391,7 @@ augroup vimrc-vimwiki
     autocmd!
     autocmd FileType vimwiki setlocal textwidth=80 autoindent
         \ spell formatoptions=tnqrj wrap wm=2
-        \ tabstop=2 shiftwidth=2 softtabstop=2
+        \ tabstop=2 shiftwidth=2 softtabstop=2 foldlevel=1
 augroup END
 " autocmd FileType vimwiki highlight Folded gui=italic guifg=5 guibg=Grey20
 "}}}
@@ -483,6 +489,7 @@ if has('nvim')
     nnoremap <Leader>ss :terminal<CR>i
     nnoremap <Leader>s\| :<C-u>vsplit<CR>:term<CR>i
     nnoremap <Leader>s- :<C-u>split<CR>:term<CR>i
+    nnoremap <Leader>sN :tabnew<CR>:terminal<CR>i
     tnoremap <Esc> <C-\><C-n>
 else
     nnoremap <Leader>sh :shell<CR>

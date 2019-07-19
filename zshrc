@@ -1,4 +1,3 @@
-[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 # Path to your oh-my-zsh installation. {{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export ZSH=/Users/neilryan/.oh-my-zsh
@@ -11,7 +10,7 @@ fi
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="avit"
+ZSH_THEME="agnoster"
 #}}}
 # Other ZSH config {{{
 # Uncomment the following line to use case-sensitive completion.
@@ -41,18 +40,29 @@ HIST_STAMPS="mm/dd/yyyy"
 #}}}
 # Oh-my-zsh config {{{
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# TODO ADD gitfast
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    plugins=(git ssh-agent colorize colored-man-pages cp)
+    plugins=(git ssh-agent colorize)
 else
-    plugins=(git ssh-agent colorize colored-man-pages)
+    plugins=(git ssh-agent colorize)
 fi
 source $ZSH/oh-my-zsh.sh
 #}}}
-# User added config {{{
+# User configuration {{{
+export LANG=en_US.UTF-8
+
+if hash nvim 2> /dev/null; then
+    export EDITOR='nvim'
+    export VISUAL='nvim'
+else
+    export EDITOR='vim'
+    export VISUAL='vim'
+fi
+# Compilation flags
+export DEFAULT_USER="neilryan"
+
 setopt correct
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# }}}
+#}}}
 # Aliases {{{
 # For a full list of active aliases, run `alias`.
 bindkey -r "^o"
@@ -69,18 +79,19 @@ fi
 if hash htop 2> /dev/null; then
     alias top='htop'
 fi
-if hash prettyping 2> /dev/null; then
-    alias ping='prettyping --nolegend'
-fi
-alias emacs="/usr/local/Cellar/emacs-plus/26.2/bin/emacs"
+alias wiki='nvim -c VimwikiIndex'
 #}}}
-# Zsh-syntax-highlighting{{{
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Path changes{{{
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+        source /etc/profile.d/vte-2.91.sh
+    fi
+    export PATH=$PATH:/snap/bin
 else
-    source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    export PATH=$PATH:~/Library/Python/3.7/bin
 fi
-#}}}
+export PATH=$PATH:~/.local/bin
+
 if [[ "$HOST" == "xor.cs.washington.edu" ]]; then
     export PATH="/home/neilryan/local/bin:/home/neilryan/.local/bin:$PATH"
     export PATH="/mnt/bsg/diskbits/neilryan/pypy/bin:$PATH"
@@ -92,4 +103,12 @@ if [[ "$HOST" == "xor.cs.washington.edu" ]]; then
     export PYTHONUNBUFFERED=1
     alias vim=nvim
 fi
+# }}}
+# Zsh-syntax-highlighting{{{
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+else
+    source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+#}}}
 # vim:foldmethod=marker:foldlevel=0
