@@ -55,7 +55,7 @@ def convert(
         "pagetitle={}".format(title),
         custom_args if custom_args != "-" else "",
         "-f",
-        "markdown",
+        "gfm",
         "-t",
         "html",
         "-o",
