@@ -131,6 +131,7 @@ let g:airline_section_c = '%t'
 " indentLine {{{
 let g:indentLine_color_term = 252
 let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
+let g:indentLine_bufNameExclude = ["term:.*"]
 " }}}
 " vimwiki {{{
 " TODO highlighting folds (pending github issue)
@@ -319,11 +320,9 @@ if !exists('*s:setNumberDisplay')
         if &buftype == 'terminal'
             setlocal nonumber
             setlocal norelativenumber
-            let g:indentLine_enabled = 0
         else
             set number
             set relativenumber
-            let g:indentLine_enabled = 1
         endif
     endfunction
 endif
