@@ -50,6 +50,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'mattn/calendar-vim'
 Plug 'vimwiki/vimwiki'
 Plug 'blindFS/vim-taskwarrior'
+Plug 'reedes/vim-wordy'
 
 " Color
 Plug 'joshdick/onedark.vim'
@@ -318,9 +319,11 @@ if !exists('*s:setNumberDisplay')
         if &buftype == 'terminal'
             setlocal nonumber
             setlocal norelativenumber
+            let g:indentLine_enabled = 0
         else
             set number
             set relativenumber
+            let g:indentLine_enabled = 1
         endif
     endfunction
 endif
@@ -393,6 +396,9 @@ augroup startup
 
     " enter insert mode whenever we're in a terminal
     " autocmd TermOpen,BufWinEnter,BufEnter term://* startinsert
+
+    " Auto-close terminal
+    autocmd TermClose term://* call nvim_input('<CR>')
 augroup END
 "}}}
 "}}}
@@ -486,10 +492,10 @@ inoremap <Down> <NOP>
 inoremap <Left> <NOP>
 inoremap <Right> <NOP>
 
-noremap <Up> :resize -1<CR>
-noremap <Down> :resize +1<CR>
-noremap <Left> :vertical resize -1<CR>
-noremap <Right> :vertical resize +1<CR>
+noremap <Up> :resize -2<CR>
+noremap <Down> :resize +2<CR>
+noremap <Left> :vertical resize -2<CR>
+noremap <Right> :vertical resize +2<CR>
 "}}}
 " Ale {{{
 nnoremap <Leader>cc :ALEEnableBuffer<CR> :ALELint<CR>
