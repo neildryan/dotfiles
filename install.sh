@@ -10,30 +10,26 @@ if [[ "$OSTYPE" == "darwin"* ]]; then  #OSX
     # Install Brew
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew cask install iterm2
-    brew install zsh-syntax-highlighting the_silver_searcher wget
-    brew install tmux reattach-to-user-namespace shellcheck aspell
-    brew link --overwrite tmux
+    brew install zsh-syntax-highlighting the_silver_searcher wget fzf
+    /usr/local/opt/fzf/install
+    brew install reattach-to-user-namespace shellcheck
     cp "$DOTFILES/$ITERM" "$HOME/Documents/$ITERM"
     cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts"
     open "$DOTFILES/one_dark.itermcolors"
 else # Debian Linux
-    sudo dpkg --add-architecture i386
     sudo apt-get update
-    sudo apt-get -y install make wget curl git python python3 cmake doxygen
-    sudo apt-get -y install zsh zsh-common neovim tmux silversearcher-ag
-    sudo apt-get -y install zsh-syntax-highlighting aspell
+    sudo apt-get -y install make wget curl python3 cmake
+    sudo apt-get -y install zsh zsh-common neovim silversearcher-ag
+    sudo apt-get -y install zsh-syntax-highlighting
     sudo apt-get -y install docker powertop tlp
-    sudo apt-get -y install libc6:i386 libncurses5:i386
     sudo apt-get -y install gnome-tweak-tool chrome-gnome-shell
-    sudo apt-get -y dist-upgrade
-    sudo apt-get -y autoremove
+    sudo apt-get -y dist-upgrade && sudo apt-get -y autoremove
     mkdir -p "$HOME/.fonts"
     cp "$DOTFILES/fonts/*" "$HOME/.fonts"
     sudo fc-cache -vf ~/.fonts
     rmdir ~/Videos ~/Templates ~/Music ~/Public
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
-    printf "\n\n"
 fi
 
 # Get oh-my-zsh, set shell to zsh
@@ -45,14 +41,12 @@ fi
 # Setup symlinks
 ln -s -f "$DOTFILES/zshrc" "$HOME/.zshrc"
 ln -s -f "$DOTFILES/zshenv" "$HOME/.zshenv"
-ln -s -f "$DOTFILES/spacemacs" "$HOME/.spacemacs"
 ln -s -f "$DOTFILES/gitignore" "$HOME/.gitignore"
 ln -s -f "$DOTFILES/gdbinit" "$HOME/.gdbinit"
 mkdir -p "$HOME/.config/nvim"
 ln -s -f "$DOTFILES/vimrc" "$HOME/.config/nvim/init.vim"
 ln -s -f "$DOTFILES/gitconfig" "$HOME/.gitconfig"
 ln -s -f "$DOTFILES/vimrc" "$HOME/.vimrc"
-ln -s -f "$DOTFILES/tmux.conf" "$HOME/.tmux.conf"
 
 # Complete vim setup
 nvim -c "PlugInstall" -c "qall"

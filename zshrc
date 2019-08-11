@@ -8,8 +8,6 @@ fi
 # Theme {{{
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
 ZSH_THEME="agnoster"
 #}}}
 # Other ZSH config {{{
@@ -41,9 +39,9 @@ HIST_STAMPS="mm/dd/yyyy"
 # Oh-my-zsh config {{{
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    plugins=(git ssh-agent colorize)
+    plugins=(git ssh-agent)
 else
-    plugins=(git ssh-agent colorize)
+    plugins=(git ssh-agent)
 fi
 source $ZSH/oh-my-zsh.sh
 #}}}
@@ -82,13 +80,13 @@ fi
 alias wiki='nvim -c VimwikiIndex'
 #}}}
 # Path changes{{{
-if [[ "$OSTYPE" != "darwin"* ]]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PATH=$PATH:~/Library/Python/3.7/bin
+else
     if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         source /etc/profile.d/vte-2.91.sh
     fi
     export PATH=$PATH:/snap/bin
-else
-    export PATH=$PATH:~/Library/Python/3.7/bin
 fi
 export PATH=$PATH:~/.local/bin
 
