@@ -77,7 +77,9 @@ fi
 if hash htop 2> /dev/null; then
     alias top='htop'
 fi
-alias wiki='nvim -c VimwikiIndex'
+alias wiki='nvim -c VimwikiIndex -c "cd ~/All-Sync/research-wiki"'
+export CWIKI_DIR="~/All-Sync/collection-wiki"
+alias collection='nvim -c "cd $CWIKI_DIR" -c ":e index.md"'
 #}}}
 # Path changes{{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
