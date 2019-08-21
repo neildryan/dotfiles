@@ -81,6 +81,22 @@ alias wiki='nvim -c VimwikiIndex -c "cd ~/All-Sync/research-wiki"'
 export CWIKI_DIR="~/All-Sync/collection-wiki"
 alias collection='nvim -c "cd $CWIKI_DIR" -c ":e index.md"'
 #}}}
+# Functions {{{
+function countdown(){
+   date1=$((`date +%s` + $1));
+   while [ "$date1" -ge `date +%s` ]; do
+       echo -ne "$(date -ju -f %s $(($date1 - $(date +%s))) +%H:%M:%S)\r"
+     sleep 1
+   done
+}
+function stopwatch(){
+  date1=`date +%s`;
+   while true; do
+    echo -ne "$(date -ju -f %s $(($(date +%s) - $date1)) +%H:%M:%S)\r";
+    sleep 1
+   done
+}
+# }}}
 # Path changes{{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export PATH=$PATH:~/Library/Python/3.7/bin
