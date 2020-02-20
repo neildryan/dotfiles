@@ -2,7 +2,7 @@
 
 set -e
 
-DOTFILES=$HOME/.files
+DOTFILES=~/.files
 ITERM=com.googlecode.iterm2.plist
 
 # Get some essentials
@@ -11,10 +11,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then  #OSX
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew cask install iterm2
     brew install zsh-syntax-highlighting the_silver_searcher wget fzf
+    brew install neovim
     /usr/local/opt/fzf/install
     brew install reattach-to-user-namespace shellcheck
-    cp "$DOTFILES/$ITERM" "$HOME/Documents/$ITERM"
-    cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts"
+    cp "$DOTFILES/$ITERM" "~/Documents/"
+    cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts/"
     open "$DOTFILES/one_dark.itermcolors"
 else # Debian Linux
     sudo apt-get update

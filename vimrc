@@ -47,9 +47,6 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-obsession'
 Plug 'junegunn/goyo.vim'
 
-Plug 'mattn/calendar-vim'
-Plug 'vimwiki/vimwiki'
-Plug 'blindFS/vim-taskwarrior'
 Plug 'reedes/vim-wordy'
 
 " Color
