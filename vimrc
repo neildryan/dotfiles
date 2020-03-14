@@ -40,7 +40,8 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
 Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
 
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 
 Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
 Plug 'christoomey/vim-tmux-navigator'
@@ -51,6 +52,7 @@ Plug 'mattn/calendar-vim'
 Plug 'vimwiki/vimwiki'
 Plug 'blindFS/vim-taskwarrior'
 Plug 'reedes/vim-wordy'
+Plug 'lervag/vimtex'
 
 " Color
 Plug 'joshdick/onedark.vim'
@@ -70,8 +72,8 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 " Ctrlp.vim {{{
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
-let g:ctrlp_map = '<Leader>f'
+let g:Lf_WildIgore='\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
+let g:Lf_UseCache = 0
 let g:ctrlp_cmd = 'CtrlPCurWD'
 let g:ctrlp_arg_map = 1
 let g:ctrlp_follow_symlinks = 1 " Follow but avoid recursive
@@ -355,7 +357,10 @@ augroup vimrc-make-cmake
 augroup END
 "}}}
 " .c, .h files {{{
-autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+augroup vimrc-c
+    autocmd!
+    autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+augroup END
 "}}}
 " python files {{{
 augroup vimrc-python
