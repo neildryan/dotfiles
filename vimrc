@@ -40,7 +40,6 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
 Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
 
-" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 
 Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
@@ -49,7 +48,7 @@ Plug 'tpope/vim-obsession'
 Plug 'junegunn/goyo.vim'
 
 Plug 'reedes/vim-wordy'
-Plug 'lervag/vimtex'
+Plug 'reedes/vim-pencil'
 
 " Color
 Plug 'joshdick/onedark.vim'
@@ -66,25 +65,11 @@ let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
 let g:NERDTreeWinSize = 50
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 "}}}
-" Ctrlp.vim {{{
+" LeaderF {{{
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 let g:Lf_WildIgore='\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
 let g:Lf_UseCache = 0
-let g:ctrlp_cmd = 'CtrlPCurWD'
-let g:ctrlp_arg_map = 1
-let g:ctrlp_follow_symlinks = 1 " Follow but avoid recursive
-let g:ctrlp_brief_prompt = 1 "<bs> on empty prompt exits
-if executable('ag')
-    " Use ag in CtrlP for listing files; fast and respects .gitignore
-    let g:ctrlp_user_command = 'ag -Q -l --nocolor --hidden -g "" %s'
-
-    " ag is fast enough that CtrlP doesn't need to cache
-    let g:ctrlp_use_caching = 0
-else
-    let g:ctrlp_user_command = "find %s -type f | grep -Ev '"+ g:ctrlp_custom_ignore +"'"
-    let g:ctrlp_use_caching = 1
-endif
 "}}}
 " Ale {{{
 let g:ale_close_preview_on_insert = 1 " Close preview window on insert mode
@@ -98,6 +83,10 @@ let g:ale_linters= { 'python': ['pylint']}
 let g:ale_maximum_file_size=100000
 let g:ale_lint_on_text_changed=0
 let g:ale_lint_on_insert_leave = 0
+" }}}
+" vim-pencil{{{
+let g:pencil#conceallevel=2
+let g:pencil#concealcursor='nc'
 " }}}
 " vim-airline {{{
 let g:airline_theme = 'onedark'
@@ -131,31 +120,6 @@ let g:airline_section_c = '%t'
 let g:indentLine_color_term = 252
 let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
 let g:indentLine_bufNameExclude = ["term:.*"]
-" }}}
-" vimwiki {{{
-" TODO highlighting folds (pending github issue)
-" TODO Taskwarrior and vim-taskwarrior integration
-" TODO Look into auto-export at a different frequency than on-save
-"      Can just run VimwikiAll2HTML
-" TODO Look into tags (Tagbar, Taglist)
-" customwiki2html from https://github.com/vimwiki/vimwiki/issues/642
-let g:vimwiki_list = [{'path': '~/All-Sync/research-wiki/',
-                    \  'path_html': '~/All-Sync/research-wiki/html',
-                    \  'custom_wiki2html' : '~/.files/convert.py',
-                    \  'syntax': 'markdown',
-                    \  'ext': '.md'},
-                    \ {'path': '~/All-Sync/collection-wiki/',
-                    \  'path_html': '~/All-Sync/collection-wiki/html',
-                    \  'custom_wiki2html' : '~/.files/convert.py',
-                    \  'syntax': 'markdown',
-                    \  'ext': '.md'}]
-" let g:vimwiki_global_ext=0 " Don't treat every .md file as Vimwiki
-let g:vimwiki_conceallevel=2
-let g:vimwiki_url_maxsave = 0 " Always show entire URL links (consider changing to 15)
-let g:vimwiki_folding = 'expr:quick'
-let g:vimwiki_hl_headers = 1 " Use different colors for different header levels
-let g:vimwiki_hl_cb_checked = 2 " Grey-out done tasks and their notes
-let g:vimwiki_listsyms = '✗○◐●✓'
 " }}}
 "}}}
 " Basic settings {{{
@@ -307,13 +271,6 @@ endif
 "}}}
 "}}}
 " Functions {{{
-if !exists('*s:setupWrapping')
-    function s:setupWrapping()
-        set wrap
-        set wm=2
-        set textwidth=79
-    endfunction
-endif
 if !exists('*s:setNumberDisplay')
     function! s:setNumberDisplay()
         if &buftype == 'terminal'
@@ -339,11 +296,15 @@ augroup vimrc-remember-cursor-position
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 "}}}
-" Auto-wrap text for .txt, .tex files {{{
-augroup vimrc-wrapping
+" Prose writing files {{{
+augroup writing
   autocmd!
-  autocmd BufRead,BufNewFile *.txt,*.tex call s:setupWrapping()
-  autocmd BufRead,BufNewFile *.txt,*.tex setlocal spell
+  autocmd Filetype tex,markdown,text call s:setupWrapping()
+              \ | call pencil#init({'wrap': 'soft'})
+              \ | set wm=2
+              \ | set textwidth=80
+              \ | setlocal spell
+              \ | set wrap
 augroup END
 "}}}
 " make/cmake files {{{
