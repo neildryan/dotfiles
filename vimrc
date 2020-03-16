@@ -48,7 +48,7 @@ Plug 'tpope/vim-obsession'
 Plug 'junegunn/goyo.vim'
 
 Plug 'reedes/vim-wordy'
-Plug 'reedes/vim-pencil'
+Plug 'lervag/vimtex'
 
 " Color
 Plug 'joshdick/onedark.vim'
@@ -84,10 +84,10 @@ let g:ale_maximum_file_size=100000
 let g:ale_lint_on_text_changed=0
 let g:ale_lint_on_insert_leave = 0
 " }}}
-" vim-pencil{{{
-let g:pencil#conceallevel=2
-let g:pencil#concealcursor='nc'
-" }}}
+"Vimtex {{{
+let g:polyglot_disabled = ['latex']
+let g:vimtex_fold_enabled = 1
+"}}}
 " vim-airline {{{
 let g:airline_theme = 'onedark'
 
@@ -299,12 +299,11 @@ augroup END
 " Prose writing files {{{
 augroup writing
   autocmd!
-  autocmd Filetype tex,markdown,text call s:setupWrapping()
-              \ | call pencil#init({'wrap': 'soft'})
-              \ | set wm=2
-              \ | set textwidth=80
+  autocmd Filetype tex,markdown,text
+              \ | setlocal wm=2
+              \ | setlocal textwidth=80
               \ | setlocal spell
-              \ | set wrap
+              \ | setlocal wrap
 augroup END
 "}}}
 " make/cmake files {{{
