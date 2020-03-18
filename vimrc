@@ -48,6 +48,7 @@ Plug 'tpope/vim-obsession'
 Plug 'junegunn/goyo.vim'
 
 Plug 'reedes/vim-wordy'
+Plug 'reedes/vim-lexical'
 Plug 'lervag/vimtex'
 
 " Color
@@ -84,9 +85,14 @@ let g:ale_maximum_file_size=100000
 let g:ale_lint_on_text_changed=0
 let g:ale_lint_on_insert_leave = 0
 " }}}
-"Vimtex {{{
+"Vimtex/Lexical {{{
 let g:polyglot_disabled = ['latex']
 let g:vimtex_fold_enabled = 1
+
+let g:lexical#thesaurus = ['~/.files/thesaurus.txt']
+let g:lexical#spellfile = ['~/.files/en.utf-8.add']
+let g:lexical#thesaurus_key = '<leader>t'
+
 "}}}
 " vim-airline {{{
 let g:airline_theme = 'onedark'
@@ -129,6 +135,7 @@ filetype plugin indent on
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
+set spellfile="~/.files/en.utf-8.add"
 set bomb
 set binary
 if !has('nvim')
@@ -301,6 +308,7 @@ augroup END
 augroup writing
   autocmd!
   autocmd Filetype tex,markdown,text
+              \ | call lexical#init()
               \ | setlocal formatoptions=tcnqrj
               \ | setlocal wm=2
               \ | setlocal textwidth=80
