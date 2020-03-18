@@ -218,6 +218,7 @@ endif
 "}}}
 " Leader & Misc {{{
 let mapleader=' '
+let localleader=' '
 
 " Directories for swp files
 set nobackup        " No backup file create when overwriting
@@ -300,6 +301,7 @@ augroup END
 augroup writing
   autocmd!
   autocmd Filetype tex,markdown,text
+              \ | setlocal formatoptions=tcnqrj
               \ | setlocal wm=2
               \ | setlocal textwidth=80
               \ | setlocal spell
@@ -373,9 +375,6 @@ onoremap M `
 onoremap ` M
 
 map <silent> <C-n> :NERDTreeToggle<CR>
-" Line numbers - default off
-noremap <Leader>l :set invrelativenumber<CR> :set invnumber<CR>
-
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
 
