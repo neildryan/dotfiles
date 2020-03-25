@@ -87,6 +87,7 @@ let g:ale_lint_on_insert_leave = 0
 "Vimtex {{{
 let g:polyglot_disabled = ['latex']
 let g:vimtex_fold_enabled = 1
+let g:vimtex_imaps_enabled = 0
 "}}}
 " vim-airline {{{
 let g:airline_theme = 'onedark'
@@ -353,7 +354,6 @@ augroup startup
                 \ |let g:f=fnameescape(expand('%:p'))
                 \ |noau bwipe
                 \ |call rpcrequest(g:r, "nvim_command", "edit ".g:f)
-                \ |call rpcrequest(g:r, "nvim_command", "call lib#SetNumberDisplay()")
                 \ |qa
                 \ |endif
 
@@ -370,9 +370,9 @@ let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
 
 " Use M instead of ` for marks (the former is tmux prefix)
 nnoremap M `
-nnoremap ` M
 onoremap M `
-onoremap ` M
+" nnoremap ` M
+" onoremap ` M
 
 map <silent> <C-n> :NERDTreeToggle<CR>
 "" Clean search (highlight)

@@ -83,18 +83,18 @@ alias collection='nvim -c "cd $CWIKI_DIR" -c ":e index.md"'
 #}}}
 # Functions {{{
 function countdown(){
-   date1=$((`date +%s` + $1));
-   while [ "$date1" -ge `date +%s` ]; do
-       echo -ne "$(date -ju -f %s $(($date1 - $(date +%s))) +%H:%M:%S)\r"
-     sleep 1
-   done
+    date1=$((`date +%s` + ($1 * 60)));
+    while [ "$date1" -ge `date +%s` ]; do
+        echo -ne "$(date -ju -f %s $(($date1 - $(date +%s))) +%H:%M:%S)\r"
+        sleep 1
+    done
 }
 function stopwatch(){
-  date1=`date +%s`;
-   while true; do
-    echo -ne "$(date -ju -f %s $(($(date +%s) - $date1)) +%H:%M:%S)\r";
-    sleep 1
-   done
+    date1=`date +%s`;
+    while true; do
+        echo -ne "$(date -ju -f %s $(($(date +%s) - $date1)) +%H:%M:%S)\r";
+        sleep 1
+    done
 }
 # }}}
 # Path changes{{{
