@@ -83,6 +83,10 @@ alias collection='nvim -c "cd $CWIKI_DIR" -c ":e index.md"'
 #}}}
 # Functions {{{
 function countdown(){
+    secs=$(($1 * 60))
+    if [[ "$OSTYPE" == "darwin"* ]]; then  #OSX, do one for linux later
+        caffeinate -u -t $secs &
+    fi
     date1=$((`date +%s` + ($1 * 60)));
     while [ "$date1" -ge `date +%s` ]; do
         echo -ne "$(date -ju -f %s $(($date1 - $(date +%s))) +%H:%M:%S)\r"
