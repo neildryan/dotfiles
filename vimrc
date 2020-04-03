@@ -1,4 +1,8 @@
 " TODO Tagbar,taglist
+" TODO Remap C-B/C-F to be a fixed number of j/k while keeping cursor in
+" center of screen with (zz?)
+" TODO Add a CITE highlight
+" TODO Clean house on leader mappings
 " Vim-plug core installation {{{
 if has('nvim')
     let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -240,8 +244,6 @@ set lazyredraw      "Don't redraw when executing macros/registers
 
 set conceallevel=2   "Give placeholder for hidden text
 set concealcursor=nc "Give placeholder for hidden text
-set relativenumber   "Show relative number above and below
-set number           "Precede line with number
 set colorcolumn=80   "Color the 80th column
 
 " Make sure that NeoVim knows where to look
@@ -279,17 +281,12 @@ endif
 "}}}
 "}}}
 " Functions {{{
-if !exists('*s:setNumberDisplay')
-    function! s:setNumberDisplay()
-        if &buftype == 'terminal'
-            setlocal nonumber
-            setlocal norelativenumber
-        else
-            set number
-            set relativenumber
-        endif
-    endfunction
-endif
+function! s:setNumberDisplay()
+    if &buftype == 'terminal'
+        setlocal nonumber
+        setlocal norelativenumber
+    endif
+endfunction
 "}}}
 " Autocmd Rules {{{
 " Do syntax highlight syncing from start unless 200 lines {{{
@@ -303,17 +300,18 @@ augroup vimrc-remember-cursor-position
   autocmd!
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
-"}}}
-" Prose writing files {{{
+"}}} 
+"Prose writing files {{{
 augroup writing
   autocmd!
   autocmd Filetype tex,markdown,text
               \ | call lexical#init()
-              \ | setlocal formatoptions=tcnqrj
+              \ | setlocal formatoptions=tcnqrja
               \ | setlocal wm=2
               \ | setlocal textwidth=80
               \ | setlocal spell
               \ | setlocal wrap
+              \ | setlocal nonumber norelativenumber
 augroup END
 "}}}
 " make/cmake files {{{
@@ -327,21 +325,32 @@ augroup END
 augroup vimrc-c
     autocmd!
     autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+                \ | setlocal number relativenumber
 augroup END
 "}}}
 " python files {{{
 augroup vimrc-python
   autocmd!
   autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4
-      \ colorcolumn=79 formatoptions+=croq softtabstop=4
-      \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+        \ colorcolumn=79 formatoptions+=croq softtabstop=4
+        \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+        \ | set number relativenumber
 augroup END
 "}}}
+" General Code Files (just vim now) {{{
+augroup coding
+    autocmd!
+    autocmd Filetype vim
+              \ | setlocal formatoptions=njcnroql
+              \ | setlocal textwidth=80 colorcolumn=79
+              \ | setlocal shiftwidth=4 tabstop=4 expandtab softtabstop=4
+augroup END
+" }}}
 "Vimwiki autocmd {{{
 augroup vimrc-vimwiki
     autocmd!
     autocmd FileType vimwiki setlocal textwidth=80 autoindent
-        \ spell formatoptions=tnqrj wrap wm=2
+        \ spell formatoptions=tcnqrj wrap wm=2
         \ tabstop=2 shiftwidth=2 softtabstop=2 foldlevel=1
 augroup END
 " autocmd FileType vimwiki highlight Folded gui=italic guifg=5 guibg=Grey20
@@ -375,6 +384,9 @@ augroup END
 " Key Mappings {{{
 let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
 
+nnoremap j jzz
+nnoremap k kzz
+nnoremap <Leader>v <Esc>:e ~/.vimrc<CR>
 " Use M instead of ` for marks (the former is tmux prefix)
 nnoremap M `
 onoremap M `
@@ -389,8 +401,8 @@ nnoremap <silent> <leader><space> :noh<cr>
 nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
 
 " Windows and Splits {{{
-nnoremap <Leader>w- :<C-u>split<CR>
-nnoremap <Leader>w\| :<C-u>vsplit<CR>
+" nnoremap <Leader>w- :<C-u>split<CR>; actually just <C-W>s
+" nnoremap <Leader>w\| :<C-u>vsplit<CR>; actually just <C-W>v
 nnoremap <Leader>wN :tabnew<CR>
 nnoremap <Leader>ws :tabnew<CR>:terminal<CR>i
 nnoremap <Leader>wp :tabprevious<CR>
