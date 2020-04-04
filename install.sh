@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# TODO probably easier to just pull fonts down from Google Fonts
+
 set -e
 
 DOTFILES=~/.files
