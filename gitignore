@@ -17,3 +17,4 @@ tmp/**/*
 .Spotlight-V100
 Thumbs.db
 ._*
+*.spl
