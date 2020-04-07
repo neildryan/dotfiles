@@ -80,6 +80,7 @@ fi
 alias wiki='nvim -c VimwikiIndex -c "cd ~/All-Sync/research-wiki"'
 export CWIKI_DIR="~/All-Sync/collection-wiki"
 alias collection='nvim -c "cd $CWIKI_DIR" -c ":e index.md"'
+alias toce='cd ~/Documents/toce2020 && nvim -c ":OpenSession toce"'
 #}}}
 # Functions {{{
 function countdown(){

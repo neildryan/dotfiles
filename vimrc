@@ -1,8 +1,8 @@
 " TODO Tagbar,taglist
-" TODO Remap C-B/C-F to be a fixed number of j/k while keeping cursor in
-" center of screen with (zz?)
 " TODO Add a CITE highlight
 " TODO Clean house on leader mappings
+" TODO Is there a way to put spelling suggestions in a floating window in Nvim?
+" TODO http://peterodding.com/code/vim/notes/
 " Vim-plug core installation {{{
 if has('nvim')
     let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -54,6 +54,8 @@ Plug 'junegunn/goyo.vim'
 Plug 'reedes/vim-wordy'
 Plug 'reedes/vim-lexical'
 Plug 'lervag/vimtex'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-session'
 
 " Color
 Plug 'joshdick/onedark.vim'
@@ -93,6 +95,7 @@ let g:ale_lint_on_insert_leave = 0
 let g:polyglot_disabled = ['latex']
 let g:vimtex_fold_enabled = 1
 let g:vimtex_imaps_enabled = 0
+let g:vimtex_mappings_enabled = 0
 
 let g:lexical#thesaurus = ['~/.files/thesaurus.txt']
 let g:lexical#spellfile = ['~/.files/en.utf-8.add']
@@ -384,8 +387,17 @@ augroup END
 " Key Mappings {{{
 let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
 
+" Always keep cursor in the center of the screen
 nnoremap j jzz
 nnoremap k kzz
+nnoremap <C-F> <C-F>zz
+nnoremap <C-B> <C-B>zz
+
+"Focus the current fold by closing all others
+nnoremap <S-Tab> zMzvzt
+"Toggle current fold
+noremap <Tab> za
+
 nnoremap <Leader>v <Esc>:e ~/.vimrc<CR>
 " Use M instead of ` for marks (the former is tmux prefix)
 nnoremap M `
