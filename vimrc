@@ -3,7 +3,6 @@
 " TODO Clean house on leader mappings
 " TODO Is there a way to put spelling suggestions in a floating window in Nvim?
 " TODO http://peterodding.com/code/vim/notes/
-" TODO Vim-session: if opened session, save session on exit
 " TODO https://github.com/rafaqz/citation.vim
 " TODO https://github.com/sbdchd/neoformat
 " Vim-plug core installation {{{
@@ -50,15 +49,12 @@ Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 
 Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
-Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-obsession'
 Plug 'junegunn/goyo.vim'
 
 Plug 'reedes/vim-wordy'
 Plug 'reedes/vim-lexical'
 Plug 'lervag/vimtex'
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-session'
 
 " Color
 Plug 'joshdick/onedark.vim'
