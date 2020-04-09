@@ -3,6 +3,9 @@
 " TODO Clean house on leader mappings
 " TODO Is there a way to put spelling suggestions in a floating window in Nvim?
 " TODO http://peterodding.com/code/vim/notes/
+" TODO Vim-session: if opened session, save session on exit
+" TODO https://github.com/rafaqz/citation.vim
+" TODO https://github.com/sbdchd/neoformat
 " Vim-plug core installation {{{
 if has('nvim')
     let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -309,7 +312,7 @@ augroup writing
   autocmd!
   autocmd Filetype tex,markdown,text
               \ | call lexical#init()
-              \ | setlocal formatoptions=tcnqrja
+              \ | setlocal formatoptions=tcnqrj
               \ | setlocal wm=2
               \ | setlocal textwidth=80
               \ | setlocal spell
