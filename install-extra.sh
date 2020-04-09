@@ -13,7 +13,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then  # OSX
     brew doctor
     brew prune
     brew cleanup
-    echo "Reaper, macpass, itsycal, Office, Slack, Skype, Spark!"
+    echo "macpass, itsycal, Office, Slack, Spark!"
 else # Debian Linux
     sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0DF731E45CE24F27EEEB1450EFDC8610341D9410
     sudo add-apt-repository ppa:snwh/pulp

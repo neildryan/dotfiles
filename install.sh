@@ -12,11 +12,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then  #OSX
     # Install Brew
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew cask install iterm2
-    brew install zsh-syntax-highlighting the_silver_searcher wget fzf
-    brew install neovim
+    brew install zsh-syntax-highlighting the_silver_searcher wget fzf neovim
     /usr/local/opt/fzf/install
     brew install reattach-to-user-namespace shellcheck
-    cp "$DOTFILES/$ITERM" "~/Documents/"
+    cp "$DOTFILES/$ITERM" "$HOME/Documents/"
     cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts/"
     open "$DOTFILES/one_dark.itermcolors"
 else # Debian Linux
@@ -30,7 +29,6 @@ else # Debian Linux
     mkdir -p "$HOME/.fonts"
     cp "$DOTFILES/fonts/*" "$HOME/.fonts"
     sudo fc-cache -vf ~/.fonts
-    rmdir ~/Videos ~/Templates ~/Music ~/Public
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
 fi

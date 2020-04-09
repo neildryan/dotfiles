@@ -1,6 +1,5 @@
 " TODO Tagbar,taglist
 " TODO Add a CITE highlight
-" TODO Clean house on leader mappings
 " TODO Is there a way to put spelling suggestions in a floating window in Nvim?
 " TODO http://peterodding.com/code/vim/notes/
 " TODO https://github.com/rafaqz/citation.vim
@@ -34,22 +33,19 @@ endif
 "}}}
 " Plugins {{{
 " Installation {{{
-
-Plug 'w0rp/ale'
-
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-obsession'
 Plug 'airblade/vim-gitgutter'
+Plug 'vim-airline/vim-airline'
+Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'sheerun/vim-polyglot'
 Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
+Plug 'w0rp/ale'
 
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-
-Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
-Plug 'tpope/vim-obsession'
 Plug 'junegunn/goyo.vim'
 
 Plug 'reedes/vim-wordy'
@@ -67,9 +63,7 @@ let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycach
 let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
 let g:NERDTreeShowBookmarks=1
 let g:nerdtree_tabs_focus_on_files=1
-let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
 let g:NERDTreeWinSize = 50
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 "}}}
 " LeaderF {{{
 set wildmode=list:longest,list:full
@@ -133,6 +127,9 @@ let g:indentLine_color_term = 252
 let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
 let g:indentLine_bufNameExclude = ["term:.*"]
 " }}}
+" BufKill {{{
+let g:BufKillCreateMappings=0
+" }}}
 "}}}
 " Basic settings {{{
 " Required {{{
@@ -150,19 +147,15 @@ endif
 set fileformats=unix,dos,mac
 set showcmd       " Show partial command in last line of screen
 set ruler
-
-"" Fix backspace indent
-set backspace=indent,eol,start
-
-"" Enable hidden buffers
-set hidden
-
-"" Disable visualbell
-set noerrorbells visualbell t_vb=
+set backspace=indent,eol,start " Fix backspace indent
+set hidden "Enable hidden buffers
+set noerrorbells visualbell t_vb= "Disable visualbell
 
 "" Use modeline overrides
 set modeline
-set modelines=10
+set modelines=1
+
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 "}}}
 "Abbreviations {{{
 cnoreabbrev W! w!
@@ -202,7 +195,7 @@ if executable('ag')
     if !exists(":Ag")
         command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
         nnoremap \ :Ag<SPACE>
-  endif
+    endif
 endif
 "}}}
 "}}}
@@ -210,17 +203,6 @@ endif
 if has('unnamedplus')
   set clipboard=unnamed,unnamedplus
 endif
-"}}}
-" Session management {{{
-if has('nvim')
-    let g:session_directory = "~/.config/nvim/session"
-else
-    let g:session_directory = "~/.vim/session"
-endif
-
-let g:session_autoload = "no"
-let g:session_autosave = "no"
-let g:session_command_aliases = 1
 "}}}
 " iTerm Cursor Fix {{{
 if has("osx")
@@ -251,6 +233,9 @@ set colorcolumn=80   "Color the 80th column
 " Make sure that NeoVim knows where to look
 let g:python_host_prog = "/usr/bin/python"
 let g:python3_host_prog = "/usr/local/bin/python3"
+
+" Just save it all
+let sessionoptions="buffers,folds,resize,terminal,winpos,winsize,curdir"
 "}}}
 " }}}
 " Colors {{{
@@ -302,12 +287,12 @@ augroup vimrc-remember-cursor-position
   autocmd!
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
-"}}} 
+"}}}
 "Prose writing files {{{
 augroup writing
   autocmd!
   autocmd Filetype tex,markdown,text
-              \ | call lexical#init()
+              \ call lexical#init()
               \ | setlocal formatoptions=tcnqrj
               \ | setlocal wm=2
               \ | setlocal textwidth=80
@@ -342,21 +327,11 @@ augroup END
 " General Code Files (just vim now) {{{
 augroup coding
     autocmd!
-    autocmd Filetype vim
-              \ | setlocal formatoptions=njcnroql
-              \ | setlocal textwidth=80 colorcolumn=79
-              \ | setlocal shiftwidth=4 tabstop=4 expandtab softtabstop=4
+    autocmd Filetype vim setlocal formatoptions=njcnroql textwidth=80
+                \ colorcolumn=79 shiftwidth=4 tabstop=4
+                \ expandtab softtabstop=4
 augroup END
 " }}}
-"Vimwiki autocmd {{{
-augroup vimrc-vimwiki
-    autocmd!
-    autocmd FileType vimwiki setlocal textwidth=80 autoindent
-        \ spell formatoptions=tcnqrj wrap wm=2
-        \ tabstop=2 shiftwidth=2 softtabstop=2 foldlevel=1
-augroup END
-" autocmd FileType vimwiki highlight Folded gui=italic guifg=5 guibg=Grey20
-"}}}
 "Startup -- Neovim terminal fixes {{{
 "From hneutr/dotfiles autocommands.vim
 augroup startup
@@ -371,12 +346,12 @@ augroup startup
                 \ |let g:r=jobstart(['nc', '-U', $NVIM_LISTEN_ADDRESS],{'rpc':v:true})
                 \ |let g:f=fnameescape(expand('%:p'))
                 \ |noau bwipe
-                \ |call rpcrequest(g:r, "nvim_command", "edit ".g:f)
+                \ |call rpcrequest(g:r, 'nvim_command', 'edit '.g:f)
                 \ |qa
                 \ |endif
 
     " enter insert mode whenever we're in a terminal
-    " autocmd TermOpen,BufWinEnter,BufEnter term://* startinsert
+    autocmd TermOpen,BufWinEnter,BufEnter term://* startinsert
 
     " Auto-close terminal
     autocmd TermClose term://* call nvim_input('<CR>')
@@ -384,8 +359,6 @@ augroup END
 "}}}
 "}}}
 " Key Mappings {{{
-let g:gitgutter_map_keys = 0 " Avoid <Leader>h conflicts
-
 " Always keep cursor in the center of the screen
 nnoremap j jzz
 nnoremap k kzz
@@ -401,8 +374,6 @@ nnoremap <Leader>v <Esc>:e ~/.vimrc<CR>
 " Use M instead of ` for marks (the former is tmux prefix)
 nnoremap M `
 onoremap M `
-" nnoremap ` M
-" onoremap ` M
 
 map <silent> <C-n> :NERDTreeToggle<CR>
 "" Clean search (highlight)
@@ -412,8 +383,8 @@ nnoremap <silent> <leader><space> :noh<cr>
 nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
 
 " Windows and Splits {{{
-" nnoremap <Leader>w- :<C-u>split<CR>; actually just <C-W>s
-" nnoremap <Leader>w\| :<C-u>vsplit<CR>; actually just <C-W>v
+nnoremap <Leader>- :<C-u>split<CR>
+nnoremap <Leader>\| :<C-u>vsplit<CR>
 nnoremap <Leader>wN :tabnew<CR>
 nnoremap <Leader>ws :tabnew<CR>:terminal<CR>i
 nnoremap <Leader>wp :tabprevious<CR>
@@ -422,12 +393,6 @@ nnoremap <Leader>wr <C-W>r
 set splitbelow
 set splitright
 "}}}
-" Vimwiki new bindings {{{
-map <Leader>kk <Plug>VimwikiIndex
-map <Leader>ki <Plug>VimiwkiDiaryIndex
-map <Leader>ks <Plug>VimwikiUISelect
-map <Leader>kt <Plug>VimwikiTabIndex
-" }}}
 " Switching windows {{{
 if has('nvim')
     inoremap <C-j> <Esc><C-w>j
@@ -450,7 +415,6 @@ else
 endif
 "}}}
 " Git - fugitive {{{
-noremap <Leader>gc :Gcommit<CR>
 noremap <Leader>gp :Gpush<CR>
 noremap <Leader>gl :Gpull<CR>
 noremap <Leader>gs :Gstatus<CR>
@@ -473,9 +437,6 @@ nnoremap <Leader>n :bnext<CR>
 nnoremap <Leader>p :bprevious<CR>
 nnoremap <Leader>d :BD<CR>
 "}}}
-
-" Opens an edit command with path of the currently edited file filled in
-noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 " Disable arrow keys for hardmode, resize instead {{{
 inoremap <Up> <NOP>
 inoremap <Down> <NOP>
