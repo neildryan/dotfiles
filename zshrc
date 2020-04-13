@@ -83,7 +83,7 @@ alias collection='nvim -c "cd $CWIKI_DIR" -c ":e index.md"'
 alias toce='cd ~/Documents/toce2020 && nvim -S "Session.vim"'
 #}}}
 # Functions {{{
-function countdown(){
+function timer(){
     secs=$(($1 * 60))
     if [[ "$OSTYPE" == "darwin"* ]]; then  #OSX, do one for linux later
         caffeinate -u -t $secs &
