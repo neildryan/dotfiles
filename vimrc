@@ -1,9 +1,13 @@
 " TODO Tagbar,taglist
-" TODO Add a CITE highlight
 " TODO Is there a way to put spelling suggestions in a floating window in Nvim?
-" TODO http://peterodding.com/code/vim/notes/
 " TODO https://github.com/rafaqz/citation.vim
 " TODO https://github.com/sbdchd/neoformat
+"
+" TODO Play around with soft-wrapping; use columns and maybe vim-pencil again
+" TODO How much can be done with tex by just using built-ins? See
+" g:tex_fold_enabled
+" TODO http://proselint.com/
+" TODO Start here
 " Vim-plug core installation {{{
 if has('nvim')
     let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -47,6 +51,7 @@ Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
 Plug 'w0rp/ale'
 
 Plug 'junegunn/goyo.vim'
+Plug 'plasticboy/vim-markdown'
 
 Plug 'reedes/vim-wordy'
 Plug 'reedes/vim-lexical'
@@ -130,6 +135,9 @@ let g:indentLine_bufNameExclude = ["term:.*"]
 " BufKill {{{
 let g:BufKillCreateMappings=0
 " }}}
+" Better Whitespace {{{
+let g:better_whitespace_enabled=1
+" }}}
 "}}}
 " Basic settings {{{
 " Required {{{
@@ -139,6 +147,7 @@ set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
 set spellfile="~/.files/en.utf-8.add"
+set spellsuggest+=10  "z= should give 10 results and no more
 set bomb
 set binary
 if !has('nvim')
@@ -234,6 +243,7 @@ set colorcolumn=80   "Color the 80th column
 let g:python_host_prog = "/usr/bin/python"
 let g:python3_host_prog = "/usr/local/bin/python3"
 
+let g:tex_fold_enabled=1
 " Just save it all
 let sessionoptions="buffers,folds,resize,terminal,winpos,winsize,curdir"
 "}}}
@@ -273,6 +283,8 @@ function! s:setNumberDisplay()
         setlocal nonumber
         setlocal norelativenumber
     endif
+    setlocal nonumber
+    setlocal norelativenumber
 endfunction
 "}}}
 " Autocmd Rules {{{
@@ -295,10 +307,11 @@ augroup writing
               \ call lexical#init()
               \ | setlocal formatoptions=tcnqrj
               \ | setlocal wm=2
-              \ | setlocal textwidth=80
+              \ | setlocal textwidth=79
               \ | setlocal spell
               \ | setlocal wrap
               \ | setlocal nonumber norelativenumber
+              \ | let g:strip_whitespace_on_save=1
 augroup END
 "}}}
 " make/cmake files {{{
@@ -314,6 +327,14 @@ augroup vimrc-c
     autocmd BufRead,BufNewFile *.h,*.c set filetype=c
                 \ | setlocal number relativenumber
 augroup END
+"}}}
+" Highlighting TODO and CITE{{{
+augroup vimrc_todo
+    autocmd!
+    autocmd Syntax * syn match MyTodo /\v<(CITE|TODO)/
+                \ containedin=ALL " Can change to .*Comment for just comments
+augroup END
+hi def link MyTodo Todo
 "}}}
 " python files {{{
 augroup vimrc-python
@@ -383,8 +404,8 @@ nnoremap <silent> <leader><space> :noh<cr>
 nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
 
 " Windows and Splits {{{
-nnoremap <Leader>- :<C-u>split<CR>
-nnoremap <Leader>\| :<C-u>vsplit<CR>
+nnoremap <Leader>w- :<C-u>split<CR>
+nnoremap <Leader>w\| :<C-u>vsplit<CR>
 nnoremap <Leader>wN :tabnew<CR>
 nnoremap <Leader>ws :tabnew<CR>:terminal<CR>i
 nnoremap <Leader>wp :tabprevious<CR>
