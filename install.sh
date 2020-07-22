@@ -19,15 +19,15 @@ if [[ "$OSTYPE" == "darwin"* ]]; then  #OSX
     cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts/"
     open "$DOTFILES/one_dark.itermcolors"
 else # Debian Linux
-    sudo apt-get update
-    sudo apt-get -y install make wget curl python3 cmake
-    sudo apt-get -y install zsh zsh-common neovim silversearcher-ag
-    sudo apt-get -y install zsh-syntax-highlighting
-    sudo apt-get -y install docker powertop tlp
-    sudo apt-get -y install gnome-tweak-tool chrome-gnome-shell
-    sudo apt-get -y dist-upgrade && sudo apt-get -y autoremove
+    sudo apt update
+    sudo apt -y install make wget curl python3 cmake
+    sudo apt -y install zsh zsh-common neovim silversearcher-ag
+    sudo apt -y install zsh-syntax-highlighting
+    sudo apt -y install docker powertop tlp
+    sudo apt -y install gnome-tweak-tool chrome-gnome-shell
+    sudo apt -y dist-upgrade && sudo apt -y autoremove
     mkdir -p "$HOME/.fonts"
-    cp "$DOTFILES/fonts/*" "$HOME/.fonts"
+    cp $DOTFILES/fonts/* $HOME/.fonts
     sudo fc-cache -vf ~/.fonts
     git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
@@ -36,7 +36,7 @@ fi
 # Get oh-my-zsh, set shell to zsh
 git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
 if [[ "$SHELL" != "/bin/zsh" ]]; then
-    chsh -s /bin/zsh
+    chsh -s /bin/zsh $USER
 fi
 
 # Setup symlinks

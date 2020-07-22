@@ -2,7 +2,7 @@
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export ZSH=/Users/neilryan/.oh-my-zsh
 else
-    export ZSH=/home/neilryan/.oh-my-zsh
+    export ZSH=/home/$USER/.oh-my-zsh
 fi
 #}}}
 # Theme {{{
@@ -56,7 +56,7 @@ else
     export VISUAL='vim'
 fi
 # Compilation flags
-export DEFAULT_USER="neilryan"
+export DEFAULT_USER=$USER
 
 setopt correct
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -117,7 +117,7 @@ export PATH=$PATH:~/.local/bin
 if [[ "$OSTYPE" == "darwin"* ]]; then
     source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
-    source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 #}}}
 # vim:foldmethod=marker:foldlevel=0
