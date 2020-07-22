@@ -97,7 +97,6 @@ let g:vimtex_mappings_enabled = 0
 
 let g:lexical#thesaurus = ['~/.files/thesaurus.txt']
 let g:lexical#spellfile = ['~/.files/en.utf-8.add']
-let g:lexical#thesaurus_key = '<leader>t'
 "}}}
 " vim-airline {{{
 let g:airline_theme = 'onedark'
@@ -147,7 +146,7 @@ set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
 set spellfile="~/.files/en.utf-8.add"
-set spellsuggest+=10  "z= should give 10 results and no more
+" set spellsuggest+=10  "z= should give 10 results and no more
 set bomb
 set binary
 if !has('nvim')
@@ -244,6 +243,7 @@ let g:python_host_prog = "/usr/bin/python"
 let g:python3_host_prog = "/usr/local/bin/python3"
 
 let g:tex_fold_enabled=1
+let g:tex_flavor="latex"
 " Just save it all
 let sessionoptions="buffers,folds,resize,terminal,winpos,winsize,curdir"
 "}}}
@@ -302,16 +302,15 @@ augroup END
 "}}}
 "Prose writing files {{{
 augroup writing
+  " autocmd BufRead,BufNewFile *.tex,*.md,*.txt
   autocmd!
-  autocmd Filetype tex,markdown,text
-              \ call lexical#init()
-              \ | setlocal formatoptions=tcnqrj
-              \ | setlocal wm=2
-              \ | setlocal textwidth=79
-              \ | setlocal spell
-              \ | setlocal wrap
-              \ | setlocal nonumber norelativenumber
-              \ | let g:strip_whitespace_on_save=1
+  autocmd FileType tex,markdown,text call lexical#init()
+  autocmd FileType tex,markdown,text setlocal formatoptions=tcnqrj
+  autocmd FileType tex,markdown,text setlocal spell wrap
+  autocmd FileType tex,markdown,text setlocal nonumber norelativenumber
+  autocmd FileType tex,markdown,text setlocal linebreak showbreak=>
+  autocmd FileType tex,markdown,text nnoremap <buffer> j gj
+  autocmd FileType tex,markdown,text nnoremap <buffer> k gk
 augroup END
 "}}}
 " make/cmake files {{{
@@ -324,7 +323,7 @@ augroup END
 " .c, .h files {{{
 augroup vimrc-c
     autocmd!
-    autocmd BufRead,BufNewFile *.h,*.c set filetype=c
+    autocmd BufRead,BufNewFile *.h,*.c setlocal filetype=c
                 \ | setlocal number relativenumber
 augroup END
 "}}}
@@ -342,15 +341,15 @@ augroup vimrc-python
   autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4
         \ colorcolumn=79 formatoptions+=croq softtabstop=4
         \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
-        \ | set number relativenumber
+        \ | setlocal number relativenumber
 augroup END
 "}}}
 " General Code Files (just vim now) {{{
 augroup coding
     autocmd!
     autocmd Filetype vim setlocal formatoptions=njcnroql textwidth=80
-                \ colorcolumn=79 shiftwidth=4 tabstop=4
-                \ expandtab softtabstop=4
+    autocmd Filetype vim setlocal colorcolumn=79 shiftwidth=4 tabstop=4
+    autocmd Filetype vim setlocal expandtab softtabstop=4
 augroup END
 " }}}
 "Startup -- Neovim terminal fixes {{{
