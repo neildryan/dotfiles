@@ -73,7 +73,10 @@ let g:NERDTreeWinSize = 50
 " LeaderF {{{
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
-let g:Lf_WildIgore='\v[\/](node_modules|target|dist)|(\.(swp|tox|ico|git|hg|svn))$'
+let g:Lf_WildIgnore= {
+            \ 'dir': [".git", "__pycache__"],
+            \ 'file': ["*.sw?", "*.bak", "*.o", "*.so", "*.py[co]"]
+            \}
 let g:Lf_UseCache = 0
 "}}}
 " Ale {{{
@@ -85,9 +88,11 @@ let g:ale_sign_style_warning='⚠'
 let g:ale_warn_about_trailing_whitespace = 0
 let g:ale_history_enabled=0
 let g:ale_linters= { 'python': ['pylint']}
+let g:ale_python_pylint_options = "--load-plugins pylint_django"
 let g:ale_maximum_file_size=100000
 let g:ale_lint_on_text_changed=0
 let g:ale_lint_on_insert_leave = 0
+
 " }}}
 "Vimtex/Lexical {{{
 let g:polyglot_disabled = ['latex']
@@ -136,6 +141,12 @@ let g:BufKillCreateMappings=0
 " }}}
 " Better Whitespace {{{
 let g:better_whitespace_enabled=1
+" }}}
+" Vim Markdown {{{
+let g:vim_markdown_auto_insert_bullets = 0
+let g:vim_markdown_new_list_item_indent = 0
+" Forgive me, but it works (from vim-markdown github issue #390)
+au FileType markdown setlocal formatlistpat=^\\s*\\d\\+[.\)]\\s\\+\\\|^\\s*[*+~-]\\s\\+\\\|^\\(\\\|[*#]\\)\\[^[^\\]]\\+\\]:\\s | setlocal comments=n:>
 " }}}
 "}}}
 " Basic settings {{{
