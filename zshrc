@@ -38,11 +38,7 @@ HIST_STAMPS="mm/dd/yyyy"
 #}}}
 # Oh-my-zsh config {{{
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    plugins=(git ssh-agent)
-else
-    plugins=(git ssh-agent)
-fi
+plugins=(git ssh-agent)
 source $ZSH/oh-my-zsh.sh
 #}}}
 # User configuration {{{
@@ -68,6 +64,7 @@ bindkey -r "^l"
 bindkey "^o" clear-screen
 
 alias r2="r2 -A"
+alias python="python3"
 if [[ "$OSTYPE" != "darwin"* ]]; then
     alias open='xdg-open'
 fi
@@ -77,9 +74,6 @@ fi
 if hash htop 2> /dev/null; then
     alias top='htop'
 fi
-alias wiki='nvim -c VimwikiIndex -c "cd ~/All-Sync/research-wiki"'
-export CWIKI_DIR="~/All-Sync/collection-wiki"
-alias collection='nvim -c "cd $CWIKI_DIR" -c ":e index.md"'
 alias toce='cd ~/Documents/toce2020 && nvim -S "Session.vim"'
 #}}}
 # Functions {{{
@@ -105,11 +99,15 @@ function stopwatch(){
 # Path changes{{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export PATH=$PATH:~/Library/Python/3.7/bin
+    export PATH=$PATH:/usr/local/sbin
 else
     if [ $TILIX_ID ] || [ $VTE_VERSION ]; then
         source /etc/profile.d/vte-2.91.sh
     fi
     export PATH=$PATH:/snap/bin
+fi
+if [ -d "$HOME/lineage/platform-tools" ] ; then
+    export PATH="$PATH:$HOME/lineage/platform-tools"
 fi
 export PATH=$PATH:~/.local/bin
 # }}}
@@ -120,4 +118,5 @@ else
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 #}}}
+echo "don't panic" \\u001b\[36m█\\u001b\[35m█\\u001b\[37m█\\u001b\[35m█\\u001b\[36m█
 # vim:foldmethod=marker:foldlevel=0
