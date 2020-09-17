@@ -92,7 +92,6 @@ let g:ale_python_pylint_options = "--load-plugins pylint_django"
 let g:ale_maximum_file_size=100000
 let g:ale_lint_on_text_changed=0
 let g:ale_lint_on_insert_leave = 0
-
 " }}}
 "Vimtex/Lexical {{{
 let g:polyglot_disabled = ['latex']

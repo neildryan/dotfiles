@@ -110,6 +110,8 @@ if [ -d "$HOME/lineage/platform-tools" ] ; then
     export PATH="$PATH:$HOME/lineage/platform-tools"
 fi
 export PATH=$PATH:~/.local/bin
+export XDG_DATA_HOME="$HOME/.config"
+export XDG_CONFIG_HOME="$HOME/.config"
 # }}}
 # Zsh-syntax-highlighting{{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
