@@ -1,0 +1,23 @@
+directory: ~/music-lib           # Path to music directory
+library: ~/data/musiclibrary.db  # Path to library file
+ui:
+  color: yes                     # Use colors
+import:
+  move: yes                      # Move files into beets lib on import
+  log: ~/beet_import.log         # Where to store import logs
+  languages: en                  # Prefer english names
+plugins: badfiles playlist duplicates missing lyrics fetchart scrub
+
+lyrics:
+  auto: yes          # Fetch on import
+
+fetchart:
+  auto: yes          # Fetch on import
+  cautious: true     # Pick only trusted album art
+  cover_names: front # Prioritize images contianing words in list
+  sources: itunes *  # Prioritize itunes album art
+  enforce_ratio: yes # Images are only valid with 1:1 ratio
+
+scrub:
+  auto: yes          # Clear extraneous tags on import
+
