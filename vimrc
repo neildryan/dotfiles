@@ -1,3 +1,4 @@
+" Features
 " TODO Tagbar,taglist
 " TODO Is there a way to put spelling suggestions in a floating window in Nvim?
 " TODO https://github.com/rafaqz/citation.vim
@@ -7,6 +8,9 @@
 " TODO How much can be done with tex by just using built-ins? See
 " g:tex_fold_enabled
 " TODO http://proselint.com/
+" Quick Fixes
+" ~ Keybinding to insert text to drop into python debugger in .py files
+
 " TODO Start here
 " Vim-plug core installation {{{
 if has('nvim')
@@ -37,7 +41,6 @@ endif
 "}}}
 " Plugins {{{
 " Installation {{{
-Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
@@ -46,6 +49,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'ntpeters/vim-better-whitespace'
+let g:polyglot_disabled = ['latex'] " Needs to be set before loading plugin
 Plug 'sheerun/vim-polyglot'
 Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
 Plug 'w0rp/ale'
@@ -61,14 +65,6 @@ Plug 'lervag/vimtex'
 Plug 'joshdick/onedark.vim'
 
 call plug#end()
-"}}}
-" NERDTree {{{
-let g:NERDTreeChDirMode=2
-let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
-let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
-let g:NERDTreeShowBookmarks=1
-let g:nerdtree_tabs_focus_on_files=1
-let g:NERDTreeWinSize = 50
 "}}}
 " LeaderF {{{
 set wildmode=list:longest,list:full
@@ -94,7 +90,6 @@ let g:ale_lint_on_text_changed=0
 let g:ale_lint_on_insert_leave = 0
 " }}}
 "Vimtex/Lexical {{{
-let g:polyglot_disabled = ['latex']
 let g:vimtex_fold_enabled = 1
 let g:vimtex_imaps_enabled = 0
 let g:vimtex_mappings_enabled = 0
@@ -296,6 +291,22 @@ function! s:setNumberDisplay()
     setlocal nonumber
     setlocal norelativenumber
 endfunction
+
+" Always keep cursor in the center of the screen for prose
+function! s:setCenterText()
+    if (&filetype == 'tex') || (&filetype == 'markdown') || (&filetype == 'text')
+        nnoremap <buffer> j jzz
+        nnoremap <buffer> k kzz
+        nnoremap <buffer> <C-F> <C-F>zz
+        nnoremap <buffer> <C-B> <C-B>zz
+    else
+        silent! nunmap <buffer> jzz
+        silent! nunmap <buffer> kzz
+        silent! nunmap <buffer> <C-F>zz
+        silent! nunmap <buffer> <C-B>zz
+    endif
+endfunction
+
 "}}}
 " Autocmd Rules {{{
 " Do syntax highlight syncing from start unless 200 lines {{{
@@ -321,6 +332,7 @@ augroup writing
   autocmd FileType tex,markdown,text setlocal linebreak showbreak=>
   autocmd FileType tex,markdown,text nnoremap <buffer> j gj
   autocmd FileType tex,markdown,text nnoremap <buffer> k gk
+  autocmd BufWinEnter * call s:setCenterText()
 augroup END
 "}}}
 " make/cmake files {{{
@@ -387,13 +399,15 @@ augroup startup
     autocmd TermClose term://* call nvim_input('<CR>')
 augroup END
 "}}}
+" Ignore terminal windows when moving through buffers {{{
+" Also, if we hide a terminal, wipe buffer (delete + delete record)
+augroup termIgnore
+    autocmd!
+    autocmd TermOpen * set nobuflisted bufhidden=wipe
+augroup END
+"}}}
 "}}}
 " Key Mappings {{{
-" Always keep cursor in the center of the screen
-nnoremap j jzz
-nnoremap k kzz
-nnoremap <C-F> <C-F>zz
-nnoremap <C-B> <C-B>zz
 
 "Focus the current fold by closing all others
 nnoremap <S-Tab> zMzvzt
@@ -420,6 +434,7 @@ nnoremap <Leader>ws :tabnew<CR>:terminal<CR>i
 nnoremap <Leader>wp :tabprevious<CR>
 nnoremap <Leader>wn :tabnext<CR>
 nnoremap <Leader>wr <C-W>r
+nnoremap <Leader>D :q<CR>
 set splitbelow
 set splitright
 "}}}
@@ -453,10 +468,10 @@ noremap <Leader>gd :Gvdiff<CR>
 "}}}
 " Shell, shell splits {{{
 if has('nvim')
-    nnoremap <Leader>ss :terminal<CR>i
-    nnoremap <Leader>s\| :<C-u>vsplit<CR>:term<CR>i
-    nnoremap <Leader>s- :<C-u>split<CR>:term<CR>i
-    nnoremap <Leader>sN :tabnew<CR>:terminal<CR>i
+    nnoremap <Leader>ss :terminal<CR>
+    nnoremap <Leader>s\| :<C-u>vsplit<CR>:term<CR>
+    nnoremap <Leader>s- :<C-u>split<CR>:term<CR>
+    nnoremap <Leader>sN :tabnew<CR>:terminal<CR>
     tnoremap <Esc> <C-\><C-n>
 else
     nnoremap <Leader>sh :shell<CR>
