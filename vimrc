@@ -8,6 +8,10 @@
 " TODO How much can be done with tex by just using built-ins? See
 " g:tex_fold_enabled
 " TODO http://proselint.com/
+"
+" TODO Switch from airline to lightline? It seems like more of my aesthetic,
+" though there's a batch of config to write. It'll be really easy to understand
+" config and customize after a bit of learning though!
 " Quick Fixes
 " ~ Keybinding to insert text to drop into python debugger in .py files
 
@@ -45,7 +49,6 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
 Plug 'airblade/vim-gitgutter'
-Plug 'vim-airline/vim-airline'
 Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'ntpeters/vim-better-whitespace'
@@ -62,9 +65,35 @@ Plug 'reedes/vim-lexical'
 Plug 'lervag/vimtex'
 
 " Color
-Plug 'joshdick/onedark.vim'
+Plug 'wadackel/vim-dogrun'
+Plug 'reedes/vim-colors-pencil'
+
+Plug 'vim-airline/vim-airline'
+" Plug 'itchyny/lightline.vim'
+" Plug 'mengelbrecht/lightline-bufferline'
+
 
 call plug#end()
+
+colo dogrun
+let g:airline_theme='dogrun'
+" let g:pencil_gutter_color = 1
+" let g:pencil_spell_undercurl = 1
+" let g:pencil_terminal_italics = 1
+" let g:pencil_neutral_headings = 1
+let g:lightline = {
+  \ 'colorscheme': 'dogrun',
+  \ 'active': {
+    \ 'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+  \ },
+  \ 'tabline': {
+  \   'left': [ ['buffers'] ],
+  \   'right': [ ['close'] ]
+  \ },
+  \ 'component_expand': { 'buffers': 'lightline#bufferline#buffers' },
+  \ 'component_function': { 'gitbranch': 'FugutiveHead' },
+  \ 'component_type': { 'buffers': 'tabsel' }
+\ }
 "}}}
 " LeaderF {{{
 set wildmode=list:longest,list:full
@@ -98,7 +127,6 @@ let g:lexical#thesaurus = ['~/.files/thesaurus.txt']
 let g:lexical#spellfile = ['~/.files/en.utf-8.add']
 "}}}
 " vim-airline {{{
-let g:airline_theme = 'onedark'
 
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#tabline#enabled = 1  " Top bar for tabs
@@ -278,7 +306,6 @@ if !exists('g:not_finish_vimplug')
         set termguicolors
     endif
     syntax on
-    colorscheme onedark
 endif
 "}}}
 "}}}
@@ -326,7 +353,7 @@ augroup writing
   " autocmd BufRead,BufNewFile *.tex,*.md,*.txt
   autocmd!
   autocmd FileType tex,markdown,text call lexical#init()
-  autocmd FileType tex,markdown,text setlocal formatoptions=tcnqrj
+  autocmd FileType tex,markdown,text setlocal formatoptions=tcnqrjaw
   autocmd FileType tex,markdown,text setlocal spell wrap
   autocmd FileType tex,markdown,text setlocal nonumber norelativenumber
   autocmd FileType tex,markdown,text setlocal linebreak showbreak=>
@@ -415,13 +442,15 @@ nnoremap <S-Tab> zMzvzt
 noremap <Tab> za
 
 nnoremap <Leader>v <Esc>:e ~/.vimrc<CR>
+
 " Use M instead of ` for marks (the former is tmux prefix)
 nnoremap M `
 onoremap M `
 
-map <silent> <C-n> :NERDTreeToggle<CR>
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
+
+vnoremap <Leader>y :join<CR>yyu
 
 "" Goyo mode with Gitgutter
 nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
@@ -468,10 +497,10 @@ noremap <Leader>gd :Gvdiff<CR>
 "}}}
 " Shell, shell splits {{{
 if has('nvim')
-    nnoremap <Leader>ss :terminal<CR>
-    nnoremap <Leader>s\| :<C-u>vsplit<CR>:term<CR>
-    nnoremap <Leader>s- :<C-u>split<CR>:term<CR>
-    nnoremap <Leader>sN :tabnew<CR>:terminal<CR>
+    nnoremap <Leader>ts :terminal<CR>
+    nnoremap <Leader>t\| :<C-u>vsplit<CR>:term<CR>
+    nnoremap <Leader>t- :<C-u>split<CR>:term<CR>
+    nnoremap <Leader>tN :tabnew<CR>:terminal<CR>
     tnoremap <Esc> <C-\><C-n>
 else
     nnoremap <Leader>sh :shell<CR>
