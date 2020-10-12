@@ -9,9 +9,14 @@
 " g:tex_fold_enabled
 " TODO http://proselint.com/
 "
+" TODO Make own function to stripwhitespace (airline builtin?)
+" TODO Deoplete, https://github.com/SirVer/ultisnips/ for wiki links
+"   https://vimways.org/2019/personal-notetaking-in-vim/
+" TODO 'machakann/vim-highlightedyank'
 " TODO Switch from airline to lightline? It seems like more of my aesthetic,
 " though there's a batch of config to write. It'll be really easy to understand
 " config and customize after a bit of learning though!
+"   - Look up "switching from airline to lightline"
 " Quick Fixes
 " ~ Keybinding to insert text to drop into python debugger in .py files
 
@@ -56,6 +61,7 @@ let g:polyglot_disabled = ['latex'] " Needs to be set before loading plugin
 Plug 'sheerun/vim-polyglot'
 Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
 Plug 'w0rp/ale'
+Plug 'vim-airline/vim-airline'
 
 Plug 'junegunn/goyo.vim'
 Plug 'plasticboy/vim-markdown'
@@ -68,32 +74,9 @@ Plug 'lervag/vimtex'
 Plug 'wadackel/vim-dogrun'
 Plug 'reedes/vim-colors-pencil'
 
-Plug 'vim-airline/vim-airline'
-" Plug 'itchyny/lightline.vim'
-" Plug 'mengelbrecht/lightline-bufferline'
 
 
 call plug#end()
-
-colo dogrun
-let g:airline_theme='dogrun'
-" let g:pencil_gutter_color = 1
-" let g:pencil_spell_undercurl = 1
-" let g:pencil_terminal_italics = 1
-" let g:pencil_neutral_headings = 1
-let g:lightline = {
-  \ 'colorscheme': 'dogrun',
-  \ 'active': {
-    \ 'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-  \ },
-  \ 'tabline': {
-  \   'left': [ ['buffers'] ],
-  \   'right': [ ['close'] ]
-  \ },
-  \ 'component_expand': { 'buffers': 'lightline#bufferline#buffers' },
-  \ 'component_function': { 'gitbranch': 'FugutiveHead' },
-  \ 'component_type': { 'buffers': 'tabsel' }
-\ }
 "}}}
 " LeaderF {{{
 set wildmode=list:longest,list:full
@@ -126,30 +109,41 @@ let g:vimtex_mappings_enabled = 0
 let g:lexical#thesaurus = ['~/.files/thesaurus.txt']
 let g:lexical#spellfile = ['~/.files/en.utf-8.add']
 "}}}
-" vim-airline {{{
+" Airline {{{
+let g:airline_theme='dogrun'
 
-let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#tabline#enabled = 1  " Top bar for tabs
-let g:airline#extensions#tabline#formatter = 'unique_tail'
 let g:airline_skip_empty_sections = 1
-let g:airline_detect_spell = 0  " Ignore spell and spelling
+let g:airline_detect_spell = 1  " Ignore spell and spelling
 let g:airline_detect_spelllang = 0
+
+" TODO Maybe add fugutiveline, vimtex, searchcount
+" TODO change session indicator to powerline symbol
+" TODO Personalize sections?
+let g:airline_extensions = [
+            \ 'branch', 'fzf', 'obsession',
+            \ 'tabline', 'term', 'whitespace', 'wordcount'
+            \ ]
+let g:airline#extensions#obsession#indicator_text = '$'
+let g:airline#extensions#tabline#formatter = 'unique_tail'
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_tab_type = 1
+" let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#buffer_idx_mode = 1 "
 
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = ' '
-
-" powerline symbols
 let g:airline_left_sep = ''
+let g:airline#extensions#tabline#left_sep = ' '
 let g:airline_left_alt_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ' '
 let g:airline_right_sep = ''
 let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
+let g:airline_symbols.dirty='⚡'
 
 let g:airline_section_c = '%t'
 "}}}
@@ -282,6 +276,12 @@ let sessionoptions="buffers,folds,resize,terminal,winpos,winsize,curdir"
 "}}}
 " }}}
 " Colors {{{
+colo dogrun
+" Stuff for vim-colors-pencil, if I go back to it
+let g:pencil_gutter_color = 1
+let g:pencil_spell_undercurl = 1
+let g:pencil_terminal_italics = 1
+let g:pencil_neutral_headings = 1
 " Terminal Color Fixes {{{
 set t_Co=256   " 256 color
 if !has('nvim')
@@ -510,6 +510,17 @@ endif
 nnoremap <Leader>n :bnext<CR>
 nnoremap <Leader>p :bprevious<CR>
 nnoremap <Leader>d :BD<CR>
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap <Leader>- <Plug>AirlineSelectPrevTab
+nmap <Leader>+ <Plug>AirlineSelectNextTab
 "}}}
 " Disable arrow keys for hardmode, resize instead {{{
 inoremap <Up> <NOP>
