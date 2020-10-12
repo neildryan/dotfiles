@@ -50,9 +50,9 @@ let g:airline#themes#dogrun#palette.insert_paste = {
 
 let g:airline#themes#dogrun#palette.terminal = airline#themes#generate_color_map(s:airline_a_insert, s:airline_b_insert, s:airline_c_normal)
 
-" TODO Just red, but matches background palette
-let g:airline#themes#dogrun#palette.replace = copy(g:airline#themes#dogrun#palette.insert)
-let g:airline#themes#dogrun#palette.replace.airline_a = [ '#f56574'   , '#424453' , s:airline_b_insert[2] , 124     , ''     ]
+let s:airline_a_replace = ['#f56574', '#424453', s:airline_b_insert[2] , 124]
+let s:airline_b_replace = ['#f56574', '#424453', s:airline_b_insert[2] , 124]
+let g:airline#themes#dogrun#palette.replace = airline#themes#generate_color_map(s:airline_a_replace, s:airline_b_replace, s:airline_c_normal)
 
 let s:airline_a_visual = [ '#c173c1' , '#424453' , 232 , 214 ]
 let s:airline_b_visual = [ '#c173c1' , '#333443' , 232 , 202 ]

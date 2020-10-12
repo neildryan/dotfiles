@@ -13,10 +13,6 @@
 " TODO Deoplete, https://github.com/SirVer/ultisnips/ for wiki links
 "   https://vimways.org/2019/personal-notetaking-in-vim/
 " TODO 'machakann/vim-highlightedyank'
-" TODO Switch from airline to lightline? It seems like more of my aesthetic,
-" though there's a batch of config to write. It'll be really easy to understand
-" config and customize after a bit of learning though!
-"   - Look up "switching from airline to lightline"
 " Quick Fixes
 " ~ Keybinding to insert text to drop into python debugger in .py files
 
