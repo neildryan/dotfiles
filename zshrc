@@ -1,4 +1,10 @@
+# Overview:
+# * Currently uses p10k as zsh theme, though `Typewritten` is also good and
+#   more minimal
+# * After removing oh-my-zsh, added git aliases & ssh-agent plugins in here
+#
 # TODO zsh-completions probably does the oh-my-zsh completion thing
+
 echo "don't panic" \\u001b\[36m█\\u001b\[35m█\\u001b\[37m█\\u001b\[35m█\\u001b\[36m█
 # Powerline10k init {{{
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
@@ -9,13 +15,18 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 source ~/.files/powerlevel10k/powerlevel10k.zsh-theme
 #}}}
+# # Typewritten {{{
+# fpath+="$HOME/.files/typewritten"
+# autoload -U promptinit; promptinit
+# prompt typewritten
 
+# # }}}
 # Other ZSH config {{{
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-export UPDATE_ZSH_DAYS=7
+UPDATE_ZSH_DAYS=7
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
@@ -213,13 +224,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
-#}}}
-
-# Theme {{{
-# Really, I just want <git status>, <current dir w/o parents>, >>
-#    Maybe show virutalenv if one exists, but without a bunch of text
-#    No time, I don't know how useful the full path is, I'd like gentle colors
-# TODO Look into Powerline10k and typewritten
 #}}}
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.files/p10k.zsh ]] || source ~/.files/p10k.zsh
