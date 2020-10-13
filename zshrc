@@ -1,15 +1,15 @@
-# Path to your oh-my-zsh installation. {{{
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    export ZSH=/Users/neilryan/.oh-my-zsh
-else
-    export ZSH=/home/$USER/.oh-my-zsh
+# TODO zsh-completions probably does the oh-my-zsh completion thing
+echo "don't panic" \\u001b\[36m█\\u001b\[35m█\\u001b\[37m█\\u001b\[35m█\\u001b\[36m█
+# Powerline10k init {{{
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+source ~/.files/powerlevel10k/powerlevel10k.zsh-theme
 #}}}
-# Theme {{{
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-ZSH_THEME="agnoster"
-#}}}
+
 # Other ZSH config {{{
 # Uncomment the following line to use case-sensitive completion.
 CASE_SENSITIVE="true"
@@ -36,11 +36,6 @@ HIST_STAMPS="mm/dd/yyyy"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 #}}}
-# Oh-my-zsh config {{{
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-plugins=(git ssh-agent)
-source $ZSH/oh-my-zsh.sh
-#}}}
 # User configuration {{{
 export LANG=en_US.UTF-8
 
@@ -59,12 +54,14 @@ setopt correct
 #}}}
 # Aliases {{{
 # For a full list of active aliases, run `alias`.
-bindkey -r "^o"
-bindkey -r "^l"
-bindkey "^o" clear-screen
 
 alias r2="r2 -A"
 alias python="python3"
+alias ls="ls -G"
+alias ll="ls -l"
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
 if [[ "$OSTYPE" != "darwin"* ]]; then
     alias open='xdg-open'
 fi
@@ -74,7 +71,20 @@ fi
 if hash htop 2> /dev/null; then
     alias top='htop'
 fi
-alias toce='cd ~/Documents/toce2020 && nvim -S "Session.vim"'
+# Git Aliases (from oh-my-zsh git plugin) {{{
+alias ga='git add'
+alias gb='git branch'
+alias gc='git commit'
+alias gcam='git commit -am'
+alias gco='git checkout'
+alias gcm='git checkout master'
+alias gd='git diff'
+alias gl='git pull'
+alias glg='git log --stat'
+alias glo='git log --oneline --decorate'
+alias gp='git push'
+alias gst='git status'
+# }}}
 #}}}
 # Functions {{{
 function timer(){
@@ -96,6 +106,90 @@ function stopwatch(){
     done
 }
 # }}}
+# ssh-agent -- from oh-my-zsh {{{
+typeset _agent_forwarding _ssh_env_cache
+
+function _start_agent() {
+	local lifetime
+	zstyle -s :omz:plugins:ssh-agent lifetime lifetime
+
+	# start ssh-agent and setup environment
+	echo Starting ssh-agent...
+	ssh-agent -s ${lifetime:+-t} ${lifetime} | sed 's/^echo/#echo/' >! $_ssh_env_cache
+	chmod 600 $_ssh_env_cache
+	. $_ssh_env_cache > /dev/null
+}
+
+function _add_identities() {
+	local id line sig lines
+	local -a identities loaded_sigs loaded_ids not_loaded
+	zstyle -a :omz:plugins:ssh-agent identities identities
+
+	# check for .ssh folder presence
+	if [[ ! -d $HOME/.ssh ]]; then
+		return
+	fi
+
+	# add default keys if no identities were set up via zstyle
+	# this is to mimic the call to ssh-add with no identities
+	if [[ ${#identities} -eq 0 ]]; then
+		# key list found on `ssh-add` man page's DESCRIPTION section
+		for id in id_rsa id_dsa id_ecdsa id_ed25519 identity; do
+			# check if file exists
+			[[ -f "$HOME/.ssh/$id" ]] && identities+=$id
+		done
+	fi
+
+	# get list of loaded identities' signatures and filenames
+	if lines=$(ssh-add -l); then
+		for line in ${(f)lines}; do
+			loaded_sigs+=${${(z)line}[2]}
+			loaded_ids+=${${(z)line}[3]}
+		done
+	fi
+
+	# add identities if not already loaded
+	for id in $identities; do
+		# check for filename match, otherwise try for signature match
+		if [[ ${loaded_ids[(I)$HOME/.ssh/$id]} -le 0 ]]; then
+			sig="$(ssh-keygen -lf "$HOME/.ssh/$id" | awk '{print $2}')"
+			[[ ${loaded_sigs[(I)$sig]} -le 0 ]] && not_loaded+="$HOME/.ssh/$id"
+		fi
+	done
+
+	[[ -n "$not_loaded" ]] && ssh-add ${^not_loaded}
+}
+
+# Get the filename to store/lookup the environment from
+_ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
+
+# test if agent-forwarding is enabled
+zstyle -b :omz:plugins:ssh-agent agent-forwarding _agent_forwarding
+
+if [[ $_agent_forwarding == "yes" && -n "$SSH_AUTH_SOCK" ]]; then
+	# Add a nifty symlink for screen/tmux if agent forwarding
+	[[ -L $SSH_AUTH_SOCK ]] || ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USER-screen
+elif [[ -f "$_ssh_env_cache" ]]; then
+	# Source SSH settings, if applicable
+	. $_ssh_env_cache > /dev/null
+	if [[ $USER == "root" ]]; then
+		FILTER="ax"
+	else
+		FILTER="x"
+	fi
+	ps $FILTER | grep ssh-agent | grep -q $SSH_AGENT_PID || {
+		_start_agent
+	}
+else
+	_start_agent
+fi
+
+_add_identities
+
+# tidy up after ourselves
+unset _agent_forwarding _ssh_env_cache
+unfunction _start_agent _add_identities
+#}}}
 # Path changes{{{
 if [[ "$OSTYPE" == "darwin"* ]]; then
     export PATH=$PATH:~/Library/Python/3.7/bin
@@ -120,5 +214,13 @@ else
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 #}}}
-echo "don't panic" \\u001b\[36m█\\u001b\[35m█\\u001b\[37m█\\u001b\[35m█\\u001b\[36m█
+
+# Theme {{{
+# Really, I just want <git status>, <current dir w/o parents>, >>
+#    Maybe show virutalenv if one exists, but without a bunch of text
+#    No time, I don't know how useful the full path is, I'd like gentle colors
+# TODO Look into Powerline10k and typewritten
+#}}}
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.files/p10k.zsh ]] || source ~/.files/p10k.zsh
 # vim:foldmethod=marker:foldlevel=0
