@@ -9,10 +9,10 @@
 " g:tex_fold_enabled
 " TODO http://proselint.com/
 "
-" TODO Make own function to stripwhitespace (airline builtin?)
 " TODO Deoplete, https://github.com/SirVer/ultisnips/ for wiki links
 "   https://vimways.org/2019/personal-notetaking-in-vim/
 " TODO 'machakann/vim-highlightedyank'
+" TODO vim-orgmode or vimwiki, bullets.vim looks good
 " Quick Fixes
 " ~ Keybinding to insert text to drop into python debugger in .py files
 
@@ -49,15 +49,14 @@ endif
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-Plug 'ntpeters/vim-better-whitespace'
-let g:polyglot_disabled = ['latex'] " Needs to be set before loading plugin
-Plug 'sheerun/vim-polyglot'
-Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
 Plug 'w0rp/ale'
 Plug 'vim-airline/vim-airline'
+
+let g:polyglot_disabled = ['latex'] " Needs to be set before loading plugin
+Plug 'sheerun/vim-polyglot'
 
 Plug 'junegunn/goyo.vim'
 Plug 'plasticboy/vim-markdown'
@@ -70,18 +69,12 @@ Plug 'lervag/vimtex'
 Plug 'wadackel/vim-dogrun'
 Plug 'reedes/vim-colors-pencil'
 
-
+" Potentially could remove, I only use :BD and this adds a lot of extra stuff
+Plug 'qpkorr/vim-bufkill' " Remove buffers without changing window layout
+" Potentially could remove; again, I only use the teeniest bit
+Plug 'Yggdroot/indentLine' " Display indentation with vertical lines
 
 call plug#end()
-"}}}
-" LeaderF {{{
-set wildmode=list:longest,list:full
-set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
-let g:Lf_WildIgnore= {
-            \ 'dir': [".git", "__pycache__"],
-            \ 'file': ["*.sw?", "*.bak", "*.o", "*.so", "*.py[co]"]
-            \}
-let g:Lf_UseCache = 0
 "}}}
 " Ale {{{
 let g:ale_close_preview_on_insert = 1 " Close preview window on insert mode
@@ -109,7 +102,7 @@ let g:lexical#spellfile = ['~/.files/en.utf-8.add']
 let g:airline_theme='dogrun'
 
 let g:airline_skip_empty_sections = 1
-let g:airline_detect_spell = 1  " Ignore spell and spelling
+let g:airline_detect_spell = 0  " Ignore spell and spelling
 let g:airline_detect_spelllang = 0
 
 " TODO Maybe add fugutiveline, vimtex, searchcount
@@ -125,6 +118,7 @@ let g:airline#extensions#tabline#show_buffers = 1
 let g:airline#extensions#tabline#show_tab_type = 1
 " let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#buffer_idx_mode = 1 "
+let g:airline#extensions#tabline#show_tabs = 0 " Don't need to see them
 
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
@@ -143,23 +137,19 @@ let g:airline_symbols.dirty='⚡'
 
 let g:airline_section_c = '%t'
 "}}}
-" indentLine {{{
-let g:indentLine_color_term = 252
-let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
-let g:indentLine_bufNameExclude = ["term:.*"]
-" }}}
-" BufKill {{{
-let g:BufKillCreateMappings=0
-" }}}
-" Better Whitespace {{{
-let g:better_whitespace_enabled=1
-" }}}
 " Vim Markdown {{{
 let g:vim_markdown_auto_insert_bullets = 0
 let g:vim_markdown_new_list_item_indent = 0
 " Forgive me, but it works (from vim-markdown github issue #390)
 au FileType markdown setlocal formatlistpat=^\\s*\\d\\+[.\)]\\s\\+\\\|^\\s*[*+~-]\\s\\+\\\|^\\(\\\|[*#]\\)\\[^[^\\]]\\+\\]:\\s | setlocal comments=n:>
 " }}}
+let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.4 }}
+
+let g:BufKillCreateMappings=0
+
+let g:indentLine_color_term = 252
+let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
+let g:indentLine_bufNameExclude = ["term:.*"]
 "}}}
 " Basic settings {{{
 " Required {{{
@@ -186,7 +176,6 @@ set noerrorbells visualbell t_vb= "Disable visualbell
 set modeline
 set modelines=1
 
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 "}}}
 "Abbreviations {{{
 cnoreabbrev W! w!
@@ -213,6 +202,10 @@ set incsearch  "Search as characters are entered
 set ignorecase "Ignore case in searching
 set smartcase  "Don't ignore case if query has uppercase letters
 set showmatch  "highlight matching [{()}]
+
+set wildmode=list:longest,list:full
+set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in and open folds
@@ -296,7 +289,7 @@ if (has("nvim"))
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 "}}}
-" Colorschemes {{{
+" TermGuiColors {{{
 if !exists('g:not_finish_vimplug')
     if (has("termguicolors"))
         set termguicolors
@@ -306,6 +299,7 @@ endif
 "}}}
 "}}}
 " Functions {{{
+" Set number display only when not in terminal (currently never sets) {{{
 function! s:setNumberDisplay()
     if &buftype == 'terminal'
         setlocal nonumber
@@ -314,8 +308,8 @@ function! s:setNumberDisplay()
     setlocal nonumber
     setlocal norelativenumber
 endfunction
-
-" Always keep cursor in the center of the screen for prose
+"}}}
+" Always keep cursor in the center of the screen for prose {{{
 function! s:setCenterText()
     if (&filetype == 'tex') || (&filetype == 'markdown') || (&filetype == 'text')
         nnoremap <buffer> j jzz
@@ -329,7 +323,33 @@ function! s:setCenterText()
         silent! nunmap <buffer> <C-B>zz
     endif
 endfunction
+"}}}
+"Strip whitespace in file with :StripWhitespace {{{
+function! s:StripWhitespace(line1, line2)
+    " Save the current search and cursor position
+    let _s=@/
+    let l = line('.')
+    let c = col('.')
 
+    let ws_chars='\u0020\u00a0\u1680\u180e\u2000-\u200b\u202f\u205f\u3000\ufeff'
+    let eol_ws_pattern = '[\u0009' . ws_chars . ']\+$'
+    " Skip empty lines
+    let ws_pattern= '[^\u0009' . ws_chars . ']\@1<=' . eol_ws_pattern
+
+    " Strip whitespace
+    silent execute ':' . a:line1 . ',' . a:line2 . 's/' . ws_pattern . '//e'
+
+    " Always strip empty lines at EOF
+    if a:line2 >= line('$')
+        silent execute '%s/\(\n\)\+\%$//e'
+    endif
+
+    " Restore the saved search and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
+command! -bang -range=% StripWhitespace call s:StripWhitespace(<line1>, <line2>)
+"}}}
 "}}}
 " Autocmd Rules {{{
 " Do syntax highlight syncing from start unless 200 lines {{{
@@ -422,13 +442,6 @@ augroup startup
     autocmd TermClose term://* call nvim_input('<CR>')
 augroup END
 "}}}
-" Ignore terminal windows when moving through buffers {{{
-" Also, if we hide a terminal, wipe buffer (delete + delete record)
-augroup termIgnore
-    autocmd!
-    autocmd TermOpen * set nobuflisted bufhidden=wipe
-augroup END
-"}}}
 "}}}
 " Key Mappings {{{
 
@@ -439,23 +452,21 @@ noremap <Tab> za
 
 nnoremap <Leader>v <Esc>:e ~/.vimrc<CR>
 
-" Use M instead of ` for marks (the former is tmux prefix)
-nnoremap M `
-onoremap M `
-
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
-
+nnoremap <silent> <leader>f :FZF<cr>
 vnoremap <Leader>y :join<CR>yyu
 
 "" Goyo mode with Gitgutter
 nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
 
+" Strip whitespace
+nnoremap <Leader>s :StripWhitespace<CR>
+
 " Windows and Splits {{{
 nnoremap <Leader>w- :<C-u>split<CR>
 nnoremap <Leader>w\| :<C-u>vsplit<CR>
 nnoremap <Leader>wN :tabnew<CR>
-nnoremap <Leader>ws :tabnew<CR>:terminal<CR>i
 nnoremap <Leader>wp :tabprevious<CR>
 nnoremap <Leader>wn :tabnext<CR>
 nnoremap <Leader>wr <C-W>r
@@ -493,7 +504,7 @@ noremap <Leader>gd :Gvdiff<CR>
 "}}}
 " Shell, shell splits {{{
 if has('nvim')
-    nnoremap <Leader>ts :terminal<CR>
+    nnoremap <Leader>tt :terminal<CR>
     nnoremap <Leader>t\| :<C-u>vsplit<CR>:term<CR>
     nnoremap <Leader>t- :<C-u>split<CR>:term<CR>
     nnoremap <Leader>tN :tabnew<CR>:terminal<CR>
@@ -503,8 +514,6 @@ else
 endif
 "}}}
 " Buffers {{{
-nnoremap <Leader>n :bnext<CR>
-nnoremap <Leader>p :bprevious<CR>
 nnoremap <Leader>d :BD<CR>
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
@@ -515,8 +524,8 @@ nmap <leader>6 <Plug>AirlineSelectTab6
 nmap <leader>7 <Plug>AirlineSelectTab7
 nmap <leader>8 <Plug>AirlineSelectTab8
 nmap <leader>9 <Plug>AirlineSelectTab9
-nmap <Leader>- <Plug>AirlineSelectPrevTab
-nmap <Leader>+ <Plug>AirlineSelectNextTab
+nmap <Leader>p <Plug>AirlineSelectPrevTab
+nmap <Leader>n <Plug>AirlineSelectNextTab
 "}}}
 " Disable arrow keys for hardmode, resize instead {{{
 inoremap <Up> <NOP>
@@ -533,6 +542,7 @@ noremap <Right> :vertical resize +2<CR>
 nnoremap <Leader>cc :ALEEnableBuffer<CR> :ALELint<CR>
 nnoremap <Leader>cr :ALEDisableBuffer<CR>
 nnoremap <Leader>ci :ALEInfo<CR>
+nnoremap <Leader>cd :ALEDetail<CR>
 "}}}
 "}}}
 " vim:foldmethod=marker:foldlevel=0
