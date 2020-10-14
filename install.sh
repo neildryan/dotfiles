@@ -1,7 +1,5 @@
 #! /bin/bash
 
-# TODO probably easier to just pull fonts down from Google Fonts
-
 set -e
 
 DOTFILES=~/.files
@@ -14,16 +12,16 @@ if [[ "$OSTYPE" == "darwin"* ]]; then  #OSX
     brew cask install iterm2
     brew install zsh-syntax-highlighting the_silver_searcher wget fzf neovim
     /usr/local/opt/fzf/install
-    brew install reattach-to-user-namespace shellcheck
+    brew install reattach-to-user-namespace shellcheck htop tldr
     cp "$DOTFILES/$ITERM" "$HOME/Documents/"
     cp "$DOTFILES/fonts/*" "$HOME/Library/Fonts/"
     open "$DOTFILES/one_dark.itermcolors"
 else # Debian Linux
     sudo apt update
-    sudo apt -y install make wget curl python3 cmake
+    sudo apt -y install make wget curl python3 cmake tldr
     sudo apt -y install zsh zsh-common neovim silversearcher-ag
     sudo apt -y install zsh-syntax-highlighting
-    sudo apt -y install docker powertop tlp
+    sudo apt -y install powertop tlp htop
     sudo apt -y install gnome-tweak-tool chrome-gnome-shell
     sudo apt -y dist-upgrade && sudo apt -y autoremove
     mkdir -p "$HOME/.fonts"
@@ -33,15 +31,16 @@ else # Debian Linux
     ~/.fzf/install
 fi
 
-# Get oh-my-zsh, set shell to zsh
-git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+# Get typewritten prompt
+git clone https://github.com/reobin/typewritten.git "$DOTFILES/typewritten"
+
+# Set shell to zsh
 if [[ "$SHELL" != "/bin/zsh" ]]; then
     chsh -s /bin/zsh $USER
 fi
 
 # Setup symlinks
 ln -s -f "$DOTFILES/zshrc" "$HOME/.zshrc"
-ln -s -f "$DOTFILES/zshenv" "$HOME/.zshenv"
 ln -s -f "$DOTFILES/gitignore" "$HOME/.gitignore"
 ln -s -f "$DOTFILES/gdbinit" "$HOME/.gdbinit"
 mkdir -p "$HOME/.config/nvim"
@@ -54,4 +53,4 @@ nvim -c "PlugInstall" -c "qall"
 
 source "$HOME/.zshrc"
 printf "\n\n"
-echo "install-extra.sh for other things!"
+echo "See install-extra.sh for system setup"
