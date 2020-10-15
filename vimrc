@@ -1,18 +1,16 @@
 " Features
 " TODO Tagbar,taglist
 " TODO Is there a way to put spelling suggestions in a floating window in Nvim?
+"   Yes, but I'd probably have to do it myself
 " TODO https://github.com/rafaqz/citation.vim
 " TODO https://github.com/sbdchd/neoformat
 "
 " TODO Play around with soft-wrapping; use columns and maybe vim-pencil again
 " TODO How much can be done with tex by just using built-ins? See
 " g:tex_fold_enabled
-" TODO http://proselint.com/
+" TODO http://proselint.com/, probably replace vim-wordly
 "
-" TODO Deoplete, https://github.com/SirVer/ultisnips/ for wiki links
-"   https://vimways.org/2019/personal-notetaking-in-vim/
 " TODO 'machakann/vim-highlightedyank'
-" TODO vim-orgmode or vimwiki, bullets.vim looks good
 " Quick Fixes
 " ~ Keybinding to insert text to drop into python debugger in .py files
 
@@ -54,12 +52,16 @@ Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'w0rp/ale'
 Plug 'vim-airline/vim-airline'
+Plug 'junegunn/goyo.vim'
 
 let g:polyglot_disabled = ['latex'] " Needs to be set before loading plugin
 Plug 'sheerun/vim-polyglot'
 
-Plug 'junegunn/goyo.vim'
+" Stuff for wiki
+Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
+Plug 'lervag/wiki.vim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 Plug 'reedes/vim-wordy'
 Plug 'reedes/vim-lexical'
@@ -139,9 +141,32 @@ let g:airline_section_c = '%t'
 "}}}
 " Vim Markdown {{{
 let g:vim_markdown_auto_insert_bullets = 0
-let g:vim_markdown_new_list_item_indent = 0
-" Forgive me, but it works (from vim-markdown github issue #390)
-au FileType markdown setlocal formatlistpat=^\\s*\\d\\+[.\)]\\s\\+\\\|^\\s*[*+~-]\\s\\+\\\|^\\(\\\|[*#]\\)\\[^[^\\]]\\+\\]:\\s | setlocal comments=n:>
+" Number of space to indent new list items (affects gq)
+let g:vim_markdown_new_list_item_indent = 2
+let g:vim_markdown_folding_style_pythonic = 1 " Foldtext is header
+" }}}
+" Wiki.vim {{{
+let g:wiki_root = '~/wiki/'
+let g:wiki_mappings_use_defaults = 'none' " Define my own, avoid conflicts
+let g:wiki_filetypes = ['markdown', 'md'] " Associated .md files with Wiki.vim
+let g:wiki_link_target_type = 'md' " Use markdown style links
+let g:wiki_link_extension = 'md' "
+let g:wiki_zotero_root="~/Documents/Zotero" " Currently does nothing
+let s:template = '--template template.html'
+let s:meta_date = '--metadata date='.strftime('%Y-%m-%d')
+let s:meta_title = '--metadata title=' . expand('%:t:r')
+let g:wiki_export = {
+        \ 'args' : s:template . ' ' . s:meta_date . ' ' . s:meta_title,
+        \ 'from_format' : 'markdown',
+        \ 'ext' : 'html',
+        \ 'output': 'html',
+        \}
+"
+" Keep <Tab> and <S-Tab> mappings
+let g:wiki_mappings_global = {
+        \ '<plug>(wiki-link-next)' : '<C-n>',
+        \ '<plug>(wiki-link-prev)' : '<C-p>'
+        \}
 " }}}
 let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.4 }}
 
@@ -190,7 +215,7 @@ cnoreabbrev Q q
 cnoreabbrev Qall qall
 "}}}
 " Tabs {{{
-set tabstop=8      "number of visual spaces per TAB
+set tabstop=4      "number of visual spaces per TAB
 set softtabstop=4  "number of spaces in tab when editing
 set shiftwidth=4   "number of spaces for << and >>
 set expandtab      "tabs are spaces
@@ -364,18 +389,27 @@ augroup vimrc-remember-cursor-position
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 "}}}
-"Prose writing files {{{
+"Tex/text/markdown(wiki) files {{{
+augroup markdown-settings
+    autocmd!
+
+    autocmd Filetype markdown setlocal textwidth=80 spell wrap autoindent
+    " See vim-markdown github issue #390 for explanation
+    autocmd FileType markdown setlocal comments=fb:>,fb:*,fb:+,fb:-
+    autocmd FileType markdown setlocal formatoptions=tcqjnb
+    autocmd Filetype markdown setlocal tabstop=4 softtabstop=4 shiftwidth=4
+augroup end
+
 augroup writing
-  " autocmd BufRead,BufNewFile *.tex,*.md,*.txt
-  autocmd!
-  autocmd FileType tex,markdown,text call lexical#init()
-  autocmd FileType tex,markdown,text setlocal formatoptions=tcnqrjaw
-  autocmd FileType tex,markdown,text setlocal spell wrap
-  autocmd FileType tex,markdown,text setlocal nonumber norelativenumber
-  autocmd FileType tex,markdown,text setlocal linebreak showbreak=>
-  autocmd FileType tex,markdown,text nnoremap <buffer> j gj
-  autocmd FileType tex,markdown,text nnoremap <buffer> k gk
-  autocmd BufWinEnter * call s:setCenterText()
+    autocmd!
+    autocmd FileType tex,text call lexical#init()
+    autocmd FileType tex,text setlocal formatoptions=tcnqrjaw tw=80
+    autocmd FileType tex,text setlocal spell wrap
+    autocmd FileType tex,text setlocal nonumber norelativenumber
+    autocmd FileType tex,text setlocal linebreak showbreak=>
+    autocmd FileType tex,text nnoremap <buffer> j gj
+    autocmd FileType tex,text nnoremap <buffer> k gk
+    autocmd BufWinEnter * call s:setCenterText()
 augroup END
 "}}}
 " make/cmake files {{{
@@ -444,25 +478,20 @@ augroup END
 "}}}
 "}}}
 " Key Mappings {{{
-
-"Focus the current fold by closing all others
-nnoremap <S-Tab> zMzvzt
-"Toggle current fold
-noremap <Tab> za
-
-nnoremap <Leader>v <Esc>:e ~/.vimrc<CR>
-
-"" Clean search (highlight)
-nnoremap <silent> <leader><space> :noh<cr>
-nnoremap <silent> <leader>f :FZF<cr>
-vnoremap <Leader>y :join<CR>yyu
-
-"" Goyo mode with Gitgutter
-nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
-
-" Strip whitespace
-nnoremap <Leader>s :StripWhitespace<CR>
-
+" Wiki stuff {{{
+" Generate html with vim-pandoc
+nmap <Leader>kk <plug>(wiki-index)
+nmap <Leader>kb <plug>(wiki-graph-find-backlinks)
+nmap <Leader>kg <plug>(wiki-graph-in)
+nmap <Leader>kG <plug>(wiki-graph-out)
+nmap <Leader>kt <plug>(wiki-tag-list)
+nmap <Leader>kr <plug>(wiki-page-remame)
+nmap <Leader>kd <plug>(wiki-page-delete)
+nmap <Leader>ke <plug>(wiki-export)
+nmap <cr> <plug>(wiki-link-open)
+nmap <bs> <plug>(wiki-link-return)
+nmap <Leader>kx <plug>(wiki-list-toggle)
+" }}}
 " Windows and Splits {{{
 nnoremap <Leader>w- :<C-u>split<CR>
 nnoremap <Leader>w\| :<C-u>vsplit<CR>
@@ -544,5 +573,25 @@ nnoremap <Leader>cr :ALEDisableBuffer<CR>
 nnoremap <Leader>ci :ALEInfo<CR>
 nnoremap <Leader>cd :ALEDetail<CR>
 "}}}
+" Misc/dumping ground {{{
+"Focus the current fold by closing all others
+nnoremap <S-Tab> zMzvzt
+"Toggle current fold
+nnoremap <Tab> za
+
+nnoremap <Leader>v <Esc>:e ~/.vimrc<CR>
+
+"" Clean search (highlight)
+nnoremap <silent> <leader><space> :noh<cr>
+nnoremap <silent> <leader>f :FZF<cr>
+vnoremap <Leader>y :join<CR>yyu
+
+"" Goyo mode with Gitgutter
+nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
+
+" Strip whitespace
+nnoremap <Leader>s :StripWhitespace<CR>
+
+" }}}
 "}}}
 " vim:foldmethod=marker:foldlevel=0
