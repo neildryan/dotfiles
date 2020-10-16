@@ -42,6 +42,59 @@ else
     call plug#begin(expand('~/.vim/plugged'))
 endif
 "}}}
+" Functions {{{
+" Set number display only when not in terminal (currently never sets) {{{
+function! s:setNumberDisplay()
+    if &buftype == 'terminal'
+        setlocal nonumber
+        setlocal norelativenumber
+    endif
+    setlocal nonumber
+    setlocal norelativenumber
+endfunction
+"}}}
+" Always keep cursor in the center of the screen for prose {{{
+function! s:setCenterText()
+    if (&filetype == 'tex') || (&filetype == 'markdown') || (&filetype == 'text')
+        nnoremap <buffer> j jzz
+        nnoremap <buffer> k kzz
+        nnoremap <buffer> <C-F> <C-F>zz
+        nnoremap <buffer> <C-B> <C-B>zz
+    else
+        silent! nunmap <buffer> jzz
+        silent! nunmap <buffer> kzz
+        silent! nunmap <buffer> <C-F>zz
+        silent! nunmap <buffer> <C-B>zz
+    endif
+endfunction
+"}}}
+"Strip whitespace in file with :StripWhitespace {{{
+function! s:StripWhitespace(line1, line2)
+    " Save the current search and cursor position
+    let _s=@/
+    let l = line('.')
+    let c = col('.')
+
+    let ws_chars='\u0020\u00a0\u1680\u180e\u2000-\u200b\u202f\u205f\u3000\ufeff'
+    let eol_ws_pattern = '[\u0009' . ws_chars . ']\+$'
+    " Skip empty lines
+    let ws_pattern= '[^\u0009' . ws_chars . ']\@1<=' . eol_ws_pattern
+
+    " Strip whitespace
+    silent execute ':' . a:line1 . ',' . a:line2 . 's/' . ws_pattern . '//e'
+
+    " Always strip empty lines at EOF
+    if a:line2 >= line('$')
+        silent execute '%s/\(\n\)\+\%$//e'
+    endif
+
+    " Restore the saved search and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
+command! -bang -range=% StripWhitespace call s:StripWhitespace(<line1>, <line2>)
+"}}}
+"}}}
 " Plugins {{{
 " Installation {{{
 Plug 'tpope/vim-commentary'
@@ -144,6 +197,7 @@ let g:vim_markdown_auto_insert_bullets = 0
 " Number of space to indent new list items (affects gq)
 let g:vim_markdown_new_list_item_indent = 2
 let g:vim_markdown_folding_style_pythonic = 1 " Foldtext is header
+let g:vim_markdown_no_default_key_mappings = 1
 " }}}
 " Wiki.vim {{{
 let g:wiki_root = '~/wiki/'
@@ -152,15 +206,34 @@ let g:wiki_filetypes = ['markdown', 'md'] " Associated .md files with Wiki.vim
 let g:wiki_link_target_type = 'md' " Use markdown style links
 let g:wiki_link_extension = 'md' "
 let g:wiki_zotero_root="~/Documents/Zotero" " Currently does nothing
+
+function! s:WikiPageExport()
+python3 << EOF
+import vim
+
+# Top-level header should be the page title
+if len(vim.current.buffer):
+    first_line = vim.current.buffer[0]
+    title = first_line.replace('#', '').strip()
+else:
+    title = ""
+
+vim.command('let title="{}"'.format(title))
+EOF
+" This is all run on export so that `title` matches
+let s:meta_title = '-M title="' . title . '"'
+let s:meta_date = '-M date='.strftime('%Y-%m-%d')
 let s:template = '--template template.html'
-let s:meta_date = '--metadata date='.strftime('%Y-%m-%d')
-let s:meta_title = '--metadata title=' . expand('%:t:r')
 let g:wiki_export = {
-        \ 'args' : s:template . ' ' . s:meta_date . ' ' . s:meta_title,
-        \ 'from_format' : 'markdown',
-        \ 'ext' : 'html',
-        \ 'output': 'html',
-        \}
+    \ 'args' : s:template . ' ' . s:meta_date . ' ' . s:meta_title,
+    \ 'from_format' : 'markdown',
+    \ 'ext' : 'html',
+    \ 'output': 'html',
+    \ 'view': 1,
+    \}
+execute ":WikiExport"
+endfunction
+command! -bang -range=% WikiPageExport call s:WikiPageExport()
 "
 " Keep <Tab> and <S-Tab> mappings
 let g:wiki_mappings_global = {
@@ -323,59 +396,6 @@ if !exists('g:not_finish_vimplug')
 endif
 "}}}
 "}}}
-" Functions {{{
-" Set number display only when not in terminal (currently never sets) {{{
-function! s:setNumberDisplay()
-    if &buftype == 'terminal'
-        setlocal nonumber
-        setlocal norelativenumber
-    endif
-    setlocal nonumber
-    setlocal norelativenumber
-endfunction
-"}}}
-" Always keep cursor in the center of the screen for prose {{{
-function! s:setCenterText()
-    if (&filetype == 'tex') || (&filetype == 'markdown') || (&filetype == 'text')
-        nnoremap <buffer> j jzz
-        nnoremap <buffer> k kzz
-        nnoremap <buffer> <C-F> <C-F>zz
-        nnoremap <buffer> <C-B> <C-B>zz
-    else
-        silent! nunmap <buffer> jzz
-        silent! nunmap <buffer> kzz
-        silent! nunmap <buffer> <C-F>zz
-        silent! nunmap <buffer> <C-B>zz
-    endif
-endfunction
-"}}}
-"Strip whitespace in file with :StripWhitespace {{{
-function! s:StripWhitespace(line1, line2)
-    " Save the current search and cursor position
-    let _s=@/
-    let l = line('.')
-    let c = col('.')
-
-    let ws_chars='\u0020\u00a0\u1680\u180e\u2000-\u200b\u202f\u205f\u3000\ufeff'
-    let eol_ws_pattern = '[\u0009' . ws_chars . ']\+$'
-    " Skip empty lines
-    let ws_pattern= '[^\u0009' . ws_chars . ']\@1<=' . eol_ws_pattern
-
-    " Strip whitespace
-    silent execute ':' . a:line1 . ',' . a:line2 . 's/' . ws_pattern . '//e'
-
-    " Always strip empty lines at EOF
-    if a:line2 >= line('$')
-        silent execute '%s/\(\n\)\+\%$//e'
-    endif
-
-    " Restore the saved search and cursor position
-    let @/=_s
-    call cursor(l, c)
-endfunction
-command! -bang -range=% StripWhitespace call s:StripWhitespace(<line1>, <line2>)
-"}}}
-"}}}
 " Autocmd Rules {{{
 " Do syntax highlight syncing from start unless 200 lines {{{
 augroup vimrc-sync-fromstart
@@ -487,10 +507,17 @@ nmap <Leader>kG <plug>(wiki-graph-out)
 nmap <Leader>kt <plug>(wiki-tag-list)
 nmap <Leader>kr <plug>(wiki-page-remame)
 nmap <Leader>kd <plug>(wiki-page-delete)
-nmap <Leader>ke <plug>(wiki-export)
+nmap <Leader>ke :WikiPageExport<CR>
+
 nmap <cr> <plug>(wiki-link-open)
 nmap <bs> <plug>(wiki-link-return)
 nmap <Leader>kx <plug>(wiki-list-toggle)
+
+nmap gx <Plug>Markdown_OpenUrlUnderCursor
+nmap ]] <Plug>Markdown_MoveToNextHeader
+nmap [[ <Plug>Markdown_MoveToPreviousHeader
+nmap ]c <Plug>Markdown_MoveToCurHeader
+nmap [c <Plug>Markdown_MoveToCurHeader
 " }}}
 " Windows and Splits {{{
 nnoremap <Leader>w- :<C-u>split<CR>
