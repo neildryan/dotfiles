@@ -8,44 +8,35 @@
 " TODO Play around with soft-wrapping; use columns and maybe vim-pencil again
 " TODO How much can be done with tex by just using built-ins? See
 " g:tex_fold_enabled
-" TODO http://proselint.com/, probably replace vim-wordly
+" TODO http://proselint.com/, probably replace vim-wordly, other writing linters
 "
-" TODO 'machakann/vim-highlightedyank'
+" TODO Configure limelight
 " Quick Fixes
 " ~ Keybinding to insert text to drop into python debugger in .py files
 
 " TODO Start here
 " Vim-plug core installation {{{
-if has('nvim')
-    let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
-    if !filereadable(vimplug_exists)
-      echo "Installing Vim-Plug..."
-      echo ""
-      silent !\curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
-         \  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-      let g:not_finish_vimplug = "yes"
+let vimplug_exists= has('nvim') ? expand('~/.config/nvim/autoload/plug.vim') :
+                               \ expand('~/.vim/autoload/plug.vim')
+if !filereadable(vimplug_exists)
+    echo 'Installing Vim-Plug...'
+    echo ''
+    silent !\curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+        \  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    let g:not_finish_vimplug = 'yes'
 
-      autocmd VimEnter * PlugInstall
-    endif
+    autocmd VimEnter * PlugInstall
+endif
+if has('nvim')
     call plug#begin(expand('~/.config/nvim/plugged'))
 else
-    let vimplug_exists=expand('~/.vim/autoload/plug.vim')
-    if !filereadable(vimplug_exists)
-      echo "Installing Vim-Plug..."
-      echo ""
-      silent !\curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-         \  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-      let g:not_finish_vimplug = "yes"
-
-      autocmd VimEnter * PlugInstall
-    endif
     call plug#begin(expand('~/.vim/plugged'))
 endif
 "}}}
 " Functions {{{
 " Set number display only when not in terminal (currently never sets) {{{
 function! s:setNumberDisplay()
-    if &buftype == 'terminal'
+    if &buftype ==# 'terminal'
         setlocal nonumber
         setlocal norelativenumber
     endif
@@ -55,7 +46,7 @@ endfunction
 "}}}
 " Always keep cursor in the center of the screen for prose {{{
 function! s:setCenterText()
-    if (&filetype == 'tex') || (&filetype == 'markdown') || (&filetype == 'text')
+    if (&filetype ==# 'tex') || (&filetype ==# 'markdown') || (&filetype ==# 'text')
         nnoremap <buffer> j jzz
         nnoremap <buffer> k kzz
         nnoremap <buffer> <C-F> <C-F>zz
@@ -106,6 +97,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'w0rp/ale'
 Plug 'vim-airline/vim-airline'
 Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'machakann/vim-highlightedyank'
 
 let g:polyglot_disabled = ['latex'] " Needs to be set before loading plugin
 Plug 'sheerun/vim-polyglot'
@@ -114,7 +107,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'lervag/wiki.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
 
 Plug 'reedes/vim-wordy'
 Plug 'reedes/vim-lexical'
@@ -139,8 +131,9 @@ let g:ale_sign_style_error='✗'
 let g:ale_sign_style_warning='⚠'
 let g:ale_warn_about_trailing_whitespace = 0
 let g:ale_history_enabled=0
-let g:ale_linters= { 'python': ['pylint']}
-let g:ale_python_pylint_options = "--load-plugins pylint_django"
+let g:ale_linters= { 'python': ['pylint'], 'vim': ['vint'],
+            \ 'markdown':[]}
+let g:ale_python_pylint_options = '--load-plugins pylint_django'
 let g:ale_maximum_file_size=100000
 let g:ale_lint_on_text_changed=0
 let g:ale_lint_on_insert_leave = 0
@@ -200,46 +193,44 @@ let g:vim_markdown_folding_style_pythonic = 1 " Foldtext is header
 let g:vim_markdown_no_default_key_mappings = 1
 " }}}
 " Wiki.vim {{{
-let g:wiki_root = '~/wiki/'
+let g:wiki_root = '/Users/neilryan/wiki/'
 let g:wiki_mappings_use_defaults = 'none' " Define my own, avoid conflicts
 let g:wiki_filetypes = ['markdown', 'md'] " Associated .md files with Wiki.vim
 let g:wiki_link_target_type = 'md' " Use markdown style links
 let g:wiki_link_extension = 'md' "
-let g:wiki_zotero_root="~/Documents/Zotero" " Currently does nothing
+let g:wiki_zotero_root='~/Documents/Zotero' " Currently does nothing
+" Keep <Tab> and <S-Tab> mappings
+let g:wiki_mappings_global = {
+        \ '<plug>(wiki-link-next)' : '<C-n>',
+        \ '<plug>(wiki-link-prev)' : '<C-p>'
+        \}
+" WikiPageExport {{{
+function! s:WikiPageExport(view)
+let curr_file = expand('%:p')
+if (stridx(curr_file, g:wiki_root)) < 0  "Only run in wiki directory
+    " echoerr 'WikiPageExport can only run on files in ' . g:wiki_root
+    " echoerr 'Current file ' . curr_file
+    return
+endif
+let first_line = getbufline(bufname(), 1)[0]
+let title = substitute(first_line, '#', '', 'g')
 
-function! s:WikiPageExport()
-python3 << EOF
-import vim
-
-# Top-level header should be the page title
-if len(vim.current.buffer):
-    first_line = vim.current.buffer[0]
-    title = first_line.replace('#', '').strip()
-else:
-    title = ""
-
-vim.command('let title="{}"'.format(title))
-EOF
 " This is all run on export so that `title` matches
 let s:meta_title = '-M title="' . title . '"'
 let s:meta_date = '-M date='.strftime('%Y-%m-%d')
 let s:template = '--template template.html'
 let g:wiki_export = {
     \ 'args' : s:template . ' ' . s:meta_date . ' ' . s:meta_title,
-    \ 'from_format' : 'markdown',
+    \ 'from_format' : 'markdown_github',
     \ 'ext' : 'html',
     \ 'output': 'html',
-    \ 'view': 1,
+    \ 'view': a:view,
+    \ 'link_ext_replace': 1
     \}
-execute ":WikiExport"
+execute ':WikiExport'
 endfunction
-command! -bang -range=% WikiPageExport call s:WikiPageExport()
-"
-" Keep <Tab> and <S-Tab> mappings
-let g:wiki_mappings_global = {
-        \ '<plug>(wiki-link-next)' : '<C-n>',
-        \ '<plug>(wiki-link-prev)' : '<C-p>'
-        \}
+command! -bang -range=% WikiPageExport call s:WikiPageExport(1)
+"}}}
 " }}}
 let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.4 }}
 
@@ -247,7 +238,8 @@ let g:BufKillCreateMappings=0
 
 let g:indentLine_color_term = 252
 let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
-let g:indentLine_bufNameExclude = ["term:.*"]
+let g:indentLine_bufNameExclude = ['term:.*']
+let g:highlightedyank_highlight_duration = 300
 "}}}
 " Basic settings {{{
 " Required {{{
@@ -314,7 +306,7 @@ if executable('ag')
     " Use Ag instead of grep
     set grepprg=ag\ --nogroup\ --nocolor
 
-    if !exists(":Ag")
+    if !exists(':Ag')
         command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
         nnoremap \ :Ag<SPACE>
     endif
@@ -327,10 +319,10 @@ if has('unnamedplus')
 endif
 "}}}
 " iTerm Cursor Fix {{{
-if has("osx")
-    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-    let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+if has('osx')
+    let &t_SI = '\<Esc>]50;CursorShape=1\x7'
+    let &t_SR = '\<Esc>]50;CursorShape=2\x7'
+    let &t_EI = '\<Esc>]50;CursorShape=0\x7'
 endif
 "}}}
 " Leader & Misc {{{
@@ -353,13 +345,13 @@ set concealcursor=nc "Give placeholder for hidden text
 set colorcolumn=80   "Color the 80th column
 
 " Make sure that NeoVim knows where to look
-let g:python_host_prog = "/usr/bin/python"
-let g:python3_host_prog = "/usr/local/bin/python3"
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 let g:tex_fold_enabled=1
-let g:tex_flavor="latex"
+let g:tex_flavor='latex'
 " Just save it all
-let sessionoptions="buffers,folds,resize,terminal,winpos,winsize,curdir"
+let sessionoptions='buffers,folds,resize,terminal,winpos,winsize,curdir'
 "}}}
 " }}}
 " Colors {{{
@@ -372,24 +364,24 @@ let g:pencil_neutral_headings = 1
 " Terminal Color Fixes {{{
 set t_Co=256   " 256 color
 if !has('nvim')
-    if $COLORTERM == 'gnome-terminal'
+    if $COLORTERM ==# 'gnome-terminal'
         set term=gnome-256color
     else
-        if $TERM == 'xterm'
+        if $TERM ==# 'xterm'
             set term=xterm-256color
         endif
     endif
-    if &term =~ '256color'
+    if &term =~# '256color'
         set t_ut=
     endif
 endif
-if (has("nvim"))
+if (has('nvim'))
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 "}}}
 " TermGuiColors {{{
 if !exists('g:not_finish_vimplug')
-    if (has("termguicolors"))
+    if (has('termguicolors'))
         set termguicolors
     endif
     syntax on
@@ -508,10 +500,10 @@ nmap <Leader>kt <plug>(wiki-tag-list)
 nmap <Leader>kr <plug>(wiki-page-remame)
 nmap <Leader>kd <plug>(wiki-page-delete)
 nmap <Leader>ke :WikiPageExport<CR>
+nmap <Leader>kx <plug>(wiki-list-toggle)
 
 nmap <cr> <plug>(wiki-link-open)
 nmap <bs> <plug>(wiki-link-return)
-nmap <Leader>kx <plug>(wiki-list-toggle)
 
 nmap gx <Plug>Markdown_OpenUrlUnderCursor
 nmap ]] <Plug>Markdown_MoveToNextHeader
@@ -618,6 +610,9 @@ nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
 
 " Strip whitespace
 nnoremap <Leader>s :StripWhitespace<CR>
+
+" Format tables (`vim-markdown`)
+nnoremap <Leader>T :TableFormat<CR>
 
 " }}}
 "}}}
