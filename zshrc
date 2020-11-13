@@ -79,16 +79,21 @@ setopt correct
 #}}}
 # Aliases {{{
 # For a full list of active aliases, run `alias`.
+bindkey -r "^o"
+bindkey -r "^l"
+bindkey "^o" clear-screen
 
-alias r2="r2 -A"
-alias python="python3"
 alias ll="ls -lh"
 alias la='ls -lAh'
-alias wiki='vim -c "WikiIndex"'
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
+
+alias r2="r2 -A"
+alias python="python3"
+alias wiki='vim -c "WikiIndex"'
+
 if [[ "$OSTYPE" != "darwin"* ]]; then
   alias open='xdg-open'
 fi
