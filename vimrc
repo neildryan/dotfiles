@@ -1,5 +1,5 @@
+scriptencoding utf-8
 " Features
-" TODO Tagbar,taglist
 " TODO Is there a way to put spelling suggestions in a floating window in Nvim?
 "   Yes, but I'd probably have to do it myself
 " TODO https://github.com/rafaqz/citation.vim
@@ -10,9 +10,12 @@
 " g:tex_fold_enabled
 " TODO http://proselint.com/, probably replace vim-wordly, other writing linters
 "
+" TODO Tagbar
 " TODO Configure limelight
 " Quick Fixes
 " ~ Keybinding to insert text to drop into python debugger in .py files
+" - 60 characters per line is best for readability, ideally with spacing on
+"      either side
 
 " TODO Start here
 " Vim-plug core installation {{{
@@ -85,6 +88,33 @@ function! s:StripWhitespace(line1, line2)
 endfunction
 command! -bang -range=% StripWhitespace call s:StripWhitespace(<line1>, <line2>)
 "}}}
+" Toggle conceallevel {{{
+function! ToggleConceal()
+    if &conceallevel > 0
+        setlocal conceallevel=0
+    else
+        setlocal conceallevel=2
+    endif
+endfunction
+"}}}
+"{{{ Goyo Enter/Leave
+function! s:goyo_enter()
+    set noshowmode
+    set noshowcmd
+    set scrolloff=999
+    Limelight
+    " ...
+endfunction
+
+function! s:goyo_leave()
+    set showmode
+    set showcmd
+    set scrolloff=5
+    Limelight!
+    " ...
+endfunction
+
+"}}}
 "}}}
 " Plugins {{{
 " Installation {{{
@@ -99,6 +129,11 @@ Plug 'vim-airline/vim-airline'
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'machakann/vim-highlightedyank'
+Plug 'simnalamburt/vim-mundo'
+
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-easytags'
+Plug 'preservim/tagbar'
 
 let g:polyglot_disabled = ['latex'] " Needs to be set before loading plugin
 Plug 'sheerun/vim-polyglot'
@@ -240,6 +275,11 @@ let g:indentLine_color_term = 252
 let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
 let g:indentLine_bufNameExclude = ['term:.*']
 let g:highlightedyank_highlight_duration = 300
+
+let g:tagbar_autofocus = 1
+let g:tagbar_compact = 1
+let g:tagbar_foldlevel = 1
+let g:easytags_async = 1
 "}}}
 " Basic settings {{{
 " Required {{{
@@ -401,26 +441,38 @@ augroup vimrc-remember-cursor-position
   autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
 "}}}
-"Tex/text/markdown(wiki) files {{{
-augroup markdown-settings
+"Markdown (and wiki) files {{{
+" 60 characters per line is best for readability
+" See vim-markdown github issue #390 for explanation
+augroup writing-markdown
     autocmd!
 
-    autocmd Filetype markdown setlocal textwidth=80 spell wrap autoindent
-    " See vim-markdown github issue #390 for explanation
+    autocmd FileType markdown setlocal spell autoindent nowrap
+    autocmd FileType markdown setlocal textwidth=60 wrapmargin=2
     autocmd FileType markdown setlocal comments=fb:>,fb:*,fb:+,fb:-
     autocmd FileType markdown setlocal formatoptions=tcqjnb
-    autocmd Filetype markdown setlocal tabstop=4 softtabstop=4 shiftwidth=4
+    autocmd BufWritePost *.md silent call s:WikiPageExport(0)
+
+augroup end
+"}}}
+" {{{ Goyo Enter/Leave
+augroup goyo-transition
+    autocmd!
+
+    autocmd User GoyoEnter nested call <SID>goyo_enter()
+    autocmd User GoyoLeave nested call <SID>goyo_leave()
 augroup end
 
-augroup writing
+" }}}
+" Tex files {{{
+augroup writing-tex
     autocmd!
-    autocmd FileType tex,text call lexical#init()
-    autocmd FileType tex,text setlocal formatoptions=tcnqrjaw tw=80
-    autocmd FileType tex,text setlocal spell wrap
-    autocmd FileType tex,text setlocal nonumber norelativenumber
-    autocmd FileType tex,text setlocal linebreak showbreak=>
-    autocmd FileType tex,text nnoremap <buffer> j gj
-    autocmd FileType tex,text nnoremap <buffer> k gk
+    autocmd FileType tex call lexical#init()
+    autocmd FileType tex setlocal formatoptions=tcnqrjaw tw=80
+    autocmd FileType tex setlocal spell wrap
+    autocmd FileType tex setlocal nonumber norelativenumber
+    autocmd FileType tex setlocal linebreak showbreak=>
+    autocmd FileType tex setlocal scrolloff=999 " Center text in page
     autocmd BufWinEnter * call s:setCenterText()
 augroup END
 "}}}
@@ -501,6 +553,8 @@ nmap <Leader>kr <plug>(wiki-page-remame)
 nmap <Leader>kd <plug>(wiki-page-delete)
 nmap <Leader>ke :WikiPageExport<CR>
 nmap <Leader>kx <plug>(wiki-list-toggle)
+nmap <Leader>kn :lnext<CR>
+nmap <Leader>kp :lprev<CR>
 
 nmap <cr> <plug>(wiki-link-open)
 nmap <bs> <plug>(wiki-link-return)
@@ -518,6 +572,7 @@ nnoremap <Leader>wN :tabnew<CR>
 nnoremap <Leader>wp :tabprevious<CR>
 nnoremap <Leader>wn :tabnext<CR>
 nnoremap <Leader>wr <C-W>r
+nnoremap <Leader>w= <C-W>=
 nnoremap <Leader>D :q<CR>
 set splitbelow
 set splitright
@@ -587,26 +642,32 @@ noremap <Left> :vertical resize -2<CR>
 noremap <Right> :vertical resize +2<CR>
 "}}}
 " Ale {{{
-nnoremap <Leader>cc :ALEEnableBuffer<CR> :ALELint<CR>
-nnoremap <Leader>cr :ALEDisableBuffer<CR>
-nnoremap <Leader>ci :ALEInfo<CR>
-nnoremap <Leader>cd :ALEDetail<CR>
+nnoremap <Leader>ee :ALEEnableBuffer<CR> :ALELint<CR>
+nnoremap <Leader>eD :ALEDisableBuffer<CR>
+nnoremap <Leader>ei :ALEInfo<CR>
+nnoremap <Leader>ed :ALEDetail<CR>
+nnoremap <Leader>en :ALENext<CR>
+nnoremap <Leader>ep :ALEPrevious<CR>
 "}}}
 " Misc/dumping ground {{{
+nnoremap <Leader>u :MundoToggle<CR>
+nnoremap <Leader>c :call ToggleConceal()<CR>
+nnoremap <Leader>o :TagbarToggle<CR>
 "Focus the current fold by closing all others
 nnoremap <S-Tab> zMzvzt
 "Toggle current fold
 nnoremap <Tab> za
 
-nnoremap <Leader>v <Esc>:e ~/.vimrc<CR>
+nnoremap <Leader>v :e ~/.vimrc<CR>
+nnoremap <Leader>V :so $MYVIMRC<CR>
 
 "" Clean search (highlight)
 nnoremap <silent> <leader><space> :noh<cr>
 nnoremap <silent> <leader>f :FZF<cr>
 vnoremap <Leader>y :join<CR>yyu
 
-"" Goyo mode with Gitgutter
-nnoremap <Leader>G :Goyo<CR>:GitGutterEnable<CR>
+"" Goyo mode
+nnoremap <Leader>G :Goyo<CR>
 
 " Strip whitespace
 nnoremap <Leader>s :StripWhitespace<CR>

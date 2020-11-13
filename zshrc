@@ -84,6 +84,7 @@ alias r2="r2 -A"
 alias python="python3"
 alias ll="ls -lh"
 alias la='ls -lAh'
+alias wiki='vim -c "WikiIndex"'
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
@@ -230,6 +231,7 @@ if [ -d "$HOME/lineage/platform-tools" ] ; then
   export PATH="$PATH:$HOME/lineage/platform-tools"
 fi
 export PATH=$PATH:~/.local/bin
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 export XDG_DATA_HOME="$HOME/.config"
 export XDG_CONFIG_HOME="$HOME/.config"
 # }}}
@@ -240,3 +242,4 @@ else
   source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 #}}}
+# vim:foldmethod=marker:foldlevel=0
