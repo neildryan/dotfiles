@@ -654,9 +654,9 @@ nnoremap <Leader>u :MundoToggle<CR>
 nnoremap <Leader>c :call ToggleConceal()<CR>
 nnoremap <Leader>o :TagbarToggle<CR>
 "Focus the current fold by closing all others
-nnoremap <S-Tab> zMzvzt
+nnoremap + zMzvzt
 "Toggle current fold
-nnoremap <Tab> za
+nnoremap = za
 
 nnoremap <Leader>v :e ~/.vimrc<CR>
 nnoremap <Leader>V :so $MYVIMRC<CR>

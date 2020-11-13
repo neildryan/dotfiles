@@ -1,5 +1,5 @@
 # dotfiles
-Configuration files for git, zsh, vim
+Configuration files for git, Zsh, Vim
 
 ## Installing
 `git clone https://github.com/soctar/dotfiles ~/.files`
