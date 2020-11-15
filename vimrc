@@ -1,23 +1,19 @@
+set encoding=utf-8
 scriptencoding utf-8
-" Features
+" TODO Play around with soft-wrapping; use columns and maybe vim-pencil again
+
+" Quick Fixes
+" - Keybinding to insert text to drop into python debugger in .py files either side
+" TODO How much can be done with tex by just using built-ins? See
+" g:tex_fold_enabled
+" TODO Tagbar configuration
+" TODO https://github.com/sbdchd/neoformat
+" TODO http://proselint.com/, probably replace vim-wordly, other writing linters
+
 " TODO Is there a way to put spelling suggestions in a floating window in Nvim?
 "   Yes, but I'd probably have to do it myself
 " TODO https://github.com/rafaqz/citation.vim
-" TODO https://github.com/sbdchd/neoformat
-"
-" TODO Play around with soft-wrapping; use columns and maybe vim-pencil again
-" TODO How much can be done with tex by just using built-ins? See
-" g:tex_fold_enabled
-" TODO http://proselint.com/, probably replace vim-wordly, other writing linters
-"
-" TODO Tagbar
-" TODO Configure limelight
-" Quick Fixes
-" ~ Keybinding to insert text to drop into python debugger in .py files
-" - 60 characters per line is best for readability, ideally with spacing on
-"      either side
 
-" TODO Start here
 " Vim-plug core installation {{{
 let vimplug_exists= has('nvim') ? expand('~/.config/nvim/autoload/plug.vim') :
                                \ expand('~/.vim/autoload/plug.vim')
@@ -45,21 +41,6 @@ function! s:setNumberDisplay()
     endif
     setlocal nonumber
     setlocal norelativenumber
-endfunction
-"}}}
-" Always keep cursor in the center of the screen for prose {{{
-function! s:setCenterText()
-    if (&filetype ==# 'tex') || (&filetype ==# 'markdown') || (&filetype ==# 'text')
-        nnoremap <buffer> j jzz
-        nnoremap <buffer> k kzz
-        nnoremap <buffer> <C-F> <C-F>zz
-        nnoremap <buffer> <C-B> <C-B>zz
-    else
-        silent! nunmap <buffer> jzz
-        silent! nunmap <buffer> kzz
-        silent! nunmap <buffer> <C-F>zz
-        silent! nunmap <buffer> <C-B>zz
-    endif
 endfunction
 "}}}
 "Strip whitespace in file with :StripWhitespace {{{
@@ -102,15 +83,20 @@ function! s:goyo_enter()
     set noshowmode
     set noshowcmd
     set scrolloff=999
-    Limelight
-    " ...
+    Limelight .7
+    set wrap
+    set linebreak
+    noremap j gj
+    noremap k gk
 endfunction
 
 function! s:goyo_leave()
     set showmode
     set showcmd
-    set scrolloff=5
+    set scrolloff=3
     Limelight!
+    unmap j
+    unmap k
     " ...
 endfunction
 
@@ -139,7 +125,7 @@ let g:polyglot_disabled = ['latex'] " Needs to be set before loading plugin
 Plug 'sheerun/vim-polyglot'
 
 " Stuff for wiki
-Plug 'godlygeek/tabular'
+Plug 'junegunn/vim-easy-align'
 Plug 'plasticboy/vim-markdown'
 Plug 'lervag/wiki.vim'
 
@@ -166,12 +152,18 @@ let g:ale_sign_style_error='✗'
 let g:ale_sign_style_warning='⚠'
 let g:ale_warn_about_trailing_whitespace = 0
 let g:ale_history_enabled=0
-let g:ale_linters= { 'python': ['pylint'], 'vim': ['vint'],
-            \ 'markdown':[]}
+let g:ale_linters= {
+    \ 'python': ['pylint'],
+    \ 'vim': ['vint'],
+    \ 'markdown':['proselint', 'languagetool', 'markdownlint']}
+let g:ale_fixers = {
+    \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+    \ 'markdown': ['remark-lint']
+    \}
 let g:ale_python_pylint_options = '--load-plugins pylint_django'
 let g:ale_maximum_file_size=100000
 let g:ale_lint_on_text_changed=0
-let g:ale_lint_on_insert_leave = 0
+let g:ale_lint_on_insert_leave=1
 " }}}
 "Vimtex/Lexical {{{
 let g:vimtex_fold_enabled = 1
@@ -232,7 +224,8 @@ let g:wiki_root = '/Users/neilryan/wiki/'
 let g:wiki_mappings_use_defaults = 'none' " Define my own, avoid conflicts
 let g:wiki_filetypes = ['markdown', 'md'] " Associated .md files with Wiki.vim
 let g:wiki_link_target_type = 'md' " Use markdown style links
-let g:wiki_link_extension = 'md' "
+let g:wiki_link_extension = '.md' "
+let g:wiki_link_toggle_on_open = 0
 let g:wiki_zotero_root='~/Documents/Zotero' " Currently does nothing
 " Keep <Tab> and <S-Tab> mappings
 let g:wiki_mappings_global = {
@@ -268,6 +261,7 @@ command! -bang -range=% WikiPageExport call s:WikiPageExport(1)
 "}}}
 " }}}
 let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.4 }}
+let g:goyo_width = 60
 
 let g:BufKillCreateMappings=0
 
@@ -285,7 +279,6 @@ let g:easytags_async = 1
 " Required {{{
 filetype plugin indent on
 
-set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
 set spellfile="~/.files/en.utf-8.add"
@@ -308,16 +301,16 @@ set modelines=1
 
 "}}}
 "Abbreviations {{{
-cnoreabbrev W! w!
-cnoreabbrev Q! q!
+cnoreabbrev W!    w!
+cnoreabbrev Q!    q!
 cnoreabbrev Qall! qall!
-cnoreabbrev Wq wq
-cnoreabbrev Wa wa
-cnoreabbrev wQ wq
-cnoreabbrev WQ wq
-cnoreabbrev W w
-cnoreabbrev Q q
-cnoreabbrev Qall qall
+cnoreabbrev Wq    wq
+cnoreabbrev Wa    wa
+cnoreabbrev wQ    wq
+cnoreabbrev WQ    wq
+cnoreabbrev W     w
+cnoreabbrev Q     q
+cnoreabbrev Qall  qall
 "}}}
 " Tabs {{{
 set tabstop=4      "number of visual spaces per TAB
@@ -451,6 +444,8 @@ augroup writing-markdown
     autocmd FileType markdown setlocal textwidth=60 wrapmargin=2
     autocmd FileType markdown setlocal comments=fb:>,fb:*,fb:+,fb:-
     autocmd FileType markdown setlocal formatoptions=tcqjnb
+    autocmd FileType markdown setlocal scrolloff=999
+    autocmd FileType markdown call lexical#init()
     autocmd BufWritePost *.md silent call s:WikiPageExport(0)
 
 augroup end
@@ -473,7 +468,6 @@ augroup writing-tex
     autocmd FileType tex setlocal nonumber norelativenumber
     autocmd FileType tex setlocal linebreak showbreak=>
     autocmd FileType tex setlocal scrolloff=999 " Center text in page
-    autocmd BufWinEnter * call s:setCenterText()
 augroup END
 "}}}
 " make/cmake files {{{
@@ -544,17 +538,17 @@ augroup END
 " Key Mappings {{{
 " Wiki stuff {{{
 " Generate html with vim-pandoc
-nmap <Leader>kk <plug>(wiki-index)
-nmap <Leader>kb <plug>(wiki-graph-find-backlinks)
-nmap <Leader>kg <plug>(wiki-graph-in)
-nmap <Leader>kG <plug>(wiki-graph-out)
-nmap <Leader>kt <plug>(wiki-tag-list)
-nmap <Leader>kr <plug>(wiki-page-remame)
-nmap <Leader>kd <plug>(wiki-page-delete)
-nmap <Leader>ke :WikiPageExport<CR>
-nmap <Leader>kx <plug>(wiki-list-toggle)
-nmap <Leader>kn :lnext<CR>
-nmap <Leader>kp :lprev<CR>
+nnoremap <Leader>kk <plug>(wiki-index)
+nnoremap <Leader>kb <plug>(wiki-graph-find-backlinks)
+nnoremap <Leader>kg <plug>(wiki-graph-in)
+nnoremap <Leader>kG <plug>(wiki-graph-out)
+nnoremap <Leader>kt <plug>(wiki-tag-list)
+nnoremap <Leader>kr <plug>(wiki-page-remame)
+nnoremap <Leader>kd <plug>(wiki-page-delete)
+nnoremap <Leader>ke :WikiPageExport<CR>
+nnoremap <Leader>kx <plug>(wiki-list-toggle)
+nnoremap <Leader>kn :lnext<CR>
+nnoremap <Leader>kp :lprev<CR>
 
 nmap <cr> <plug>(wiki-link-open)
 nmap <bs> <plug>(wiki-link-return)
@@ -642,21 +636,28 @@ noremap <Left> :vertical resize -2<CR>
 noremap <Right> :vertical resize +2<CR>
 "}}}
 " Ale {{{
-nnoremap <Leader>ee :ALEEnableBuffer<CR> :ALELint<CR>
-nnoremap <Leader>eD :ALEDisableBuffer<CR>
-nnoremap <Leader>ei :ALEInfo<CR>
-nnoremap <Leader>ed :ALEDetail<CR>
-nnoremap <Leader>en :ALENext<CR>
-nnoremap <Leader>ep :ALEPrevious<CR>
+nnoremap <Leader>ae :ALEEnableBuffer<CR> :ALELint<CR>
+nnoremap <Leader>aD :ALEDisableBuffer<CR>
+nnoremap <Leader>ai :ALEInfo<CR>
+nnoremap <Leader>ad :ALEDetail<CR>
+nnoremap <Leader>an :ALENext<CR>
+nnoremap <Leader>ap :ALEPrevious<CR>
+nnoremap <Leader>af :ALEFix<CR>
 "}}}
 " Misc/dumping ground {{{
 nnoremap <Leader>u :MundoToggle<CR>
 nnoremap <Leader>c :call ToggleConceal()<CR>
 nnoremap <Leader>o :TagbarToggle<CR>
 "Focus the current fold by closing all others
-nnoremap + zMzvzt
+nnoremap <S-Tab> zMzvzt
 "Toggle current fold
-nnoremap = za
+nnoremap <Tab> za
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 nnoremap <Leader>v :e ~/.vimrc<CR>
 nnoremap <Leader>V :so $MYVIMRC<CR>
@@ -673,7 +674,7 @@ nnoremap <Leader>G :Goyo<CR>
 nnoremap <Leader>s :StripWhitespace<CR>
 
 " Format tables (`vim-markdown`)
-nnoremap <Leader>T :TableFormat<CR>
+vnoremap <Leader>T :EasyAlign * \|<CR>
 
 " }}}
 "}}}
