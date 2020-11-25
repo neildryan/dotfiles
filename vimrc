@@ -86,8 +86,8 @@ function! s:goyo_enter()
     Limelight .7
     set wrap
     set linebreak
-    noremap j gj
-    noremap k gk
+    map j gj
+    map k gk
 endfunction
 
 function! s:goyo_leave()
@@ -261,7 +261,7 @@ command! -bang -range=% WikiPageExport call s:WikiPageExport(1)
 "}}}
 " }}}
 let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.4 }}
-let g:goyo_width = 60
+let g:goyo_width = 70
 
 let g:BufKillCreateMappings=0
 
@@ -330,10 +330,6 @@ set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 
-" Search mappings: These will make it so that going to the next one in a
-" search will center on the line it's found in and open folds
-nnoremap n nzzzv
-nnoremap N Nzzzv
 " The Silver Searcher {{{
 if executable('ag')
     " Use Ag instead of grep
@@ -536,19 +532,27 @@ augroup END
 "}}}
 "}}}
 " Key Mappings {{{
+" Colemap/Tarmak {{{
+nnoremap e k|xnoremap e k|onoremap e k|
+nnoremap n j|xnoremap n j|onoremap n j|
+nnoremap j e|xnoremap j e|onoremap j e|
+nnoremap J E|xnoremap J E|onoremap J E|
+nnoremap k n|xnoremap k n|onoremap k n|
+nnoremap K N|xnoremap K N|onoremap K N|
+"}}}
 " Wiki stuff {{{
 " Generate html with vim-pandoc
-nnoremap <Leader>kk <plug>(wiki-index)
-nnoremap <Leader>kb <plug>(wiki-graph-find-backlinks)
-nnoremap <Leader>kg <plug>(wiki-graph-in)
-nnoremap <Leader>kG <plug>(wiki-graph-out)
-nnoremap <Leader>kt <plug>(wiki-tag-list)
-nnoremap <Leader>kr <plug>(wiki-page-remame)
-nnoremap <Leader>kd <plug>(wiki-page-delete)
-nnoremap <Leader>ke :WikiPageExport<CR>
-nnoremap <Leader>kx <plug>(wiki-list-toggle)
-nnoremap <Leader>kn :lnext<CR>
-nnoremap <Leader>kp :lprev<CR>
+nmap <Leader>kk <plug>(wiki-index)
+nmap <Leader>kb <plug>(wiki-graph-find-backlinks)
+nmap <Leader>kg <plug>(wiki-graph-in)
+nmap <Leader>kG <plug>(wiki-graph-out)
+nmap <Leader>kt <plug>(wiki-tag-list)
+nmap <Leader>kr <plug>(wiki-page-remame)
+nmap <Leader>kd <plug>(wiki-page-delete)
+nmap <Leader>ke :WikiPageExport<CR>
+nmap <Leader>kx <plug>(wiki-list-toggle)
+nmap <Leader>kn :lnext<CR>
+nmap <Leader>kp :lprev<CR>
 
 nmap <cr> <plug>(wiki-link-open)
 nmap <bs> <plug>(wiki-link-return)
@@ -573,21 +577,21 @@ set splitright
 "}}}
 " Switching windows {{{
 if has('nvim')
-    inoremap <C-j> <Esc><C-w>j
-    inoremap <C-k> <Esc><C-w>k
+    inoremap <C-n> <Esc><C-w>j
+    inoremap <C-e> <Esc><C-w>k
     inoremap <C-l> <Esc><C-w>l
     inoremap <C-h> <Esc><C-w>h
-    noremap <C-j> <C-w>j
-    noremap <C-k> <C-w>k
+    noremap <C-n> <C-w>j
+    noremap <C-e> <C-w>k
     noremap <C-l> <C-w>l
     noremap <C-h> <C-w>h
-    tnoremap <C-j> <C-\><C-n><C-w>j
-    tnoremap <C-k> <C-\><C-n><C-w>k
+    tnoremap <C-n> <C-\><C-n><C-w>j
+    tnoremap <C-e> <C-\><C-n><C-w>k
     tnoremap <C-l> <C-\><C-n><C-w>l
     tnoremap <C-h> <C-\><C-n><C-w>h
 else
-    noremap <C-j> <C-w>j
-    noremap <C-k> <C-w>k
+    noremap <C-n> <C-w>j
+    noremap <C-e> <C-w>k
     noremap <C-l> <C-w>l
     noremap <C-h> <C-w>h
 endif
@@ -645,6 +649,11 @@ nnoremap <Leader>ap :ALEPrevious<CR>
 nnoremap <Leader>af :ALEFix<CR>
 "}}}
 " Misc/dumping ground {{{
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in and open folds
+nmap k kzzzv
+nmap K Kzzzv
+
 nnoremap <Leader>u :MundoToggle<CR>
 nnoremap <Leader>c :call ToggleConceal()<CR>
 nnoremap <Leader>o :TagbarToggle<CR>
@@ -677,5 +686,6 @@ nnoremap <Leader>s :StripWhitespace<CR>
 vnoremap <Leader>T :EasyAlign * \|<CR>
 
 " }}}
+"}}}
 "}}}
 " vim:foldmethod=marker:foldlevel=0
