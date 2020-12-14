@@ -360,7 +360,6 @@ let localleader=' '
 
 " Directories for swp files
 set nobackup        " No backup file create when overwriting
-set noswapfile      " No swap files
 
 set shortmess=atI   "All abbreviations, truncate file message, no intro
 set ttimeoutlen=50  "Time to wait for keycode/sequence to complete
@@ -532,14 +531,6 @@ augroup END
 "}}}
 "}}}
 " Key Mappings {{{
-" Colemap/Tarmak {{{
-nnoremap e k|xnoremap e k|onoremap e k|
-nnoremap n j|xnoremap n j|onoremap n j|
-nnoremap j e|xnoremap j e|onoremap j e|
-nnoremap J E|xnoremap J E|onoremap J E|
-nnoremap k n|xnoremap k n|onoremap k n|
-nnoremap K N|xnoremap K N|onoremap K N|
-"}}}
 " Wiki stuff {{{
 " Generate html with vim-pandoc
 nmap <Leader>kk <plug>(wiki-index)
@@ -564,8 +555,8 @@ nmap ]c <Plug>Markdown_MoveToCurHeader
 nmap [c <Plug>Markdown_MoveToCurHeader
 " }}}
 " Windows and Splits {{{
-nnoremap <Leader>w- :<C-u>split<CR>
-nnoremap <Leader>w\| :<C-u>vsplit<CR>
+nnoremap <Leader>wj :<C-u>split<CR>
+nnoremap <Leader>wl :<C-u>vsplit<CR>
 nnoremap <Leader>wN :tabnew<CR>
 nnoremap <Leader>wp :tabprevious<CR>
 nnoremap <Leader>wn :tabnext<CR>
@@ -577,21 +568,21 @@ set splitright
 "}}}
 " Switching windows {{{
 if has('nvim')
-    inoremap <C-n> <Esc><C-w>j
-    inoremap <C-e> <Esc><C-w>k
+    inoremap <C-j> <Esc><C-w>j
+    inoremap <C-k> <Esc><C-w>k
     inoremap <C-l> <Esc><C-w>l
     inoremap <C-h> <Esc><C-w>h
-    noremap <C-n> <C-w>j
-    noremap <C-e> <C-w>k
+    noremap <C-j> <C-w>j
+    noremap <C-k> <C-w>k
     noremap <C-l> <C-w>l
     noremap <C-h> <C-w>h
-    tnoremap <C-n> <C-\><C-n><C-w>j
-    tnoremap <C-e> <C-\><C-n><C-w>k
+    tnoremap <C-j> <C-\><C-n><C-w>j
+    tnoremap <C-k> <C-\><C-n><C-w>k
     tnoremap <C-l> <C-\><C-n><C-w>l
     tnoremap <C-h> <C-\><C-n><C-w>h
 else
-    noremap <C-n> <C-w>j
-    noremap <C-e> <C-w>k
+    noremap <C-j> <C-w>j
+    noremap <C-k> <C-w>k
     noremap <C-l> <C-w>l
     noremap <C-h> <C-w>h
 endif
@@ -606,8 +597,8 @@ noremap <Leader>gd :Gvdiff<CR>
 " Shell, shell splits {{{
 if has('nvim')
     nnoremap <Leader>tt :terminal<CR>
-    nnoremap <Leader>t\| :<C-u>vsplit<CR>:term<CR>
-    nnoremap <Leader>t- :<C-u>split<CR>:term<CR>
+    nnoremap <Leader>tl :<C-u>vsplit<CR>:term<CR>
+    nnoremap <Leader>tj :<C-u>split<CR>:term<CR>
     nnoremap <Leader>tN :tabnew<CR>:terminal<CR>
     tnoremap <Esc> <C-\><C-n>
 else
@@ -651,8 +642,8 @@ nnoremap <Leader>af :ALEFix<CR>
 " Misc/dumping ground {{{
 " Search mappings: These will make it so that going to the next one in a
 " search will center on the line it's found in and open folds
-nmap k kzzzv
-nmap K Kzzzv
+nmap n kzzzv
+nmap N Kzzzv
 
 nnoremap <Leader>u :MundoToggle<CR>
 nnoremap <Leader>c :call ToggleConceal()<CR>
