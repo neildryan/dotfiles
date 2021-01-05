@@ -545,7 +545,7 @@ nmap <Leader>kx <plug>(wiki-list-toggle)
 nmap <Leader>kn :lnext<CR>
 nmap <Leader>kp :lprev<CR>
 
-nmap <cr> <plug>(wiki-link-open)
+nmap <cr> f[<plug>(wiki-link-open)
 nmap <bs> <plug>(wiki-link-return)
 
 nmap gx <Plug>Markdown_OpenUrlUnderCursor
