@@ -269,7 +269,7 @@ let g:indentLine_color_term = 252
 let g:indentLine_setConceal=0  " Don't let indentLine override conceal settings
 let g:indentLine_bufNameExclude = ['term:.*']
 let g:highlightedyank_highlight_duration = 300
-
+let g:gitgutter_map_keys = 0
 let g:tagbar_autofocus = 1
 let g:tagbar_compact = 1
 let g:tagbar_foldlevel = 1
@@ -458,11 +458,13 @@ augroup end
 augroup writing-tex
     autocmd!
     autocmd FileType tex call lexical#init()
-    autocmd FileType tex setlocal formatoptions=tcnqrjaw tw=80
+    autocmd FileType tex setlocal formatoptions=cnqrjw tw=80
     autocmd FileType tex setlocal spell wrap
     autocmd FileType tex setlocal nonumber norelativenumber
     autocmd FileType tex setlocal linebreak showbreak=>
     autocmd FileType tex setlocal scrolloff=999 " Center text in page
+    autocmd FileType tex map <buffer> <silent> j gj
+    autocmd FileType tex map <buffer> <silent> k gk
 augroup END
 "}}}
 " make/cmake files {{{
@@ -533,17 +535,17 @@ augroup END
 " Key Mappings {{{
 " Wiki stuff {{{
 " Generate html with vim-pandoc
-nmap <Leader>kk <plug>(wiki-index)
-nmap <Leader>kb <plug>(wiki-graph-find-backlinks)
-nmap <Leader>kg <plug>(wiki-graph-in)
-nmap <Leader>kG <plug>(wiki-graph-out)
-nmap <Leader>kt <plug>(wiki-tag-list)
-nmap <Leader>kr <plug>(wiki-page-remame)
-nmap <Leader>kd <plug>(wiki-page-delete)
-nmap <Leader>ke :WikiPageExport<CR>
-nmap <Leader>kx <plug>(wiki-list-toggle)
-nmap <Leader>kn :lnext<CR>
-nmap <Leader>kp :lprev<CR>
+nmap <Leader>ee <plug>(wiki-index)
+nmap <Leader>eb <plug>(wiki-graph-find-backlinks)
+nmap <Leader>eg <plug>(wiki-graph-in)
+nmap <Leader>eG <plug>(wiki-graph-out)
+nmap <Leader>et <plug>(wiki-tag-list)
+nmap <Leader>er <plug>(wiki-page-remame)
+nmap <Leader>ed <plug>(wiki-page-delete)
+nmap <Leader>ee :WikiPageExport<CR>
+nmap <Leader>ex <plug>(wiki-list-toggle)
+nmap <Leader>en :lnext<CR>
+nmap <Leader>ep :lprev<CR>
 
 nmap <cr> <plug>(wiki-link-open)
 nmap <bs> <plug>(wiki-link-return)

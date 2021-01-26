@@ -92,6 +92,7 @@ alias -g ......='../../../../..'
 
 alias r2="r2 -A"
 alias python="python3"
+alias pip="pip3"
 alias wiki='vim -c "WikiIndex"'
 
 if [[ "$OSTYPE" != "darwin"* ]]; then
