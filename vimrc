@@ -484,7 +484,7 @@ augroup END
 " Highlighting TODO and CITE{{{
 augroup vimrc_todo
     autocmd!
-    autocmd Syntax * syn match MyTodo /\v<(CITE|TODO)/
+    autocmd Syntax * syn match MyTodo /\v<(TODO)/
                 \ containedin=ALL " Can change to .*Comment for just comments
 augroup END
 hi def link MyTodo Todo
@@ -542,8 +542,8 @@ nmap <Leader>eG <plug>(wiki-graph-out)
 nmap <Leader>et <plug>(wiki-tag-list)
 nmap <Leader>er <plug>(wiki-page-remame)
 nmap <Leader>ed <plug>(wiki-page-delete)
-nmap <Leader>ee :WikiPageExport<CR>
-nmap <Leader>ex <plug>(wiki-list-toggle)
+nmap <Leader>ex :WikiPageExport<CR>
+" nmap <Leader>ex <plug>(wiki-list-toggle)
 nmap <Leader>en :lnext<CR>
 nmap <Leader>ep :lprev<CR>
 
